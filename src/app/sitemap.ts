@@ -1,6 +1,8 @@
 import { getAllCountries, getAllChannels } from '@/lib/search';
 import { slugify } from '@/lib/utils';
 
+export const dynamic = 'force-dynamic';
+
 const BASE_URL = 'https://goalcast-tv.vercel.app';
 
 export default async function sitemap() {
