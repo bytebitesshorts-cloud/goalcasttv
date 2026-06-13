@@ -19,11 +19,7 @@ interface Props {
   params: { channelId: string };
 }
 
-// Generate static params for all channels (SSG)
-export async function generateStaticParams() {
-  const channels = await getAllChannels();
-  return channels.map((c) => ({ channelId: c.id }));
-}
+export const dynamic = 'force-dynamic';
 
 // Dynamic metadata per channel
 export async function generateMetadata({ params }: Props): Promise<Metadata> {

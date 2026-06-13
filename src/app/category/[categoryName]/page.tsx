@@ -12,10 +12,7 @@ interface Props {
   params: { categoryName: string };
 }
 
-export async function generateStaticParams() {
-  const categories = await getAllCategories();
-  return categories.map((c) => ({ categoryName: c.toLowerCase() }));
-}
+export const dynamic = 'force-dynamic';
 
 // Dynamic metadata
 export async function generateMetadata({ params }: Props): Promise<Metadata> {

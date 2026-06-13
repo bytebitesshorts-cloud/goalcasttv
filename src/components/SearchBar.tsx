@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Search, X } from 'lucide-react';
 
 import type { SearchResult } from '@/types';
-import { slugify, getSimulatedViewers, formatViewerCount } from '@/lib/utils';
+import { slugify } from '@/lib/utils';
 import ChannelLogo from '@/components/ChannelLogo';
 import CountryFlag from '@/components/CountryFlag';
 
@@ -212,7 +212,7 @@ export default function SearchBar() {
                       )}
                     </p>
                     <p className="text-xs text-zinc-500 dark:text-zinc-400">
-                      {result.countryName} • {formatViewerCount(getSimulatedViewers(result.channel.id))} watching
+                      {result.countryName}
                     </p>
                   </div>
                   <span className="ml-2 text-xs font-medium px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600 dark:text-emerald-400">

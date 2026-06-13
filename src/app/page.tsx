@@ -7,6 +7,8 @@ import { getAllCountries } from '@/lib/search';
 import { getAllCategories } from '@/lib/category';
 import VpnPopup from '@/components/VpnPopup';
 
+export const dynamic = 'force-dynamic';
+
 export const metadata: Metadata = {
   title: 'GoalCast – Free Live Sports TV Worldwide',
   description:

@@ -61,8 +61,8 @@ let fuseInstance: Fuse<SearchResult> | null = null;
 let lastFuseUpdate = 0;
 
 async function getFuseInstance(): Promise<Fuse<SearchResult>> {
-  // Simple cache invalidation for serverless (10 minutes)
-  if (fuseInstance && Date.now() - lastFuseUpdate < 10 * 60 * 1000) return fuseInstance;
+  // Disable memory cache so database changes reflect instantly in search
+  // if (fuseInstance && Date.now() - lastFuseUpdate < 10 * 60 * 1000) return fuseInstance;
   
   const countries = await getAllCountries();
   const searchItems: SearchResult[] = [];

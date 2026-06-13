@@ -7,7 +7,7 @@ import { Play } from 'lucide-react';
 import type { Channel } from '@/types';
 import ChannelLogo from '@/components/ChannelLogo';
 import FavoriteButton from '@/components/FavoriteButton';
-import { getSimulatedViewers, formatViewerCount } from '@/lib/utils';
+
 
 interface ChannelCardProps {
   channel: Channel;
@@ -15,7 +15,7 @@ interface ChannelCardProps {
 }
 
 export default function ChannelCard({ channel, isActive }: ChannelCardProps) {
-  const viewerCount = getSimulatedViewers(channel.id);
+
   const cardRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
 
@@ -78,13 +78,8 @@ export default function ChannelCard({ channel, isActive }: ChannelCardProps) {
           cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500
           overflow-hidden
         `}
-        aria-label={`Watch ${channel.name} live. ${formatViewerCount(viewerCount)} watching.`}
+        aria-label={`Watch ${channel.name} live.`}
       >
-        {/* Viewers badge (Top Left) */}
-        <div className="absolute top-2 left-2 flex items-center gap-1.5 px-2 py-0.5 rounded bg-zinc-900/80 dark:bg-zinc-950/80 backdrop-blur-sm text-zinc-200 dark:text-zinc-300">
-          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" aria-hidden="true" />
-          <span className="text-[10px] font-semibold leading-none">{formatViewerCount(viewerCount)}</span>
-        </div>
 
         {/* LIVE / PLAYING badge (Top Right) */}
         <div className={`absolute top-2 right-2 flex items-center gap-1 px-1.5 py-0.5 rounded-md ${isActive ? 'bg-emerald-500' : 'bg-red-500/90'} backdrop-blur-sm`}>

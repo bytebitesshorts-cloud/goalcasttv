@@ -10,11 +10,7 @@ interface Props {
   params: { countryName: string };
 }
 
-// Generate static params for all countries (SSG)
-export async function generateStaticParams() {
-  const countries = await getAllCountries();
-  return countries.map((c) => ({ countryName: encodeURIComponent(c.name) }));
-}
+export const dynamic = 'force-dynamic';
 
 // Dynamic metadata per country
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
