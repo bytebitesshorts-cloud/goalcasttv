@@ -16,7 +16,7 @@ export const dynamic = 'force-dynamic';
 
 // Dynamic metadata
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const catParam = params.categoryName.toLowerCase();
+  const catParam = decodeURIComponent(params.categoryName).toLowerCase();
   const categories = await getAllCategories();
   const validCat = categories.find(c => c.toLowerCase() === catParam);
   
@@ -29,7 +29,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function CategoryPage({ params }: Props) {
-  const catParam = params.categoryName.toLowerCase();
+  const catParam = decodeURIComponent(params.categoryName).toLowerCase();
   const categories = await getAllCategories();
   const validCat = categories.find(c => c.toLowerCase() === catParam);
 
