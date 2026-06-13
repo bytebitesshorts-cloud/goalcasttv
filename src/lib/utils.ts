@@ -7,7 +7,7 @@ export function cn(...inputs: ClassValue[]): string {
 
 // Slugify a string (e.g. "United States" -> "united-states")
 export function slugify(str: string): string {
-  return encodeURIComponent(str);
+  return str.toLowerCase().replace(/[\s_]+/g, '-').replace(/[^\w-]/g, '');
 }
 
 // Format channel name for display

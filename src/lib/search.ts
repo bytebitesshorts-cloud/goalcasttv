@@ -2,6 +2,7 @@ import Fuse from 'fuse.js';
 import connectDB from '@/lib/db';
 import { Store } from '@/lib/models';
 import type { Channel, Country, SearchResult } from '@/types';
+import { slugify } from '@/lib/utils';
 
 export async function getAllCountries(): Promise<Country[]> {
   await connectDB();
@@ -48,7 +49,7 @@ export async function getAllChannels(): Promise<Channel[]> {
 export async function getCountry(name: string): Promise<Country | undefined> {
   const countries = await getAllCountries();
   return countries.find(
-    (c) => c.name.toLowerCase() === decodeURIComponent(name).toLowerCase()
+    (c) => slugify(c.name) === name
   );
 }
 

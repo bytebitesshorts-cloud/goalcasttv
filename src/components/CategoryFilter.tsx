@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { slugify } from '@/lib/utils';
 
 interface CategoryFilterProps {
   categories: string[];
@@ -52,7 +53,7 @@ export default function CategoryFilter({ categories, baseUrl, activeCategory, on
 
       {/* Category buttons */}
       {categories.map((cat) => {
-        const isActive = baseUrl ? pathname === `${baseUrl}/${cat.toLowerCase()}` : activeCategory === cat;
+        const isActive = baseUrl ? pathname === `${baseUrl}/${slugify(cat)}` : activeCategory === cat;
         
         // Emojis for common categories
         let emoji = '';
@@ -70,7 +71,7 @@ export default function CategoryFilter({ categories, baseUrl, activeCategory, on
           return (
             <Link
               key={cat}
-              href={`${baseUrl}/${cat.toLowerCase()}`}
+              href={`${baseUrl}/${slugify(cat)}`}
               className={`
                 shrink-0 px-4 py-1.5 rounded-full text-sm font-semibold whitespace-nowrap snap-start
                 transition-all duration-200 border

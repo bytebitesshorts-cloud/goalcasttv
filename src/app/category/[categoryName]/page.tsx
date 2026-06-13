@@ -16,9 +16,9 @@ export const dynamic = 'force-dynamic';
 
 // Dynamic metadata
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const catParam = decodeURIComponent(params.categoryName).toLowerCase();
+  const catParam = params.categoryName;
   const categories = await getAllCategories();
-  const validCat = categories.find(c => c.toLowerCase() === catParam);
+  const validCat = categories.find(c => slugify(c) === catParam);
   
   if (!validCat) return { title: 'Category Not Found' };
 
@@ -29,9 +29,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function CategoryPage({ params }: Props) {
-  const catParam = decodeURIComponent(params.categoryName).toLowerCase();
+  const catParam = params.categoryName;
   const categories = await getAllCategories();
-  const validCat = categories.find(c => c.toLowerCase() === catParam);
+  const validCat = categories.find(c => slugify(c) === catParam);
 
   if (!validCat) notFound();
 
