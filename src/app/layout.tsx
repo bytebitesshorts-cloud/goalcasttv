@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Script from 'next/script';
 import { Inter } from 'next/font/google';
 import './globals.css';
 import { ThemeProvider } from '@/context/ThemeContext';
@@ -11,7 +12,7 @@ import ScoresTicker from '@/components/ScoresTicker';
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://goalcast.live'),
+  metadataBase: new URL('https://goalcast-tv.vercel.app'),
   title: {
     default: 'GoalCast – Free Live Sports TV Worldwide',
     template: '%s | GoalCast',
@@ -29,7 +30,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: 'https://goalcast.live',
+    url: 'https://goalcast-tv.vercel.app',
     siteName: 'GoalCast',
     title: 'GoalCast – Free Live Sports TV Worldwide',
     description: 'Watch live sports channels from every country, for free.',
@@ -70,6 +71,12 @@ export default function RootLayout({
               })();
             `,
           }}
+        />
+        <Script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3600961769317289"
+          crossOrigin="anonymous"
+          strategy="afterInteractive"
         />
       </head>
       <body

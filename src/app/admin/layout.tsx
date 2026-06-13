@@ -14,12 +14,16 @@ import {
   X,
   ChevronRight,
   Trophy,
+  Megaphone,
+  BookOpen,
 } from 'lucide-react';
 
 const navItems = [
   { href: '/admin/channels', label: 'Channels', icon: Radio },
   { href: '/admin/blog', label: 'Blog Posts', icon: FileText },
+  { href: '/admin/pages', label: 'Pages', icon: BookOpen },
   { href: '/admin/ticker', label: 'Match Ticker', icon: Trophy },
+  { href: '/admin/ads', label: 'Ads', icon: Megaphone },
   { href: '/admin/settings', label: 'Settings', icon: Settings },
 ];
 

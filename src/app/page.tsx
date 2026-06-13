@@ -5,6 +5,7 @@ import HomePersonalSection from '@/components/HomePersonalSection';
 import CategoryFilter from '@/components/CategoryFilter';
 import { getAllCountries } from '@/lib/search';
 import { getAllCategories } from '@/lib/category';
+import VpnPopup from '@/components/VpnPopup';
 
 export const metadata: Metadata = {
   title: 'GoalCast – Free Live Sports TV Worldwide',
@@ -15,9 +16,9 @@ export const metadata: Metadata = {
 /**
  * Home page — displays a responsive grid of all countries
  */
-export default function HomePage() {
-  const countries = getAllCountries();
-  const categories = getAllCategories();
+export default async function HomePage() {
+  const countries = await getAllCountries();
+  const categories = await getAllCategories();
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
@@ -44,7 +45,10 @@ export default function HomePage() {
       </section>
 
       {/* Recently Watched + Favorites — client-side, appears after hydration */}
-      <HomePersonalSection />
+      <HomePersonalSection allCountries={countries} />
+
+      {/* VPN Warning Popup */}
+      <VpnPopup />
 
       {/* Global Categories */}
       <section aria-labelledby="categories-heading" className="mb-8">
@@ -92,11 +96,11 @@ export default function HomePage() {
             '@context': 'https://schema.org',
             '@type': 'WebSite',
             name: 'GoalCast',
-            url: 'https://goalcast.live',
+            url: 'https://goalcast-tv.vercel.app',
             description: 'Free live sports TV channels worldwide',
             potentialAction: {
               '@type': 'SearchAction',
-              target: 'https://goalcast.live/?q={search_term_string}',
+              target: 'https://goalcast-tv.vercel.app/?q={search_term_string}',
               'query-input': 'required name=search_term_string',
             },
           }),

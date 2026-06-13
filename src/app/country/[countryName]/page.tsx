@@ -12,13 +12,13 @@ interface Props {
 
 // Generate static params for all countries (SSG)
 export async function generateStaticParams() {
-  const countries = getAllCountries();
+  const countries = await getAllCountries();
   return countries.map((c) => ({ countryName: encodeURIComponent(c.name) }));
 }
 
 // Dynamic metadata per country
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const country = getCountry(params.countryName);
+  const country = await getCountry(params.countryName);
   if (!country) return { title: 'Country Not Found' };
 
   return {
@@ -38,8 +38,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 /**
  * Country page — grid of that country's sports channels
  */
-export default function CountryPage({ params }: Props) {
-  const country = getCountry(params.countryName);
+export default async function CountryPage({ params }: Props) {
+  const country = await getCountry(params.countryName);
 
   if (!country) notFound();
 
@@ -117,7 +117,7 @@ export default function CountryPage({ params }: Props) {
               '@type': 'ListItem',
               position: i + 1,
               name: ch.name,
-              url: `https://goalcast.live/watch/${ch.id}`,
+              url: `https://goalcast-tv.vercel.app/watch/${ch.id}`,
             })),
           }),
         }}

@@ -1,29 +1,34 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { readFileSync, writeFileSync } from 'fs';
-import path from 'path';
-
-const CHANNELS_PATH = path.join(process.cwd(), 'src/data/channels.json');
+import connectDB from '@/lib/db';
+import { Store } from '@/lib/models';
 
 function isAuthenticated(req: NextRequest) {
   return req.cookies.get('admin_session')?.value === 'authenticated';
-}
-
-function getChannels() {
-  return JSON.parse(readFileSync(CHANNELS_PATH, 'utf-8'));
-}
-
-function saveChannels(channels: Record<string, unknown[]>) {
-  writeFileSync(CHANNELS_PATH, JSON.stringify(channels, null, 2), 'utf-8');
 }
 
 export async function GET(req: NextRequest) {
   if (!isAuthenticated(req)) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
-  const channels = getChannels();
-  // channels.json is an object keyed by country — flatten to a single array
-  const flat = Object.values(channels).flat();
-  return NextResponse.json(flat);
+  
+  try {
+    await connectDB();
+    const channelsStore = await Store.findOne({ key: 'channels' });
+    const raw = channelsStore?.data || {};
+    
+    // Inject country name into each channel object since it's stored implicitly via grouping
+    const flat = Object.entries(raw).flatMap(([countryName, channels]: [string, any]) => {
+      return channels.map((ch: any) => ({
+        ...ch,
+        country: countryName,
+        countryCode: ch.countryCode || countryName.toLowerCase().replace(/\s+/g, '-'),
+      }));
+    });
+    
+    return NextResponse.json(flat);
+  } catch (error) {
+    return NextResponse.json({ error: 'Failed to fetch channels' }, { status: 500 });
+  }
 }
 
 export async function POST(req: NextRequest) {
@@ -32,16 +37,17 @@ export async function POST(req: NextRequest) {
   }
 
   try {
+    await connectDB();
     const body = await req.json();
-    const raw = getChannels() as Record<string, unknown[]>;
+    
+    const channelsStore = await Store.findOne({ key: 'channels' });
+    const raw = (channelsStore?.data || {}) as Record<string, unknown[]>;
 
     const newChannel: Record<string, unknown> = {
       id: `ch_${Date.now()}`,
       name: body.name || '',
       code: body.code || '',
       category: body.category || 'Sports',
-      country: body.country || 'Unknown',
-      countryCode: body.countryCode || 'UN',
       logo: body.logo || '',
       stream: body.stream || '',
       languages: body.languages ? [body.languages] : [],
@@ -49,20 +55,17 @@ export async function POST(req: NextRequest) {
       is_nsfw: false,
     };
 
-    // raw is an object keyed by country — flatten, append, then re-save as object
-    const flat = Object.values(raw).flat() as Record<string, unknown>[];
-    flat.push(newChannel);
+    const targetCountry = body.country || 'Unknown';
+    if (!raw[targetCountry]) raw[targetCountry] = [];
+    raw[targetCountry].push(newChannel);
 
-    // Re-group by country
-    const grouped: Record<string, unknown[]> = {};
-    for (const ch of flat) {
-      const key = (ch.country as string) || 'Unknown';
-      if (!grouped[key]) grouped[key] = [];
-      grouped[key].push(ch);
-    }
-    saveChannels(grouped);
+    await Store.findOneAndUpdate(
+      { key: 'channels' },
+      { data: raw },
+      { upsert: true }
+    );
 
-    return NextResponse.json(newChannel, { status: 201 });
+    return NextResponse.json({ ...newChannel, country: targetCountry }, { status: 201 });
   } catch {
     return NextResponse.json({ error: 'Failed to create channel' }, { status: 500 });
   }

@@ -1,11 +1,11 @@
 import { getAllCountries, getAllChannels } from '@/lib/search';
 import { slugify } from '@/lib/utils';
 
-const BASE_URL = 'https://goalcast.live';
+const BASE_URL = 'https://goalcast-tv.vercel.app';
 
-export default function sitemap() {
-  const countries = getAllCountries();
-  const channels = getAllChannels();
+export default async function sitemap() {
+  const countries = await getAllCountries();
+  const channels = await getAllChannels();
 
   const countryUrls = countries.map((c) => ({
     url: `${BASE_URL}/country/${slugify(c.name)}`,

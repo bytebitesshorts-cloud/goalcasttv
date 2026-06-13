@@ -1,14 +1,15 @@
 import Fuse from 'fuse.js';
-import channelsData from '@/data/channels.json';
+import connectDB from '@/lib/db';
+import { Store } from '@/lib/models';
 import type { Channel, Country, SearchResult } from '@/types';
 
-// Build a flat list of all countries with their channels
-export function getAllCountries(): Country[] {
-  const data = channelsData as Record<string, Omit<Channel, 'country' | 'countryCode'>[]>;
+export async function getAllCountries(): Promise<Country[]> {
+  await connectDB();
+  const channelsStore = await Store.findOne({ key: 'channels' });
+  const data = (channelsStore?.data || {}) as Record<string, Omit<Channel, 'country' | 'countryCode'>[]>;
   
   const countries = Object.entries(data)
     .map(([countryName, channels]) => {
-      // Get country code from first channel if available
       const firstChannel = channels[0] as Channel;
       const code = firstChannel?.countryCode || countryName.toLowerCase().replace(/\s+/g, '-');
       
@@ -29,7 +30,6 @@ export function getAllCountries(): Country[] {
     })
     .filter((country) => country.channels.length > 0);
 
-  // Assign stable serial code CH-1, CH-2, ...
   let globalIdx = 1;
   for (const country of countries) {
     for (const channel of country.channels) {
@@ -40,41 +40,37 @@ export function getAllCountries(): Country[] {
   return countries;
 }
 
-// Get all channels flat
-export function getAllChannels(): Channel[] {
-  const countries = getAllCountries();
+export async function getAllChannels(): Promise<Channel[]> {
+  const countries = await getAllCountries();
   return countries.flatMap((c) => c.channels);
 }
 
-// Get country by name
-export function getCountry(name: string): Country | undefined {
-  const countries = getAllCountries();
+export async function getCountry(name: string): Promise<Country | undefined> {
+  const countries = await getAllCountries();
   return countries.find(
     (c) => c.name.toLowerCase() === decodeURIComponent(name).toLowerCase()
   );
 }
 
-// Get channel by id
-export function getChannel(id: string): Channel | undefined {
-  const channels = getAllChannels();
+export async function getChannel(id: string): Promise<Channel | undefined> {
+  const channels = await getAllChannels();
   return channels.find((c) => c.id === id);
 }
 
-// Create Fuse.js search instance for countries + channels
 let fuseInstance: Fuse<SearchResult> | null = null;
+let lastFuseUpdate = 0;
 
-function getFuseInstance(): Fuse<SearchResult> {
-  if (fuseInstance) return fuseInstance;
+async function getFuseInstance(): Promise<Fuse<SearchResult>> {
+  // Simple cache invalidation for serverless (10 minutes)
+  if (fuseInstance && Date.now() - lastFuseUpdate < 10 * 60 * 1000) return fuseInstance;
   
-  const countries = getAllCountries();
+  const countries = await getAllCountries();
   const searchItems: SearchResult[] = [];
   
-  // Add countries
   countries.forEach((country) => {
     searchItems.push({ type: 'country', country });
   });
   
-  // Add channels (with country name context)
   countries.forEach((country) => {
     country.channels.forEach((channel) => {
       searchItems.push({
@@ -98,22 +94,19 @@ function getFuseInstance(): Fuse<SearchResult> {
     includeScore: true,
   });
   
+  lastFuseUpdate = Date.now();
   return fuseInstance;
 }
 
-// Search function returning top results
-export function searchAll(query: string, limit = 8): SearchResult[] {
+export async function searchAll(query: string, limit = 8): Promise<SearchResult[]> {
   if (!query.trim()) return [];
-  const fuse = getFuseInstance();
+  const fuse = await getFuseInstance();
   return fuse.search(query, { limit }).map((r) => r.item);
 }
 
-// Get flag emoji from 2-letter ISO country code dynamically
 export function getFlagEmoji(code: string): string {
   if (!code || code.length !== 2) return '🏳️';
   const cleanCode = code.toUpperCase();
-  // Regional Indicator Symbol Letter A is 127462. 'A' char code is 65.
-  // Base offset is 127462 - 65 = 127397.
   const first = cleanCode.charCodeAt(0) + 127397;
   const second = cleanCode.charCodeAt(1) + 127397;
   try {

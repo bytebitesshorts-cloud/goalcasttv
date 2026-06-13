@@ -4,6 +4,6 @@ export default function robots() {
       userAgent: '*',
       allow: '/',
     },
-    sitemap: 'https://goalcast.live/sitemap.xml',
+    sitemap: 'https://goalcast-tv.vercel.app/sitemap.xml',
   };
 }

@@ -1,22 +1,27 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { readFileSync, writeFileSync, existsSync } from 'fs';
-import path from 'path';
-
-const TICKER_PATH = path.join(process.cwd(), 'src/data/ticker.json');
+import connectDB from '@/lib/db';
+import { Store } from '@/lib/models';
 
 function isAuthenticated(req: NextRequest) {
   return req.cookies.get('admin_session')?.value === 'authenticated';
 }
 
-function getTicker() {
-  if (!existsSync(TICKER_PATH)) {
+async function getTicker() {
+  await connectDB();
+  const tickerStore = await Store.findOne({ key: 'ticker' });
+  if (!tickerStore) {
     return { active: false, useLiveFeed: true, matches: [] };
   }
-  return JSON.parse(readFileSync(TICKER_PATH, 'utf-8'));
+  return tickerStore.data;
 }
 
-function saveTicker(data: unknown) {
-  writeFileSync(TICKER_PATH, JSON.stringify(data, null, 2), 'utf-8');
+async function saveTicker(data: unknown) {
+  await connectDB();
+  await Store.findOneAndUpdate(
+    { key: 'ticker' },
+    { data },
+    { upsert: true }
+  );
 }
 
 interface ESPNCompetitor {
@@ -44,7 +49,7 @@ interface ESPNEvent {
 
 export async function GET() {
   try {
-    const data = getTicker();
+    const data = await getTicker();
     
     if (data.active) {
       // Fetch live data from ESPN
@@ -104,13 +109,13 @@ export async function PUT(req: NextRequest) {
 
   try {
     const body = await req.json();
-    const current = getTicker();
+    const current = await getTicker();
 
     const updated = {
       active: body.active !== undefined ? body.active : current.active,
     };
 
-    saveTicker(updated);
+    await saveTicker(updated);
     return NextResponse.json(updated);
   } catch {
     return NextResponse.json({ error: 'Failed to update ticker settings' }, { status: 500 });

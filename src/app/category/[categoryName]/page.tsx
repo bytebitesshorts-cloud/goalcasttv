@@ -12,16 +12,15 @@ interface Props {
   params: { categoryName: string };
 }
 
-// Generate static params for all categories
 export async function generateStaticParams() {
-  const categories = getAllCategories();
+  const categories = await getAllCategories();
   return categories.map((c) => ({ categoryName: c.toLowerCase() }));
 }
 
 // Dynamic metadata
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const catParam = params.categoryName.toLowerCase();
-  const categories = getAllCategories();
+  const categories = await getAllCategories();
   const validCat = categories.find(c => c.toLowerCase() === catParam);
   
   if (!validCat) return { title: 'Category Not Found' };
@@ -32,14 +31,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default function CategoryPage({ params }: Props) {
+export default async function CategoryPage({ params }: Props) {
   const catParam = params.categoryName.toLowerCase();
-  const categories = getAllCategories();
+  const categories = await getAllCategories();
   const validCat = categories.find(c => c.toLowerCase() === catParam);
 
   if (!validCat) notFound();
 
-  const channels = getChannelsByCategory(validCat);
+  const channels = await getChannelsByCategory(validCat);
 
   // Group channels by country
   const grouped: Record<string, Channel[]> = {};

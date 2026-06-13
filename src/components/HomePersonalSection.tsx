@@ -6,14 +6,18 @@ import { useUserPrefs } from '@/context/UserPrefsContext';
 import ChannelCard from '@/components/ChannelCard';
 import CountryFlag from '@/components/CountryFlag';
 import { slugify } from '@/lib/utils';
-import { getAllCountries } from '@/lib/search';
+import type { Country } from '@/types';
+
+interface Props {
+  allCountries: Country[];
+}
 
 /**
  * Client-side section shown above the main grid on the homepage.
  * Shows Recently Watched channels and Favorited channels + countries.
  * Only renders after hydration to avoid SSR mismatch.
  */
-export default function HomePersonalSection() {
+export default function HomePersonalSection({ allCountries }: Props) {
   const {
     recentChannels,
     clearRecents,
@@ -33,7 +37,6 @@ export default function HomePersonalSection() {
   if (!hasRecents && !hasFavs) return null;
 
   // Resolve favorited countries to full Country objects for the flag + link
-  const allCountries = getAllCountries();
   const favCountries = allCountries.filter((c) => favCountryNames.includes(c.name));
 
   return (

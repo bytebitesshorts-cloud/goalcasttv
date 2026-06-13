@@ -1,32 +1,27 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { readFileSync, writeFileSync } from 'fs';
-import path from 'path';
-
-const SETTINGS_PATH = path.join(process.cwd(), 'src/data/settings.json');
+import connectDB from '@/lib/db';
+import { Store } from '@/lib/models';
 
 function isAuthenticated(req: NextRequest) {
   return req.cookies.get('admin_session')?.value === 'authenticated';
 }
 
-function getSettings() {
-  return JSON.parse(readFileSync(SETTINGS_PATH, 'utf-8'));
-}
-
-function saveSettings(settings: unknown) {
-  writeFileSync(SETTINGS_PATH, JSON.stringify(settings, null, 2), 'utf-8');
-}
-
 export async function GET(req: NextRequest) {
-  // Public — maintenance mode needs to be readable without auth
-  const settings = getSettings();
-  // Only expose safe fields publicly
-  if (!isAuthenticated(req)) {
-    return NextResponse.json({
-      maintenanceMode: settings.maintenanceMode,
-      maintenanceMessage: settings.maintenanceMessage,
-    });
+  try {
+    await connectDB();
+    const settingsStore = await Store.findOne({ key: 'settings' });
+    const settings = settingsStore?.data || {};
+
+    if (!isAuthenticated(req)) {
+      return NextResponse.json({
+        maintenanceMode: settings.maintenanceMode,
+        maintenanceMessage: settings.maintenanceMessage,
+      });
+    }
+    return NextResponse.json(settings);
+  } catch (error) {
+    return NextResponse.json({ error: 'Failed to fetch settings' }, { status: 500 });
   }
-  return NextResponse.json(settings);
 }
 
 export async function PUT(req: NextRequest) {
@@ -35,8 +30,11 @@ export async function PUT(req: NextRequest) {
   }
 
   try {
+    await connectDB();
     const body = await req.json();
-    const settings = getSettings();
+    
+    const settingsStore = await Store.findOne({ key: 'settings' });
+    const settings = settingsStore?.data || {};
 
     const updated = {
       ...settings,
@@ -46,9 +44,14 @@ export async function PUT(req: NextRequest) {
       ...(body.adminUsername !== undefined && { adminUsername: body.adminUsername }),
     };
 
-    saveSettings(updated);
+    await Store.findOneAndUpdate(
+      { key: 'settings' },
+      { data: updated },
+      { upsert: true }
+    );
+
     return NextResponse.json(updated);
-  } catch {
+  } catch (error) {
     return NextResponse.json({ error: 'Failed to update settings' }, { status: 500 });
   }
 }

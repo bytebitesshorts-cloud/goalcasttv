@@ -5,8 +5,8 @@ import type { Channel } from '@/types';
  * Get all unique categories present in the database, sorted alphabetically,
  * with 'General' pushed to the end.
  */
-export function getAllCategories(): string[] {
-  const countries = getAllCountries();
+export async function getAllCategories(): Promise<string[]> {
+  const countries = await getAllCountries();
   const categorySet = new Set<string>();
 
   countries.forEach((country) => {
@@ -33,8 +33,8 @@ export function getAllCategories(): string[] {
 /**
  * Get all channels globally that match a specific category.
  */
-export function getChannelsByCategory(category: string): Channel[] {
-  const countries = getAllCountries();
+export async function getChannelsByCategory(category: string): Promise<Channel[]> {
+  const countries = await getAllCountries();
   const channels: Channel[] = [];
   const lowerCat = category.toLowerCase();
 

@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { Search, X } from 'lucide-react';
-import { searchAll } from '@/lib/search';
+
 import type { SearchResult } from '@/types';
 import { slugify, getSimulatedViewers, formatViewerCount } from '@/lib/utils';
 import ChannelLogo from '@/components/ChannelLogo';
@@ -25,10 +25,22 @@ export default function SearchBar() {
       setIsOpen(false);
       return;
     }
-    const found = searchAll(query, 8);
-    setResults(found);
-    setIsOpen(found.length > 0);
-    setActiveIndex(-1);
+    
+    const timeoutId = setTimeout(async () => {
+      try {
+        const res = await fetch(`/api/search?q=${encodeURIComponent(query)}`);
+        if (res.ok) {
+          const found = await res.json();
+          setResults(found);
+          setIsOpen(found.length > 0);
+          setActiveIndex(-1);
+        }
+      } catch (err) {
+        console.error('Search failed', err);
+      }
+    }, 300); // Add a small debounce
+
+    return () => clearTimeout(timeoutId);
   }, [query]);
 
   // Close dropdown when clicking outside

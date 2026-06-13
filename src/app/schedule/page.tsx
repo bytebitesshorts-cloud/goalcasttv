@@ -1,8 +1,19 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Calendar, Search, MapPin, Trophy, ShieldAlert, Clock, Globe } from 'lucide-react';
 import CountryFlag from '@/components/CountryFlag';
+
+interface HeroData {
+  badge?: string;
+  title?: string;
+  subtitle?: string;
+  statDates?: string;
+  statHosts?: string;
+  statMatches?: string;
+  statStadiums?: string;
+  disclaimer?: string;
+}
 
 // Helper to convert flag emoji to 2-letter ISO code
 function emojiToCode(emoji: string): string | null {
@@ -249,7 +260,26 @@ const matchesData: Match[] = [
   }
 ];
 
-export default function SchedulePage() {
+export default function SchedulePage({ hero: heroProp = {} }: { hero?: HeroData }) {
+  const [heroData, setHeroData] = useState<HeroData>(heroProp);
+
+  useEffect(() => {
+    fetch('/api/admin/pages/page_schedule')
+      .then((r) => r.json())
+      .then((data) => { if (data && Object.keys(data).length > 0) setHeroData(data); })
+      .catch(() => {});
+  }, []);
+
+  const h = {
+    badge: heroData.badge ?? 'FIFA World Cup 2026 — USA, Canada & Mexico',
+    title: heroData.title ?? 'Match Schedule & Fixtures',
+    subtitle: heroData.subtitle ?? 'Track the matches, dates, groups, and stadiums. The tournament features 48 countries playing 104 matches from June 11 to July 19, 2026.',
+    statDates: heroData.statDates ?? 'June 11 – July 19',
+    statHosts: heroData.statHosts ?? 'USA, CA, MX',
+    statMatches: heroData.statMatches ?? '104 Fixtures',
+    statStadiums: heroData.statStadiums ?? '16 Stadiums',
+    disclaimer: heroData.disclaimer ?? 'Match fixtures and kickoff schedules are subject to change. For official ticketing, updates and real-time broadcasts, refer to official tournament guidelines.',
+  };
   const [searchQuery, setSearchQuery] = useState('');
   const [activeTab, setActiveTab] = useState<'all' | 'group' | 'knockout'>('all');
 
@@ -275,24 +305,24 @@ export default function SchedulePage() {
         <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-50 dark:bg-emerald-900/30 border border-emerald-200 dark:border-emerald-800/50 mb-4">
           <Trophy className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
           <span className="text-xs font-semibold text-emerald-700 dark:text-emerald-400">
-            FIFA World Cup 2026 — USA, Canada & Mexico
+            {h.badge}
           </span>
         </div>
         <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-zinc-900 dark:text-white mb-3">
-          Match Schedule & Fixtures
+          {h.title}
         </h1>
         <p className="text-zinc-500 dark:text-zinc-400 max-w-xl mx-auto text-sm sm:text-base">
-          Track the matches, dates, groups, and stadiums. The tournament features 48 countries playing 104 matches from June 11 to July 19, 2026.
+          {h.subtitle}
         </p>
       </section>
 
       {/* Quick Stats Grid */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
         {[
-          { label: 'Dates', val: 'June 11 – July 19', icon: Calendar },
-          { label: 'Host Nations', val: 'USA, CA, MX', icon: Globe },
-          { label: 'Total Matches', val: '104 Fixtures', icon: Trophy },
-          { label: 'Host Cities', val: '16 Stadiums', icon: MapPin }
+          { label: 'Dates', val: h.statDates, icon: Calendar },
+          { label: 'Host Nations', val: h.statHosts, icon: Globe },
+          { label: 'Total Matches', val: h.statMatches, icon: Trophy },
+          { label: 'Host Cities', val: h.statStadiums, icon: MapPin }
         ].map((stat, idx) => (
           <div key={idx} className="p-4 rounded-2xl bg-white dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-700/60 shadow-sm flex items-center gap-3">
             <div className="p-2 rounded-xl bg-emerald-50 dark:bg-emerald-900/20 text-emerald-500 shrink-0">
@@ -474,7 +504,7 @@ export default function SchedulePage() {
 
       {/* Footer Disclaimer */}
       <p className="text-center text-xs text-zinc-400 dark:text-zinc-600 mt-6 max-w-md mx-auto">
-        Match fixtures and kickoff schedules are subject to change. For official ticketing, updates and real-time broadcasts, refer to official tournament guidelines.
+        {h.disclaimer}
       </p>
     </div>
   );

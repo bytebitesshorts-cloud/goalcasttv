@@ -34,9 +34,7 @@
       "category": "sports",
       "country": "Australia",
       "countryCode": "au",
-      "quality": "720p",
-      "code": "CH-0004",
-      "active": true
+      "quality": "720p"
     },
     {
       "id": "fox-sports-au",
@@ -136,9 +134,7 @@
       "category": "sports",
       "country": "Bahrain",
       "countryCode": "bh",
-      "quality": "720p",
-      "code": "CH-0012",
-      "active": true
+      "quality": "720p"
     }
   ],
   "Sweden": [
@@ -183,18 +179,6 @@
   ],
   "Pakistan": [
     {
-      "id": "gtv-bd",
-      "name": "Sports",
-      "logo": "https://upload.wikimedia.org/wikipedia/en/thumb/4/44/GTV_%28Bangladeshi_TV_channel%29_logo.svg/200px-GTV_%28Bangladeshi_TV_channel%29_logo.svg.png",
-      "stream": "https://d3qs3d2rkhfqrt.cloudfront.net/out/v1/b17adfe543354fdd8d189b110617cddd/index_3.m3u8",
-      "category": "sports",
-      "country": "Pakistan",
-      "countryCode": "pk",
-      "quality": "720p",
-      "code": "CH-0015",
-      "active": true
-    },
-    {
       "id": "a-sports-pk",
       "name": "A Sports",
       "logo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTWw7Tog0Vmto_gO32WGjKy2-tX8G-CIdmuZN8QCIla3g&s=10",
@@ -202,9 +186,7 @@
       "category": "sports",
       "country": "Pakistan",
       "countryCode": "pk",
-      "quality": "720p",
-      "code": "CH-0193",
-      "active": false
+      "quality": "720p"
     },
     {
       "id": "geo-super-pk",
@@ -226,20 +208,28 @@
       "category": "sports",
       "country": "Pakistan",
       "countryCode": "pk",
-      "quality": "720p",
-      "code": "CH-0195",
-      "active": true
+      "quality": "720p"
     },
     {
       "id": "ptv-sports-pk",
-      "name": "PTV Sports (Premium)",
+      "name": "PTV Sports",
       "logo": "https://s3.aynaott.com/storage/9d9d7cbfba5a8ceea648bbd963ad1014",
       "stream": "https://tvsen5.aynaott.com/PtvSports/index.m3u8?e=1779283784&u=78be6644-0a65-48ec-81a4-089ac65a2619&token=db1789e36c278bf538489fac263e0ffb",
       "category": "sports",
       "country": "Pakistan",
       "countryCode": "pk",
+      "quality": "720p"
+    },
+    {
+      "id": "gtv-bd",
+      "name": "Sports",
+      "logo": "https://upload.wikimedia.org/wikipedia/en/thumb/4/44/GTV_%28Bangladeshi_TV_channel%29_logo.svg/200px-GTV_%28Bangladeshi_TV_channel%29_logo.svg.png",
+      "stream": "https://d3qs3d2rkhfqrt.cloudfront.net/out/v1/b17adfe543354fdd8d189b110617cddd/index_3.m3u8",
+      "category": "sports",
+      "country": "Pakistan",
+      "countryCode": "pk",
       "quality": "720p",
-      "code": "CH-0196",
+      "code": "CH-0015",
       "active": true
     },
     {
@@ -257,75 +247,242 @@
   ],
   "Bangladesh": [
     {
-      "id": "t-sports-hd-bd",
-      "name": "T Sports HD",
-      "logo": "https://s3.aynaott.com/storage/dbc585f70a60b9855b6e13a8ce4cb6f4",
-      "stream": "https://tvsen7.aynaott.com/tsports-hd/index.m3u8?e=1779283784&u=78be6644-0a65-48ec-81a4-089ac65a2619&token=3b4c5a2cfa872fa7f91ffbfb4aa0f658",
-      "category": "sports",
-      "country": "Bangladesh",
-      "countryCode": "bd",
-      "quality": "720p",
-      "code": "CH-0017",
-      "active": false
-    },
-    {
-      "id": "t-sports-bd",
-      "name": "T-SPORTS",
-      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/T_Sports_logo.svg/500px-T_Sports_logo.svg.png",
-      "stream": "https://tvsen7.aynaott.com/tsports-hd/index.m3u8",
-      "category": "sports",
-      "country": "Bangladesh",
-      "countryCode": "bd",
-      "quality": "720p",
-      "code": "CH-0018",
-      "active": false
-    },
-    {
-      "id": "maasranga-tv-hd",
-      "name": "MAASRANGA TV HD",
-      "logo": "https://sunplex.net/iptv/logo/maasranga-tv.jpg",
-      "stream": "http://172.32.1.88:1935/tvprogram/MAASRANGA-TV/playlist.m3u8",
+      "id": "aljazeera-hd",
+      "name": "ALJAZEERA HD",
+      "logo": "https://sunplex.net/iptv/logo/aljazeera.jpg",
+      "stream": "http://172.32.1.88:1935/tvprogram/Aljazeera-HD/playlist.m3u8",
       "category": "sports",
       "country": "Bangladesh",
       "countryCode": "bd",
       "quality": "HD",
-      "code": "CH-0019",
+      "code": "CH-0063",
       "active": false
     },
     {
-      "id": "sports-18-hd-fifa-22",
-      "name": "SPORTS 18 HD (FIFA-22)",
-      "logo": "https://sunplex.net/iptv/logo/sports-18-hd1-fifa-2022.jpg",
-      "stream": "https://stream.sunplex.live/SPORTS-18/index.m3u8",
+      "id": "atn-bangla",
+      "name": "ATN BANGLA",
+      "logo": "https://sunplex.net/iptv/logo/atn-bangla.jpg",
+      "stream": "https://tvsen5.aynaott.com/atnbangla/index.m3u8",
       "category": "sports",
       "country": "Bangladesh",
       "countryCode": "bd",
       "quality": "HD",
-      "code": "CH-0020",
-      "active": false
+      "code": "CH-0035",
+      "active": true
     },
     {
-      "id": "t-sports-hd",
-      "name": "T SPORTS HD",
-      "logo": "https://sunplex.net/iptv/logo/t-sports-hd-fifa-2022.jpg",
-      "stream": "https://stream.sunplex.live/T-SPORTS/index.m3u8",
+      "id": "ch_1781277934968",
+      "name": "ATN Bangla UK",
+      "code": "",
+      "category": "News",
+      "country": "Bangladesh",
+      "countryCode": "UN",
+      "logo": "https://sunplex.net/iptv/logo/atn-bangla.jpg",
+      "stream": "https://app.ncare.live/c3VydmVyX8RpbEU9Mi8xNy8yMDE0GIDU6RgzQ6NTAgdEoaeFzbF92YWxIZTO0U0ezN1IzMyfvcGVMZEJCTEFWeVN3PTOmdFsaWRtaW51aiPhnPTI2/atnbanglauk-off.stream/playlist.m3u8",
+      "languages": [
+        []
+      ],
+      "active": true,
+      "is_nsfw": false
+    },
+    {
+      "id": "bangla-vision-hd",
+      "name": "BANGLA VISION HD",
+      "logo": "https://sunplex.net/iptv/logo/banglavision.jpg",
+      "stream": "http://172.32.1.88:1935/tvprogram/BANGLA-VISION/playlist.m3u8",
       "category": "sports",
       "country": "Bangladesh",
       "countryCode": "bd",
       "quality": "HD",
-      "code": "CH-0021",
+      "code": "CH-0041",
       "active": false
     },
     {
-      "id": "t-sports-hd-source-2",
-      "name": "T SPORTS HD (Source 2)",
-      "logo": "https://sunplex.net/iptv/logo/t-sports-hd-fifa-2022.jpg",
-      "stream": "http://172.32.1.88:1935/tvprogram/T-SPORTS/playlist.m3u8",
+      "id": "bbc-earth-hd",
+      "name": "BBC EARTH HD",
+      "logo": "https://sunplex.net/iptv/logo/bbc-earth.jpg",
+      "stream": "http://172.32.1.88:1935/tvprogram/BBC-EARTH/playlist.m3u8",
       "category": "sports",
       "country": "Bangladesh",
       "countryCode": "bd",
       "quality": "HD",
-      "code": "CH-0022",
+      "code": "CH-0064",
+      "active": false
+    },
+    {
+      "id": "bbc-lifestyle",
+      "name": "BBC Lifestyle",
+      "logo": "https://sunplex.net/iptv/logo/bbc-lifestyle.jpg",
+      "stream": "http://172.32.1.88:1935/tvprogram/JALSHA-MOVIES/playlist.m3u8",
+      "category": "sports",
+      "country": "Bangladesh",
+      "countryCode": "bd",
+      "quality": "HD",
+      "code": "CH-0060",
+      "active": false
+    },
+    {
+      "id": "bbc-world-news",
+      "name": "BBC WORLD NEWS",
+      "logo": "https://sunplex.net/iptv/logo/bbc-world-news.jpg",
+      "stream": "http://172.32.1.88:1935/tvprogram/BBC-WORLD/playlist.m3u8",
+      "category": "sports",
+      "country": "Bangladesh",
+      "countryCode": "bd",
+      "quality": "HD",
+      "code": "CH-0062",
+      "active": false
+    },
+    {
+      "id": "btv-hd",
+      "name": "BTV HD",
+      "logo": "https://sunplex.net/iptv/logo/btv.jpg",
+      "stream": "http://172.32.1.88:1935/tvprogram/BTV/playlist.m3u8",
+      "category": "sports",
+      "country": "Bangladesh",
+      "countryCode": "bd",
+      "quality": "HD",
+      "code": "CH-0025",
+      "active": false
+    },
+    {
+      "id": "channel-24",
+      "name": "CHANNEL 24",
+      "logo": "https://sunplex.net/iptv/logo/channel-24.jpg",
+      "stream": "http://172.32.1.88:1935/tvprogram/Channel-24/playlist.m3u8",
+      "category": "sports",
+      "country": "Bangladesh",
+      "countryCode": "bd",
+      "quality": "HD",
+      "code": "CH-0040",
+      "active": false
+    },
+    {
+      "id": "channel-9-hd",
+      "name": "CHANNEL 9 HD",
+      "logo": "https://sunplex.net/iptv/logo/channel-9.jpg",
+      "stream": "http://172.32.1.88:1935/tvprogram/CHANNEL-9/playlist.m3u8",
+      "category": "sports",
+      "country": "Bangladesh",
+      "countryCode": "bd",
+      "quality": "HD",
+      "code": "CH-0032",
+      "active": false
+    },
+    {
+      "id": "channel-i-hd",
+      "name": "CHANNEL I HD",
+      "logo": "https://sunplex.net/iptv/logo/channel-i.jpg",
+      "stream": "http://172.32.1.88:1935/tvprogram/CHANNEL-I/playlist.m3u8",
+      "category": "sports",
+      "country": "Bangladesh",
+      "countryCode": "bd",
+      "quality": "HD",
+      "code": "CH-0030",
+      "active": false
+    },
+    {
+      "id": "dd-bangla",
+      "name": "DD BANGLA",
+      "logo": "https://sunplex.net/iptv/logo/dd-bangla.jpg",
+      "stream": "http://172.32.1.88:1935/tvprogram/DD-BANGLA/playlist.m3u8",
+      "category": "sports",
+      "country": "Bangladesh",
+      "countryCode": "bd",
+      "quality": "HD",
+      "code": "CH-0061",
+      "active": false
+    },
+    {
+      "id": "depto-bangla-hd",
+      "name": "DEPTO BANGLA HD",
+      "logo": "https://sunplex.net/iptv/logo/depto-tv.jpg",
+      "stream": "http://172.32.1.88:1935/tvprogram/DEPTO-BANGLA/playlist.m3u8",
+      "category": "sports",
+      "country": "Bangladesh",
+      "countryCode": "bd",
+      "quality": "HD",
+      "code": "CH-0031",
+      "active": false
+    },
+    {
+      "id": "duronto-tv",
+      "name": "DURONTO TV",
+      "logo": "https://sunplex.net/iptv/logo/duronto-tv.jpg",
+      "stream": "http://172.32.1.88:1935/tvprogram/Duronto-TV/playlist.m3u8",
+      "category": "sports",
+      "country": "Bangladesh",
+      "countryCode": "bd",
+      "quality": "HD",
+      "code": "CH-0065",
+      "active": false
+    },
+    {
+      "id": "dw",
+      "name": "DW",
+      "logo": "https://sunplex.net/iptv/logo/dw.jpg",
+      "stream": "http://172.32.1.88:1935/tvprogram/DW-HD/playlist.m3u8",
+      "category": "sports",
+      "country": "Bangladesh",
+      "countryCode": "bd",
+      "quality": "HD",
+      "code": "CH-0067",
+      "active": false
+    },
+    {
+      "id": "ekattor-tv-hd",
+      "name": "EKATTOR TV HD",
+      "logo": "https://sunplex.net/iptv/logo/ekattor-tv.jpg",
+      "stream": "http://172.32.1.88:1935/tvprogram/Ekattor-TV/playlist.m3u8",
+      "category": "sports",
+      "country": "Bangladesh",
+      "countryCode": "bd",
+      "quality": "HD",
+      "code": "CH-0028",
+      "active": false
+    },
+    {
+      "id": "ekushey-tv",
+      "name": "EKUSHEY TV",
+      "logo": "https://sunplex.net/iptv/logo/ekushey-tv.jpg",
+      "stream": "http://172.32.1.88:1935/tvprogram/Ekushey-TV/playlist.m3u8",
+      "category": "sports",
+      "country": "Bangladesh",
+      "countryCode": "bd",
+      "quality": "HD",
+      "code": "CH-0039",
+      "active": false
+    },
+    {
+      "id": "fighter-tv-bd",
+      "name": "FIGHTER TV",
+      "logo": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgNTVL_Em_EdwVB2BrdBsyD6vxWv3VoEcBlDLj2qpE_jdxCDlIAqp07_ToS5ZFAB2ThnA04BYdC9T7pgwPy5HWX8IwL74oCwsNXdVANpHq7x98tgvaEBCGMkYBQqAUfj5W9un5H8BckX7TgB5pVV3g7kGMRc_vLGyY5XfmsLtrEEmgJJ5-q5eNqBZp8qA/s1080/1000059174.png",
+      "stream": "https://nomawnoijl.gpcdn.net/akash/fighter/chunks.m3u8",
+      "category": "sports",
+      "country": "Bangladesh",
+      "countryCode": "bd",
+      "quality": "720p"
+    },
+    {
+      "id": "flash-guys-hd-bd",
+      "name": "Flash Guys HD",
+      "logo": "https://tstatic.akash-go.com/cms-ui/images/custom-content/1770378074527.png",
+      "stream": "https://nomawnoijl.gpcdn.net/akash/flashguys/playlist.m3u8",
+      "category": "sports",
+      "country": "Bangladesh",
+      "countryCode": "bd",
+      "quality": "720p"
+    },
+    {
+      "id": "gaan-bangla",
+      "name": "GAAN BANGLA",
+      "logo": "https://sunplex.net/iptv/logo/gaan-bangla.jpg",
+      "stream": "http://172.32.1.88:1935/tvprogram/Gaan-Bangla/playlist.m3u8",
+      "category": "sports",
+      "country": "Bangladesh",
+      "countryCode": "bd",
+      "quality": "HD",
+      "code": "CH-0066",
       "active": false
     },
     {
@@ -353,150 +510,6 @@
       "active": false
     },
     {
-      "id": "btv-hd",
-      "name": "BTV HD",
-      "logo": "https://sunplex.net/iptv/logo/btv.jpg",
-      "stream": "http://172.32.1.88:1935/tvprogram/BTV/playlist.m3u8",
-      "category": "sports",
-      "country": "Bangladesh",
-      "countryCode": "bd",
-      "quality": "HD",
-      "code": "CH-0025",
-      "active": false
-    },
-    {
-      "id": "yes-tv-hd-fifa-22",
-      "name": "YES TV HD (FIFA-22)",
-      "logo": "https://sunplex.net/iptv/logo/yestv-hd-fifa-2022.jpg",
-      "stream": "https://stream.sunplex.live/YES-TV/index.m3u8",
-      "category": "sports",
-      "country": "Bangladesh",
-      "countryCode": "bd",
-      "quality": "HD",
-      "code": "CH-0026",
-      "active": false
-    },
-    {
-      "id": "somoy-tv",
-      "name": "SOMOY TV",
-      "logo": "https://sunplex.net/iptv/logo/somoy-tv.jpg",
-      "stream": "http://172.32.1.88:1935/tvprogram/SOMOY-TV/playlist.m3u8",
-      "category": "sports",
-      "country": "Bangladesh",
-      "countryCode": "bd",
-      "quality": "HD",
-      "code": "CH-0027",
-      "active": false
-    },
-    {
-      "id": "ekattor-tv-hd",
-      "name": "EKATTOR TV HD",
-      "logo": "https://sunplex.net/iptv/logo/ekattor-tv.jpg",
-      "stream": "http://172.32.1.88:1935/tvprogram/Ekattor-TV/playlist.m3u8",
-      "category": "sports",
-      "country": "Bangladesh",
-      "countryCode": "bd",
-      "quality": "HD",
-      "code": "CH-0028",
-      "active": false
-    },
-    {
-      "id": "nagorik-tv",
-      "name": "NAGORIK TV",
-      "logo": "https://sunplex.net/iptv/logo/nagorik-tv.jpg",
-      "stream": "http://172.32.1.88:1935/tvprogram/NAGORIK-TV/playlist.m3u8",
-      "category": "sports",
-      "country": "Bangladesh",
-      "countryCode": "bd",
-      "quality": "HD",
-      "code": "CH-0029",
-      "active": false
-    },
-    {
-      "id": "channel-i-hd",
-      "name": "CHANNEL I HD",
-      "logo": "https://sunplex.net/iptv/logo/channel-i.jpg",
-      "stream": "http://172.32.1.88:1935/tvprogram/CHANNEL-I/playlist.m3u8",
-      "category": "sports",
-      "country": "Bangladesh",
-      "countryCode": "bd",
-      "quality": "HD",
-      "code": "CH-0030",
-      "active": false
-    },
-    {
-      "id": "depto-bangla-hd",
-      "name": "DEPTO BANGLA HD",
-      "logo": "https://sunplex.net/iptv/logo/depto-tv.jpg",
-      "stream": "http://172.32.1.88:1935/tvprogram/DEPTO-BANGLA/playlist.m3u8",
-      "category": "sports",
-      "country": "Bangladesh",
-      "countryCode": "bd",
-      "quality": "HD",
-      "code": "CH-0031",
-      "active": false
-    },
-    {
-      "id": "channel-9-hd",
-      "name": "CHANNEL 9 HD",
-      "logo": "https://sunplex.net/iptv/logo/channel-9.jpg",
-      "stream": "http://172.32.1.88:1935/tvprogram/CHANNEL-9/playlist.m3u8",
-      "category": "sports",
-      "country": "Bangladesh",
-      "countryCode": "bd",
-      "quality": "HD",
-      "code": "CH-0032",
-      "active": false
-    },
-    {
-      "id": "satv",
-      "name": "SATV",
-      "logo": "https://sunplex.net/iptv/logo/satv.jpg",
-      "stream": "http://172.32.1.88:1935/tvprogram/SATV/playlist.m3u8",
-      "category": "sports",
-      "country": "Bangladesh",
-      "countryCode": "bd",
-      "quality": "HD",
-      "code": "CH-0033",
-      "active": false
-    },
-    {
-      "id": "ntv",
-      "name": "NTV",
-      "logo": "https://sunplex.net/iptv/logo/ntv.jpg",
-      "stream": "http://172.32.1.88:1935/tvprogram/N-TV/playlist.m3u8",
-      "category": "sports",
-      "country": "Bangladesh",
-      "countryCode": "bd",
-      "quality": "HD",
-      "code": "CH-0034",
-      "active": false
-    },
-    {
-      "id": "atn-bangla",
-      "name": "ATN BANGLA",
-      "logo": "https://sunplex.net/iptv/logo/atn-bangla.jpg",
-      "stream": "https://tvsen5.aynaott.com/atnbangla/index.m3u8",
-      "category": "sports",
-      "country": "Bangladesh",
-      "countryCode": "bd",
-      "quality": "HD",
-      "code": "CH-0035",
-      "active": true
-    },
-    {
-      "id": "rtv-hd",
-      "name": "RTV HD",
-      "logo": "https://sunplex.net/iptv/logo/rtv.jpg",
-      "stream": "http://172.32.1.88:1935/tvprogram/RTV-BANGLA/playlist.m3u8",
-      "category": "sports",
-      "country": "Bangladesh",
-      "countryCode": "bd",
-      "quality": "HD",
-      "code": "CH-0036",
-      "active": false
-    },
-    {
       "id": "independent-tv",
       "name": "INDEPENDENT TV",
       "logo": "https://sunplex.net/iptv/logo/independent-tv.jpg",
@@ -521,39 +534,15 @@
       "active": false
     },
     {
-      "id": "ekushey-tv",
-      "name": "EKUSHEY TV",
-      "logo": "https://sunplex.net/iptv/logo/ekushey-tv.jpg",
-      "stream": "http://172.32.1.88:1935/tvprogram/Ekushey-TV/playlist.m3u8",
+      "id": "maasranga-tv-hd",
+      "name": "MAASRANGA TV HD",
+      "logo": "https://sunplex.net/iptv/logo/maasranga-tv.jpg",
+      "stream": "http://172.32.1.88:1935/tvprogram/MAASRANGA-TV/playlist.m3u8",
       "category": "sports",
       "country": "Bangladesh",
       "countryCode": "bd",
       "quality": "HD",
-      "code": "CH-0039",
-      "active": false
-    },
-    {
-      "id": "channel-24",
-      "name": "CHANNEL 24",
-      "logo": "https://sunplex.net/iptv/logo/channel-24.jpg",
-      "stream": "http://172.32.1.88:1935/tvprogram/Channel-24/playlist.m3u8",
-      "category": "sports",
-      "country": "Bangladesh",
-      "countryCode": "bd",
-      "quality": "HD",
-      "code": "CH-0040",
-      "active": false
-    },
-    {
-      "id": "bangla-vision-hd",
-      "name": "BANGLA VISION HD",
-      "logo": "https://sunplex.net/iptv/logo/banglavision.jpg",
-      "stream": "http://172.32.1.88:1935/tvprogram/BANGLA-VISION/playlist.m3u8",
-      "category": "sports",
-      "country": "Bangladesh",
-      "countryCode": "bd",
-      "quality": "HD",
-      "code": "CH-0041",
+      "code": "CH-0019",
       "active": false
     },
     {
@@ -569,6 +558,18 @@
       "active": false
     },
     {
+      "id": "nagorik-tv",
+      "name": "NAGORIK TV",
+      "logo": "https://sunplex.net/iptv/logo/nagorik-tv.jpg",
+      "stream": "http://172.32.1.88:1935/tvprogram/NAGORIK-TV/playlist.m3u8",
+      "category": "sports",
+      "country": "Bangladesh",
+      "countryCode": "bd",
+      "quality": "HD",
+      "code": "CH-0029",
+      "active": false
+    },
+    {
       "id": "news24-hd",
       "name": "News24 HD",
       "logo": "https://sunplex.net/iptv/logo/news-24.jpg",
@@ -581,51 +582,39 @@
       "active": false
     },
     {
-      "id": "sony-aath",
-      "name": "SONY AATH",
-      "logo": "https://sunplex.net/iptv/logo/sony-aath.jpg",
-      "stream": "http://172.32.1.88:1935/tvprogram/SONY-AATH/playlist.m3u8",
+      "id": "ntv",
+      "name": "NTV",
+      "logo": "https://sunplex.net/iptv/logo/ntv.jpg",
+      "stream": "http://172.32.1.88:1935/tvprogram/N-TV/playlist.m3u8",
       "category": "sports",
       "country": "Bangladesh",
       "countryCode": "bd",
       "quality": "HD",
-      "code": "CH-0044",
+      "code": "CH-0034",
       "active": false
     },
     {
-      "id": "zee-bangla",
-      "name": "ZEE BANGLA",
-      "logo": "https://sunplex.net/iptv/logo/zee-bangla.jpg",
-      "stream": "http://172.32.1.88:1935/tvprogram/ZEE-BANGLA/playlist.m3u8",
+      "id": "rtv-hd",
+      "name": "RTV HD",
+      "logo": "https://sunplex.net/iptv/logo/rtv.jpg",
+      "stream": "http://172.32.1.88:1935/tvprogram/RTV-BANGLA/playlist.m3u8",
       "category": "sports",
       "country": "Bangladesh",
       "countryCode": "bd",
       "quality": "HD",
-      "code": "CH-0045",
+      "code": "CH-0036",
       "active": false
     },
     {
-      "id": "star-jalsha-hd",
-      "name": "STAR JALSHA HD",
-      "logo": "https://sunplex.net/iptv/logo/star-jalsha.jpg",
-      "stream": "http://172.32.1.88:1935/tvprogram/STAR-JALSHA/playlist.m3u8",
+      "id": "satv",
+      "name": "SATV",
+      "logo": "https://sunplex.net/iptv/logo/satv.jpg",
+      "stream": "http://172.32.1.88:1935/tvprogram/SATV/playlist.m3u8",
       "category": "sports",
       "country": "Bangladesh",
       "countryCode": "bd",
       "quality": "HD",
-      "code": "CH-0046",
-      "active": false
-    },
-    {
-      "id": "sony-hd",
-      "name": "SONY HD",
-      "logo": "https://sunplex.net/iptv/logo/sony-hd.jpg",
-      "stream": "http://172.32.1.88:1935/tvprogram/SONY-HD/playlist.m3u8",
-      "category": "sports",
-      "country": "Bangladesh",
-      "countryCode": "bd",
-      "quality": "HD",
-      "code": "CH-0047",
+      "code": "CH-0033",
       "active": false
     },
     {
@@ -641,6 +630,102 @@
       "active": false
     },
     {
+      "id": "skynet-sports-1",
+      "name": "Skynet Sports 1",
+      "logo": "https://sunplex.net/iptv/logo/skynet-sports-1.jpg",
+      "stream": "http://172.32.1.88:1935/tvprogram/SKY-NET-1/playlist.m3u8",
+      "category": "sports",
+      "country": "Bangladesh",
+      "countryCode": "bd",
+      "quality": "HD",
+      "code": "CH-0055",
+      "active": false
+    },
+    {
+      "id": "skynet-sports-2",
+      "name": "Skynet Sports 2",
+      "logo": "https://sunplex.net/iptv/logo/skynet-sports-2.jpg",
+      "stream": "http://172.32.1.88:1935/tvprogram/SKY-NET-2/playlist.m3u8",
+      "category": "sports",
+      "country": "Bangladesh",
+      "countryCode": "bd",
+      "quality": "HD",
+      "code": "CH-0056",
+      "active": false
+    },
+    {
+      "id": "skynet-sports-6",
+      "name": "Skynet Sports 6",
+      "logo": "https://sunplex.net/iptv/logo/skynet-sports-6.jpg",
+      "stream": "http://172.32.1.88:1935/tvprogram/SKY-NET-6/playlist.m3u8",
+      "category": "sports",
+      "country": "Bangladesh",
+      "countryCode": "bd",
+      "quality": "HD",
+      "code": "CH-0057",
+      "active": false
+    },
+    {
+      "id": "skynet-sports-hd",
+      "name": "Skynet Sports HD",
+      "logo": "https://sunplex.net/iptv/logo/skynet-sports-hd.jpg",
+      "stream": "http://172.32.1.88:1935/tvprogram/SKY-NET-HD/playlist.m3u8",
+      "category": "sports",
+      "country": "Bangladesh",
+      "countryCode": "bd",
+      "quality": "HD",
+      "code": "CH-0054",
+      "active": false
+    },
+    {
+      "id": "somoy-tv",
+      "name": "SOMOY TV",
+      "logo": "https://sunplex.net/iptv/logo/somoy-tv.jpg",
+      "stream": "http://172.32.1.88:1935/tvprogram/SOMOY-TV/playlist.m3u8",
+      "category": "sports",
+      "country": "Bangladesh",
+      "countryCode": "bd",
+      "quality": "HD",
+      "code": "CH-0027",
+      "active": false
+    },
+    {
+      "id": "sony-aath",
+      "name": "SONY AATH",
+      "logo": "https://sunplex.net/iptv/logo/sony-aath.jpg",
+      "stream": "http://172.32.1.88:1935/tvprogram/SONY-AATH/playlist.m3u8",
+      "category": "sports",
+      "country": "Bangladesh",
+      "countryCode": "bd",
+      "quality": "HD",
+      "code": "CH-0044",
+      "active": false
+    },
+    {
+      "id": "sony-hd",
+      "name": "SONY HD",
+      "logo": "https://sunplex.net/iptv/logo/sony-hd.jpg",
+      "stream": "http://172.32.1.88:1935/tvprogram/SONY-HD/playlist.m3u8",
+      "category": "sports",
+      "country": "Bangladesh",
+      "countryCode": "bd",
+      "quality": "HD",
+      "code": "CH-0047",
+      "active": false
+    },
+    {
+      "id": "sony-max-2",
+      "name": "SONY MAX 2",
+      "logo": "https://sunplex.net/iptv/logo/sony-max-2.jpg",
+      "stream": "http://172.32.1.88:1935/tvprogram/SONY-MAX2/playlist.m3u8",
+      "category": "sports",
+      "country": "Bangladesh",
+      "countryCode": "bd",
+      "quality": "HD",
+      "code": "CH-0058",
+      "active": false
+    },
+    {
       "id": "sony-pix-hd",
       "name": "SONY PIX HD",
       "logo": "https://sunplex.net/iptv/logo/sony-pix-hd.jpg",
@@ -650,6 +735,18 @@
       "countryCode": "bd",
       "quality": "HD",
       "code": "CH-0049",
+      "active": false
+    },
+    {
+      "id": "sony-sab-hd",
+      "name": "SONY SAB HD",
+      "logo": "https://sunplex.net/iptv/logo/sony-sab-hd.jpg",
+      "stream": "http://172.32.1.88:1935/tvprogram/SONY-SUBHD/playlist.m3u8",
+      "category": "sports",
+      "country": "Bangladesh",
+      "countryCode": "bd",
+      "quality": "HD",
+      "code": "CH-0059",
       "active": false
     },
     {
@@ -701,202 +798,109 @@
       "active": false
     },
     {
-      "id": "skynet-sports-hd",
-      "name": "Skynet Sports HD",
-      "logo": "https://sunplex.net/iptv/logo/skynet-sports-hd.jpg",
-      "stream": "http://172.32.1.88:1935/tvprogram/SKY-NET-HD/playlist.m3u8",
+      "id": "sports-18-hd-fifa-22",
+      "name": "SPORTS 18 HD (FIFA-22)",
+      "logo": "https://sunplex.net/iptv/logo/sports-18-hd1-fifa-2022.jpg",
+      "stream": "https://stream.sunplex.live/SPORTS-18/index.m3u8",
       "category": "sports",
       "country": "Bangladesh",
       "countryCode": "bd",
       "quality": "HD",
-      "code": "CH-0054",
+      "code": "CH-0020",
       "active": false
     },
-    {
-      "id": "skynet-sports-1",
-      "name": "Skynet Sports 1",
-      "logo": "https://sunplex.net/iptv/logo/skynet-sports-1.jpg",
-      "stream": "http://172.32.1.88:1935/tvprogram/SKY-NET-1/playlist.m3u8",
-      "category": "sports",
-      "country": "Bangladesh",
-      "countryCode": "bd",
-      "quality": "HD",
-      "code": "CH-0055",
-      "active": false
-    },
-    {
-      "id": "skynet-sports-2",
-      "name": "Skynet Sports 2",
-      "logo": "https://sunplex.net/iptv/logo/skynet-sports-2.jpg",
-      "stream": "http://172.32.1.88:1935/tvprogram/SKY-NET-2/playlist.m3u8",
-      "category": "sports",
-      "country": "Bangladesh",
-      "countryCode": "bd",
-      "quality": "HD",
-      "code": "CH-0056",
-      "active": false
-    },
-    {
-      "id": "skynet-sports-6",
-      "name": "Skynet Sports 6",
-      "logo": "https://sunplex.net/iptv/logo/skynet-sports-6.jpg",
-      "stream": "http://172.32.1.88:1935/tvprogram/SKY-NET-6/playlist.m3u8",
-      "category": "sports",
-      "country": "Bangladesh",
-      "countryCode": "bd",
-      "quality": "HD",
-      "code": "CH-0057",
-      "active": false
-    },
-    {
-      "id": "sony-max-2",
-      "name": "SONY MAX 2",
-      "logo": "https://sunplex.net/iptv/logo/sony-max-2.jpg",
-      "stream": "http://172.32.1.88:1935/tvprogram/SONY-MAX2/playlist.m3u8",
-      "category": "sports",
-      "country": "Bangladesh",
-      "countryCode": "bd",
-      "quality": "HD",
-      "code": "CH-0058",
-      "active": false
-    },
-    {
-      "id": "sony-sab-hd",
-      "name": "SONY SAB HD",
-      "logo": "https://sunplex.net/iptv/logo/sony-sab-hd.jpg",
-      "stream": "http://172.32.1.88:1935/tvprogram/SONY-SUBHD/playlist.m3u8",
-      "category": "sports",
-      "country": "Bangladesh",
-      "countryCode": "bd",
-      "quality": "HD",
-      "code": "CH-0059",
-      "active": false
-    },
-    {
-      "id": "bbc-lifestyle",
-      "name": "BBC Lifestyle",
-      "logo": "https://sunplex.net/iptv/logo/bbc-lifestyle.jpg",
-      "stream": "http://172.32.1.88:1935/tvprogram/JALSHA-MOVIES/playlist.m3u8",
-      "category": "sports",
-      "country": "Bangladesh",
-      "countryCode": "bd",
-      "quality": "HD",
-      "code": "CH-0060",
-      "active": false
-    },
-    {
-      "id": "dd-bangla",
-      "name": "DD BANGLA",
-      "logo": "https://sunplex.net/iptv/logo/dd-bangla.jpg",
-      "stream": "http://172.32.1.88:1935/tvprogram/DD-BANGLA/playlist.m3u8",
-      "category": "sports",
-      "country": "Bangladesh",
-      "countryCode": "bd",
-      "quality": "HD",
-      "code": "CH-0061",
-      "active": false
-    },
-    {
-      "id": "bbc-world-news",
-      "name": "BBC WORLD NEWS",
-      "logo": "https://sunplex.net/iptv/logo/bbc-world-news.jpg",
-      "stream": "http://172.32.1.88:1935/tvprogram/BBC-WORLD/playlist.m3u8",
-      "category": "sports",
-      "country": "Bangladesh",
-      "countryCode": "bd",
-      "quality": "HD",
-      "code": "CH-0062",
-      "active": false
-    },
-    {
-      "id": "aljazeera-hd",
-      "name": "ALJAZEERA HD",
-      "logo": "https://sunplex.net/iptv/logo/aljazeera.jpg",
-      "stream": "http://172.32.1.88:1935/tvprogram/Aljazeera-HD/playlist.m3u8",
-      "category": "sports",
-      "country": "Bangladesh",
-      "countryCode": "bd",
-      "quality": "HD",
-      "code": "CH-0063",
-      "active": false
-    },
-    {
-      "id": "bbc-earth-hd",
-      "name": "BBC EARTH HD",
-      "logo": "https://sunplex.net/iptv/logo/bbc-earth.jpg",
-      "stream": "http://172.32.1.88:1935/tvprogram/BBC-EARTH/playlist.m3u8",
-      "category": "sports",
-      "country": "Bangladesh",
-      "countryCode": "bd",
-      "quality": "HD",
-      "code": "CH-0064",
-      "active": false
-    },
-    {
-      "id": "duronto-tv",
-      "name": "DURONTO TV",
-      "logo": "https://sunplex.net/iptv/logo/duronto-tv.jpg",
-      "stream": "http://172.32.1.88:1935/tvprogram/Duronto-TV/playlist.m3u8",
-      "category": "sports",
-      "country": "Bangladesh",
-      "countryCode": "bd",
-      "quality": "HD",
-      "code": "CH-0065",
-      "active": false
-    },
-    {
-      "id": "gaan-bangla",
-      "name": "GAAN BANGLA",
-      "logo": "https://sunplex.net/iptv/logo/gaan-bangla.jpg",
-      "stream": "http://172.32.1.88:1935/tvprogram/Gaan-Bangla/playlist.m3u8",
-      "category": "sports",
-      "country": "Bangladesh",
-      "countryCode": "bd",
-      "quality": "HD",
-      "code": "CH-0066",
-      "active": false
-    },
-    {
-      "id": "dw",
-      "name": "DW",
-      "logo": "https://sunplex.net/iptv/logo/dw.jpg",
-      "stream": "http://172.32.1.88:1935/tvprogram/DW-HD/playlist.m3u8",
-      "category": "sports",
-      "country": "Bangladesh",
-      "countryCode": "bd",
-      "quality": "HD",
-      "code": "CH-0067",
-      "active": false
-    },
-    {
-      "id": "ch_1781277934968",
-      "name": "ATN Bangla UK",
-      "code": "",
-      "category": "News",
-      "country": "Bangladesh",
-      "countryCode": "UN",
-      "logo": "https://sunplex.net/iptv/logo/atn-bangla.jpg",
-      "stream": "https://app.ncare.live/c3VydmVyX8RpbEU9Mi8xNy8yMDE0GIDU6RgzQ6NTAgdEoaeFzbF92YWxIZTO0U0ezN1IzMyfvcGVMZEJCTEFWeVN3PTOmdFsaWRtaW51aiPhnPTI2/atnbanglauk-off.stream/playlist.m3u8",
-      "languages": [
-        []
-      ],
-      "active": true,
-      "is_nsfw": false
-    }
-  ],
-  "Spain": [
     {
       "id": "sports-legends-bd",
       "name": "Sports Legends",
       "logo": "https://tstatic.akash-go.com/cms-ui/images/custom-content/1770377900139.png",
       "stream": "https://nomawnoijl.gpcdn.net/akash/sportslegends/playlist.m3u8",
       "category": "sports",
-      "country": "Spain",
-      "countryCode": "es",
-      "quality": "720p",
-      "code": "CH-0016",
-      "active": true
+      "country": "Bangladesh",
+      "countryCode": "bd",
+      "quality": "720p"
     },
+    {
+      "id": "star-jalsha-hd",
+      "name": "STAR JALSHA HD",
+      "logo": "https://sunplex.net/iptv/logo/star-jalsha.jpg",
+      "stream": "http://172.32.1.88:1935/tvprogram/STAR-JALSHA/playlist.m3u8",
+      "category": "sports",
+      "country": "Bangladesh",
+      "countryCode": "bd",
+      "quality": "HD",
+      "code": "CH-0046",
+      "active": false
+    },
+    {
+      "id": "t-sports-hd-bd",
+      "name": "T Sports HD",
+      "logo": "https://s3.aynaott.com/storage/dbc585f70a60b9855b6e13a8ce4cb6f4",
+      "stream": "https://tvsen7.aynaott.com/tsports-hd/index.m3u8?e=1779283784&u=78be6644-0a65-48ec-81a4-089ac65a2619&token=3b4c5a2cfa872fa7f91ffbfb4aa0f658",
+      "category": "sports",
+      "country": "Bangladesh",
+      "countryCode": "bd",
+      "quality": "720p"
+    },
+    {
+      "id": "t-sports-hd",
+      "name": "T SPORTS HD",
+      "logo": "https://sunplex.net/iptv/logo/t-sports-hd-fifa-2022.jpg",
+      "stream": "https://stream.sunplex.live/T-SPORTS/index.m3u8",
+      "category": "sports",
+      "country": "Bangladesh",
+      "countryCode": "bd",
+      "quality": "HD",
+      "code": "CH-0021",
+      "active": false
+    },
+    {
+      "id": "t-sports-hd-source-2",
+      "name": "T SPORTS HD (Source 2)",
+      "logo": "https://sunplex.net/iptv/logo/t-sports-hd-fifa-2022.jpg",
+      "stream": "http://172.32.1.88:1935/tvprogram/T-SPORTS/playlist.m3u8",
+      "category": "sports",
+      "country": "Bangladesh",
+      "countryCode": "bd",
+      "quality": "HD",
+      "code": "CH-0022",
+      "active": false
+    },
+    {
+      "id": "t-sports-bd",
+      "name": "T-SPORTS",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/T_Sports_logo.svg/500px-T_Sports_logo.svg.png",
+      "stream": "https://tvsen7.aynaott.com/tsports-hd/index.m3u8",
+      "category": "sports",
+      "country": "Bangladesh",
+      "countryCode": "bd",
+      "quality": "720p"
+    },
+    {
+      "id": "yes-tv-hd-fifa-22",
+      "name": "YES TV HD (FIFA-22)",
+      "logo": "https://sunplex.net/iptv/logo/yestv-hd-fifa-2022.jpg",
+      "stream": "https://stream.sunplex.live/YES-TV/index.m3u8",
+      "category": "sports",
+      "country": "Bangladesh",
+      "countryCode": "bd",
+      "quality": "HD",
+      "code": "CH-0026",
+      "active": false
+    },
+    {
+      "id": "zee-bangla",
+      "name": "ZEE BANGLA",
+      "logo": "https://sunplex.net/iptv/logo/zee-bangla.jpg",
+      "stream": "http://172.32.1.88:1935/tvprogram/ZEE-BANGLA/playlist.m3u8",
+      "category": "sports",
+      "country": "Bangladesh",
+      "countryCode": "bd",
+      "quality": "HD",
+      "code": "CH-0045",
+      "active": false
+    }
+  ],
+  "Spain": [
     {
       "id": "bein-sports-es",
       "name": "beIN Sports España",
@@ -959,14 +963,24 @@
     },
     {
       "id": "real-madrid-tv-football-es",
-      "name": "Real Madrid TV",
-      "logo": "https://upload.wikimedia.org/wikipedia/en/thumb/5/56/Real_Madrid_CF.svg/200px-Real_Madrid_CF.svg.png",
+      "name": "Real Madrid TV (FOOTBALL)",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/Olympics_symbol.svg/200px-Olympics_symbol.svg.png",
       "stream": "https://rmtv.akamaized.net/hls/live/2043154/rmtv-en-web/bitrate_3.m3u8",
       "category": "sports",
       "country": "Spain",
       "countryCode": "es",
+      "quality": "720p"
+    },
+    {
+      "id": "sports-legends-bd",
+      "name": "Sports Legends",
+      "logo": "https://tstatic.akash-go.com/cms-ui/images/custom-content/1770377900139.png",
+      "stream": "https://nomawnoijl.gpcdn.net/akash/sportslegends/playlist.m3u8",
+      "category": "sports",
+      "country": "Spain",
+      "countryCode": "es",
       "quality": "720p",
-      "code": "CH-0222",
+      "code": "CH-0016",
       "active": true
     }
   ],
@@ -991,9 +1005,7 @@
       "category": "sports",
       "country": "Brazil",
       "countryCode": "br",
-      "quality": "720p",
-      "code": "CH-0069",
-      "active": true
+      "quality": "720p"
     },
     {
       "id": "caze-tv-1080p-br",
@@ -1003,9 +1015,7 @@
       "category": "sports",
       "country": "Brazil",
       "countryCode": "br",
-      "quality": "1080p",
-      "code": "CH-0070",
-      "active": true
+      "quality": "1080p"
     },
     {
       "id": "pluto-esportes-br",
@@ -1089,9 +1099,7 @@
       "category": "sports",
       "country": "Canada",
       "countryCode": "ca",
-      "quality": "720p",
-      "code": "CH-0077",
-      "active": false
+      "quality": "720p"
     },
     {
       "id": "tsn-2-ca",
@@ -1101,9 +1109,7 @@
       "category": "sports",
       "country": "Canada",
       "countryCode": "ca",
-      "quality": "720p",
-      "code": "CH-0078",
-      "active": false
+      "quality": "720p"
     },
     {
       "id": "tsn-3-ca",
@@ -1113,9 +1119,7 @@
       "category": "sports",
       "country": "Canada",
       "countryCode": "ca",
-      "quality": "720p",
-      "code": "CH-0079",
-      "active": false
+      "quality": "720p"
     }
   ],
   "Chile": [
@@ -1348,6 +1352,26 @@
   ],
   "France": [
     {
+      "id": "ch_import_1781275737868_208",
+      "name": "Bein Sports 2 - France (FIFA)",
+      "logo": "https://imglink.cc/cdn/kIiut6WBq0.jpg",
+      "stream": "http://145.239.5.177/559/mpegts",
+      "category": "sports",
+      "country": "France",
+      "countryCode": "fr",
+      "active": true
+    },
+    {
+      "id": "ch_import_1781275737868_651",
+      "name": "Bein Sports 2 B- France (FIFA)",
+      "logo": "https://imglink.cc/cdn/kIiut6WBq0.jpg",
+      "stream": "http://145.239.5.177:80/559/index.m3u8",
+      "category": "sports",
+      "country": "France",
+      "countryCode": "fr",
+      "active": true
+    },
+    {
       "id": "canal-plus-sport-fr",
       "name": "Canal+ Sport",
       "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Canal%2B_Sport_logo.svg/200px-Canal%2B_Sport_logo.svg.png",
@@ -1394,26 +1418,6 @@
       "quality": "720p",
       "code": "CH-0101",
       "active": false
-    },
-    {
-      "id": "ch_import_1781275737868_208",
-      "name": "Bein Sports 2 - France (FIFA)",
-      "logo": "https://imglink.cc/cdn/kIiut6WBq0.jpg",
-      "stream": "http://145.239.5.177/559/mpegts",
-      "category": "sports",
-      "country": "France",
-      "countryCode": "fr",
-      "active": true
-    },
-    {
-      "id": "ch_import_1781275737868_651",
-      "name": "Bein Sports 2 B- France (FIFA)",
-      "logo": "https://imglink.cc/cdn/kIiut6WBq0.jpg",
-      "stream": "http://145.239.5.177:80/559/index.m3u8",
-      "category": "sports",
-      "country": "France",
-      "countryCode": "fr",
-      "active": true
     }
   ],
   "Germany": [
@@ -1431,15 +1435,13 @@
     },
     {
       "id": "more-then-sports-tv-de",
-      "name": "MORE THAN SPORTS TV",
+      "name": "MORE THEN SPORTS TV",
       "logo": "https://s3.aynaott.com/storage/39174e32d4f8d29a95c881637fe1ecdb",
       "stream": "https://mts1.iptv-playoutcenter.de/mts/mts-web/playlist.m3u8",
       "category": "sports",
       "country": "Germany",
       "countryCode": "de",
-      "quality": "720p",
-      "code": "CH-0103",
-      "active": true
+      "quality": "720p"
     },
     {
       "id": "ran-de",
@@ -1473,9 +1475,7 @@
       "category": "sports",
       "country": "Germany",
       "countryCode": "de",
-      "quality": "720p",
-      "code": "CH-0106",
-      "active": true
+      "quality": "720p"
     },
     {
       "id": "xtrem-sports-de",
@@ -1485,9 +1485,7 @@
       "category": "sports",
       "country": "Germany",
       "countryCode": "de",
-      "quality": "720p",
-      "code": "CH-0107",
-      "active": true
+      "quality": "720p"
     }
   ],
   "Greece": [
@@ -1601,9 +1599,7 @@
       "category": "sports",
       "country": "India",
       "countryCode": "in",
-      "quality": "720p",
-      "code": "CH-0116",
-      "active": false
+      "quality": "720p"
     },
     {
       "id": "dd-sports-in",
@@ -1613,9 +1609,7 @@
       "category": "sports",
       "country": "India",
       "countryCode": "in",
-      "quality": "720p",
-      "code": "CH-0117",
-      "active": true
+      "quality": "720p"
     },
     {
       "id": "jio-cinema-sports-in",
@@ -1637,9 +1631,7 @@
       "category": "sports",
       "country": "India",
       "countryCode": "in",
-      "quality": "720p",
-      "code": "CH-0119",
-      "active": false
+      "quality": "720p"
     },
     {
       "id": "sony-ten-1-in",
@@ -1667,15 +1659,13 @@
     },
     {
       "id": "star-select-1-in",
-      "name": "Star Sports HD",
+      "name": "Star Select 1",
       "logo": "https://ctgiptv.com/assets/images/channels/starselect1hd.jpg",
       "stream": "https://tvsen7.aynaott.com/sspts1/index.m3u8",
       "category": "sports",
       "country": "India",
       "countryCode": "in",
-      "quality": "720p",
-      "code": "CH-0122",
-      "active": true
+      "quality": "720p"
     },
     {
       "id": "star-sports-1-in",
@@ -1730,40 +1720,160 @@
   ],
   "International Sports": [
     {
-      "id": "world-poker-tour-intl",
-      "name": "World Poker Tour",
-      "logo": "https://upload.wikimedia.org/wikipedia/en/thumb/4/49/World_Poker_Tour_logo.svg/200px-World_Poker_Tour_logo.svg.png",
-      "stream": "https://d39g1vxj2ef6in.cloudfront.net/v1/manifest/3fec3e5cac39a52b2132f9c66c83dae043dc17d4/prod-rakuten-stitched/15d59f2f-80da-4448-9bce-775cc9f470f7/1.m3u8",
-      "category": "sports",
-      "country": "International Sports",
-      "countryCode": "intl",
-      "quality": "1080p",
-      "code": "CH-0127",
-      "active": true
-    },
-    {
-      "id": "world-billiards-intl",
-      "name": "World Billiards",
-      "logo": "https://i.imgur.com/mbQCGm5.png",
-      "stream": "https://9a81dd4ee3884d0dbcacafaf0d81327a.mediatailor.us-east-1.amazonaws.com/v1/master/04fd913bb278d8775298c26fdca9d9841f37601f/RakutenTV-eu_BilliardsTV/playlist.m3u8",
+      "id": "30a-golf-kingdom-intl",
+      "name": "30A Golf Kingdom",
+      "logo": "https://golfkingdom.net/wp-content/uploads/2022/04/golf-kingdom-st.jpg",
+      "stream": "https://30a-tv.com/feeds/vidaa/golf.m3u8",
       "category": "sports",
       "country": "International Sports",
       "countryCode": "intl",
       "quality": "720p",
-      "code": "CH-0128",
+      "code": "CH-0157",
       "active": true
     },
     {
-      "id": "world-of-freesports-intl",
-      "name": "World of FreeSports",
-      "logo": "https://i.imgur.com/BcN8B3D.png",
-      "stream": "https://rakutenaa-mainstreammediafreesportsintl-rakuten-t7dc0.amagi.tv/playlist/rakutenAA-mainstreammediafreesportsintl-rakuten/playlist.m3u8",
+      "id": "accdn-intl",
+      "name": "ACCDN",
+      "logo": "https://i.imgur.com/V6Kaqha.png",
+      "stream": "https://raycom-accdn-firetv.amagi.tv/playlist.m3u8",
       "category": "sports",
       "country": "International Sports",
       "countryCode": "intl",
       "quality": "1080p",
-      "code": "CH-0129",
+      "code": "CH-0150",
       "active": true
+    },
+    {
+      "id": "africa-24-sport-intl",
+      "name": "Africa 24 Sport",
+      "logo": "https://i.imgur.com/YWIJdai.png",
+      "stream": "https://africa24.vedge.infomaniak.com/livecast/ik:africa24sport/manifest.m3u8",
+      "category": "sports",
+      "country": "International Sports",
+      "countryCode": "intl",
+      "quality": "1080p",
+      "code": "CH-0151",
+      "active": true
+    },
+    {
+      "id": "all-sports-tv-intl",
+      "name": "All Sports Television Network",
+      "logo": "https://i.imgur.com/D4mZ8ll.png",
+      "stream": "https://2-fss-2.streamhoster.com/pl_118/204972-2205186-1/playlist.m3u8",
+      "category": "sports",
+      "country": "International Sports",
+      "countryCode": "intl",
+      "quality": "720p",
+      "code": "CH-0149",
+      "active": false
+    },
+    {
+      "id": "antena-sport-intl",
+      "name": "AntenaSport",
+      "logo": "https://yt3.googleusercontent.com/mXF6CZIe_yJNlPPQdqVvGNUbLY6V6N38hLKnWWKcOMhCDjuLTFZZ4QH_faUmo0pPXQBEIIIa=s512-c-k-c0x00ffffff-no-rj",
+      "stream": "https://stream1.antenaplay.ro/as/asrolive1/playlist.m3u8",
+      "category": "sports",
+      "country": "International Sports",
+      "countryCode": "intl",
+      "quality": "720p",
+      "code": "CH-0152",
+      "active": true
+    },
+    {
+      "id": "bahrain-sports-2-intl",
+      "name": "Bahrain Sports 2",
+      "logo": "https://i.imgur.com/ZkuZmIo.png",
+      "stream": "https://5c7b683162943.streamlock.net/live/ngrp:bahrainsportstwo_all/playlist.m3u8",
+      "category": "sports",
+      "country": "International Sports",
+      "countryCode": "intl",
+      "quality": "720p",
+      "code": "CH-0153",
+      "active": false
+    },
+    {
+      "id": "bek-tv-sports-west-intl",
+      "name": "BEK TV Sports West",
+      "logo": "https://i.imgur.com/1l3t5jd.png",
+      "stream": "https://cdn3.wowza.com/5/ZWQ1K2NYTmpFbGsr/BEK-WOWZA-1/smil:BEKPRIMEW.smil/playlist.m3u8",
+      "category": "sports",
+      "country": "International Sports",
+      "countryCode": "intl",
+      "quality": "720p",
+      "code": "CH-0154",
+      "active": true
+    },
+    {
+      "id": "canal-11-intl",
+      "name": "Canal 11",
+      "logo": "https://i.imgur.com/mbQCGm5.png",
+      "stream": "https://ythls.armelin.one/channel/UCMfEEaNYYX5w6nbvccTCHhg.m3u8",
+      "category": "sports",
+      "country": "International Sports",
+      "countryCode": "intl",
+      "quality": "1080p",
+      "code": "CH-0140",
+      "active": false
+    },
+    {
+      "id": "canal-motor-intl",
+      "name": "Canal Motor",
+      "logo": "https://i.imgur.com/BHm0wem.png",
+      "stream": "https://digicom.hls.iptvdc.com/canalmotor/index.m3u8",
+      "category": "sports",
+      "country": "International Sports",
+      "countryCode": "intl",
+      "quality": "720p",
+      "code": "CH-0136",
+      "active": true
+    },
+    {
+      "id": "cdn-deportes-intl",
+      "name": "CDN Deportes",
+      "logo": "https://i.imgur.com/yU5LqTL.png",
+      "stream": "http://200.125.170.122:8000/play/a03j/index.m3u8",
+      "category": "sports",
+      "country": "International Sports",
+      "countryCode": "intl",
+      "quality": "720p",
+      "code": "CH-0155",
+      "active": false
+    },
+    {
+      "id": "ct-sport-intl",
+      "name": "ČT Sport",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/%C4%8CT_sport_logo.png/512px-%C4%8CT_sport_logo.png",
+      "stream": "http://88.212.15.19/live/test_ctsport_25p/playlist.m3u8",
+      "category": "sports",
+      "country": "International Sports",
+      "countryCode": "intl",
+      "quality": "720p",
+      "code": "CH-0156",
+      "active": true
+    },
+    {
+      "id": "esports-max-intl",
+      "name": "eSports Max",
+      "logo": "https://i.imgur.com/ulGKX30.png",
+      "stream": "http://vcpar.myplaytv.com/esportsmax/live/playlist.m3u8",
+      "category": "sports",
+      "country": "International Sports",
+      "countryCode": "intl",
+      "quality": "480p",
+      "code": "CH-0158",
+      "active": true
+    },
+    {
+      "id": "fubo-sports-intl",
+      "name": "Fubo Sports Network",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6c/Fubo_Sports_Network_logo.svg/200px-Fubo_Sports_Network_logo.svg.png",
+      "stream": "https://playout.fubo.tv/plex/3.m3u8",
+      "category": "sports",
+      "country": "International Sports",
+      "countryCode": "intl",
+      "quality": "720p",
+      "code": "CH-0139",
+      "active": false
     },
     {
       "id": "hard-knocks-fighting-intl",
@@ -1778,16 +1888,28 @@
       "active": true
     },
     {
-      "id": "tna-wrestling-intl",
-      "name": "TNA Wrestling",
-      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/TNA_Wrestling_logo.svg/200px-TNA_Wrestling_logo.svg.png",
-      "stream": "http://cfd-v4-service-channel-stitcher-use1-1.prd.pluto.tv/stitch/hls/channel/62ea4dadce395f0007086df2/master.m3u8?appName=web&appVersion=unknown&clientTime=0&deviceDNT=0&deviceId=2c7c7788-35fc-11ef-a031-2b5d494037a2&deviceMake=Chrome&deviceModel=web&deviceType=web&deviceVersion=unknown&includeExtendedEvents=false&serverSideAds=false&sid=649aa9eb-97bb-42d6-85e0-d0595821c87a",
+      "id": "la-redonda-tv-intl",
+      "name": "La Redonda TV",
+      "logo": "https://i.imgur.com/a5SxXvJ.jpg",
+      "stream": "https://ythls.armelin.one/channel/UCG_S--F4wcdre2-8PG9YlhA.m3u8",
+      "category": "sports",
+      "country": "International Sports",
+      "countryCode": "intl",
+      "quality": "1080p",
+      "code": "CH-0141",
+      "active": true
+    },
+    {
+      "id": "m-net-sport-intl",
+      "name": "M-Net Sport",
+      "logo": "https://i.imgur.com/7k8ar1Z.png",
+      "stream": "http://ares.mnet.mk/hls/mnet-sport.m3u8",
       "category": "sports",
       "country": "International Sports",
       "countryCode": "intl",
       "quality": "720p",
-      "code": "CH-0131",
-      "active": false
+      "code": "CH-0142",
+      "active": true
     },
     {
       "id": "mma-tv-intl",
@@ -1802,51 +1924,15 @@
       "active": true
     },
     {
-      "id": "red-bull-tv-intl",
-      "name": "Red Bull TV",
-      "logo": "https://i.imgur.com/BcN8B3D.png",
-      "stream": "https://rbmn-live.akamaized.net/hls/live/590964/BoRB-AT/master.m3u8",
+      "id": "pac-12-insider-intl",
+      "name": "Pac 12 Insider",
+      "logo": "https://i.imgur.com/736QREy.png",
+      "stream": "https://pac12-roku-us.amagi.tv/playlist.m3u8",
       "category": "sports",
       "country": "International Sports",
       "countryCode": "intl",
       "quality": "1080p",
-      "code": "CH-0133",
-      "active": true
-    },
-    {
-      "id": "tennis-channel-intl",
-      "name": "Tennis Channel",
-      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Tennis_Channel_logo.svg/200px-Tennis_Channel_logo.svg.png",
-      "stream": "https://tennischannel-int-samsunguk.amagi.tv/playlist.m3u8",
-      "category": "sports",
-      "country": "International Sports",
-      "countryCode": "intl",
-      "quality": "1080p",
-      "code": "CH-0134",
-      "active": false
-    },
-    {
-      "id": "sports-grid-intl",
-      "name": "SportsGrid",
-      "logo": "https://i.imgur.com/ulGKX30.png",
-      "stream": "https://sportsgrid-tribal.amagi.tv/playlist.m3u8",
-      "category": "sports",
-      "country": "International Sports",
-      "countryCode": "intl",
-      "quality": "1080p",
-      "code": "CH-0135",
-      "active": true
-    },
-    {
-      "id": "canal-motor-intl",
-      "name": "Canal Motor",
-      "logo": "https://i.imgur.com/BHm0wem.png",
-      "stream": "https://digicom.hls.iptvdc.com/canalmotor/index.m3u8",
-      "category": "sports",
-      "country": "International Sports",
-      "countryCode": "intl",
-      "quality": "720p",
-      "code": "CH-0136",
+      "code": "CH-0143",
       "active": true
     },
     {
@@ -1874,63 +1960,27 @@
       "active": true
     },
     {
-      "id": "fubo-sports-intl",
-      "name": "Fubo Sports Network",
-      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6c/Fubo_Sports_Network_logo.svg/200px-Fubo_Sports_Network_logo.svg.png",
-      "stream": "https://playout.fubo.tv/plex/3.m3u8",
-      "category": "sports",
-      "country": "International Sports",
-      "countryCode": "intl",
-      "quality": "720p",
-      "code": "CH-0139",
-      "active": false
-    },
-    {
-      "id": "canal-11-intl",
-      "name": "Canal 11",
-      "logo": "https://i.imgur.com/mbQCGm5.png",
-      "stream": "https://ythls.armelin.one/channel/UCMfEEaNYYX5w6nbvccTCHhg.m3u8",
+      "id": "red-bull-tv-intl",
+      "name": "Red Bull TV",
+      "logo": "https://i.imgur.com/BcN8B3D.png",
+      "stream": "https://rbmn-live.akamaized.net/hls/live/590964/BoRB-AT/master.m3u8",
       "category": "sports",
       "country": "International Sports",
       "countryCode": "intl",
       "quality": "1080p",
-      "code": "CH-0140",
-      "active": false
-    },
-    {
-      "id": "la-redonda-tv-intl",
-      "name": "La Redonda TV",
-      "logo": "https://i.imgur.com/a5SxXvJ.jpg",
-      "stream": "https://ythls.armelin.one/channel/UCG_S--F4wcdre2-8PG9YlhA.m3u8",
-      "category": "sports",
-      "country": "International Sports",
-      "countryCode": "intl",
-      "quality": "1080p",
-      "code": "CH-0141",
+      "code": "CH-0133",
       "active": true
     },
     {
-      "id": "m-net-sport-intl",
-      "name": "M-Net Sport",
-      "logo": "https://i.imgur.com/7k8ar1Z.png",
-      "stream": "http://ares.mnet.mk/hls/mnet-sport.m3u8",
-      "category": "sports",
-      "country": "International Sports",
-      "countryCode": "intl",
-      "quality": "720p",
-      "code": "CH-0142",
-      "active": true
-    },
-    {
-      "id": "pac-12-insider-intl",
-      "name": "Pac 12 Insider",
-      "logo": "https://i.imgur.com/736QREy.png",
-      "stream": "https://pac12-roku-us.amagi.tv/playlist.m3u8",
+      "id": "sports-grid-intl",
+      "name": "SportsGrid",
+      "logo": "https://i.imgur.com/ulGKX30.png",
+      "stream": "https://sportsgrid-tribal.amagi.tv/playlist.m3u8",
       "category": "sports",
       "country": "International Sports",
       "countryCode": "intl",
       "quality": "1080p",
-      "code": "CH-0143",
+      "code": "CH-0135",
       "active": true
     },
     {
@@ -1944,6 +1994,30 @@
       "quality": "720p",
       "code": "CH-0144",
       "active": true
+    },
+    {
+      "id": "tennis-channel-intl",
+      "name": "Tennis Channel",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Tennis_Channel_logo.svg/200px-Tennis_Channel_logo.svg.png",
+      "stream": "https://tennischannel-int-samsunguk.amagi.tv/playlist.m3u8",
+      "category": "sports",
+      "country": "International Sports",
+      "countryCode": "intl",
+      "quality": "1080p",
+      "code": "CH-0134",
+      "active": false
+    },
+    {
+      "id": "tna-wrestling-intl",
+      "name": "TNA Wrestling",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/TNA_Wrestling_logo.svg/200px-TNA_Wrestling_logo.svg.png",
+      "stream": "http://cfd-v4-service-channel-stitcher-use1-1.prd.pluto.tv/stitch/hls/channel/62ea4dadce395f0007086df2/master.m3u8?appName=web&appVersion=unknown&clientTime=0&deviceDNT=0&deviceId=2c7c7788-35fc-11ef-a031-2b5d494037a2&deviceMake=Chrome&deviceModel=web&deviceType=web&deviceVersion=unknown&includeExtendedEvents=false&serverSideAds=false&sid=649aa9eb-97bb-42d6-85e0-d0595821c87a",
+      "category": "sports",
+      "country": "International Sports",
+      "countryCode": "intl",
+      "quality": "720p",
+      "code": "CH-0131",
+      "active": false
     },
     {
       "id": "tr-sport-intl",
@@ -1994,123 +2068,39 @@
       "active": true
     },
     {
-      "id": "all-sports-tv-intl",
-      "name": "All Sports Television Network",
-      "logo": "https://i.imgur.com/D4mZ8ll.png",
-      "stream": "https://2-fss-2.streamhoster.com/pl_118/204972-2205186-1/playlist.m3u8",
+      "id": "world-billiards-intl",
+      "name": "World Billiards",
+      "logo": "https://i.imgur.com/mbQCGm5.png",
+      "stream": "https://9a81dd4ee3884d0dbcacafaf0d81327a.mediatailor.us-east-1.amazonaws.com/v1/master/04fd913bb278d8775298c26fdca9d9841f37601f/RakutenTV-eu_BilliardsTV/playlist.m3u8",
       "category": "sports",
       "country": "International Sports",
       "countryCode": "intl",
       "quality": "720p",
-      "code": "CH-0149",
-      "active": false
+      "code": "CH-0128",
+      "active": true
     },
     {
-      "id": "accdn-intl",
-      "name": "ACCDN",
-      "logo": "https://i.imgur.com/V6Kaqha.png",
-      "stream": "https://raycom-accdn-firetv.amagi.tv/playlist.m3u8",
+      "id": "world-of-freesports-intl",
+      "name": "World of FreeSports",
+      "logo": "https://i.imgur.com/BcN8B3D.png",
+      "stream": "https://rakutenaa-mainstreammediafreesportsintl-rakuten-t7dc0.amagi.tv/playlist/rakutenAA-mainstreammediafreesportsintl-rakuten/playlist.m3u8",
       "category": "sports",
       "country": "International Sports",
       "countryCode": "intl",
       "quality": "1080p",
-      "code": "CH-0150",
+      "code": "CH-0129",
       "active": true
     },
     {
-      "id": "africa-24-sport-intl",
-      "name": "Africa 24 Sport",
-      "logo": "https://i.imgur.com/YWIJdai.png",
-      "stream": "https://africa24.vedge.infomaniak.com/livecast/ik:africa24sport/manifest.m3u8",
+      "id": "world-poker-tour-intl",
+      "name": "World Poker Tour",
+      "logo": "https://upload.wikimedia.org/wikipedia/en/thumb/4/49/World_Poker_Tour_logo.svg/200px-World_Poker_Tour_logo.svg.png",
+      "stream": "https://d39g1vxj2ef6in.cloudfront.net/v1/manifest/3fec3e5cac39a52b2132f9c66c83dae043dc17d4/prod-rakuten-stitched/15d59f2f-80da-4448-9bce-775cc9f470f7/1.m3u8",
       "category": "sports",
       "country": "International Sports",
       "countryCode": "intl",
       "quality": "1080p",
-      "code": "CH-0151",
-      "active": true
-    },
-    {
-      "id": "antena-sport-intl",
-      "name": "AntenaSport",
-      "logo": "https://yt3.googleusercontent.com/mXF6CZIe_yJNlPPQdqVvGNUbLY6V6N38hLKnWWKcOMhCDjuLTFZZ4QH_faUmo0pPXQBEIIIa=s512-c-k-c0x00ffffff-no-rj",
-      "stream": "https://stream1.antenaplay.ro/as/asrolive1/playlist.m3u8",
-      "category": "sports",
-      "country": "International Sports",
-      "countryCode": "intl",
-      "quality": "720p",
-      "code": "CH-0152",
-      "active": true
-    },
-    {
-      "id": "bahrain-sports-2-intl",
-      "name": "Bahrain Sports 2",
-      "logo": "https://i.imgur.com/ZkuZmIo.png",
-      "stream": "https://5c7b683162943.streamlock.net/live/ngrp:bahrainsportstwo_all/playlist.m3u8",
-      "category": "sports",
-      "country": "International Sports",
-      "countryCode": "intl",
-      "quality": "720p",
-      "code": "CH-0153",
-      "active": false
-    },
-    {
-      "id": "bek-tv-sports-west-intl",
-      "name": "BEK TV Sports West",
-      "logo": "https://i.imgur.com/1l3t5jd.png",
-      "stream": "https://cdn3.wowza.com/5/ZWQ1K2NYTmpFbGsr/BEK-WOWZA-1/smil:BEKPRIMEW.smil/playlist.m3u8",
-      "category": "sports",
-      "country": "International Sports",
-      "countryCode": "intl",
-      "quality": "720p",
-      "code": "CH-0154",
-      "active": true
-    },
-    {
-      "id": "cdn-deportes-intl",
-      "name": "CDN Deportes",
-      "logo": "https://i.imgur.com/yU5LqTL.png",
-      "stream": "http://200.125.170.122:8000/play/a03j/index.m3u8",
-      "category": "sports",
-      "country": "International Sports",
-      "countryCode": "intl",
-      "quality": "720p",
-      "code": "CH-0155",
-      "active": false
-    },
-    {
-      "id": "ct-sport-intl",
-      "name": "ČT Sport",
-      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/%C4%8CT_sport_logo.png/512px-%C4%8CT_sport_logo.png",
-      "stream": "http://88.212.15.19/live/test_ctsport_25p/playlist.m3u8",
-      "category": "sports",
-      "country": "International Sports",
-      "countryCode": "intl",
-      "quality": "720p",
-      "code": "CH-0156",
-      "active": true
-    },
-    {
-      "id": "30a-golf-kingdom-intl",
-      "name": "30A Golf Kingdom",
-      "logo": "https://golfkingdom.net/wp-content/uploads/2022/04/golf-kingdom-st.jpg",
-      "stream": "https://30a-tv.com/feeds/vidaa/golf.m3u8",
-      "category": "sports",
-      "country": "International Sports",
-      "countryCode": "intl",
-      "quality": "720p",
-      "code": "CH-0157",
-      "active": true
-    },
-    {
-      "id": "esports-max-intl",
-      "name": "eSports Max",
-      "logo": "https://i.imgur.com/ulGKX30.png",
-      "stream": "http://vcpar.myplaytv.com/esportsmax/live/playlist.m3u8",
-      "category": "sports",
-      "country": "International Sports",
-      "countryCode": "intl",
-      "quality": "480p",
-      "code": "CH-0158",
+      "code": "CH-0127",
       "active": true
     }
   ],
@@ -2343,9 +2333,7 @@
       "category": "sports",
       "country": "Kuwait",
       "countryCode": "kw",
-      "quality": "720p",
-      "code": "CH-0177",
-      "active": true
+      "quality": "720p"
     }
   ],
   "Macau": [
@@ -2539,9 +2527,7 @@
       "category": "sports",
       "country": "Oman",
       "countryCode": "om",
-      "quality": "720p",
-      "code": "CH-0192",
-      "active": true
+      "quality": "720p"
     }
   ],
   "Peru": [
@@ -3109,9 +3095,7 @@
       "category": "sports",
       "country": "United Kingdom",
       "countryCode": "gb",
-      "quality": "720p",
-      "code": "CH-0249",
-      "active": false
+      "quality": "720p"
     },
     {
       "id": "sky-news-gb",
@@ -3157,9 +3141,7 @@
       "category": "sports",
       "country": "United Kingdom",
       "countryCode": "gb",
-      "quality": "720p",
-      "code": "CH-0253",
-      "active": true
+      "quality": "720p"
     },
     {
       "id": "tna-wrestling-uk",
@@ -3237,9 +3219,7 @@
       "category": "sports",
       "country": "United States",
       "countryCode": "us",
-      "quality": "720p",
-      "code": "CH-0257",
-      "active": true
+      "quality": "720p"
     },
     {
       "id": "bloomberg-tv-us",
@@ -3249,9 +3229,7 @@
       "category": "sports",
       "country": "United States",
       "countryCode": "us",
-      "quality": "720p",
-      "code": "CH-0258",
-      "active": false
+      "quality": "720p"
     },
     {
       "id": "cbs-sports-us",
@@ -3279,15 +3257,13 @@
     },
     {
       "id": "espn-us",
-      "name": "ESPN",
+      "name": "Espn",
       "logo": "https://s3.aynaott.com/storage/b46df1959322aa48d270a6b163234c76",
       "stream": "https://tvsen5.aynaott.com/espn/index.m3u8?e=1779283793&u=78be6644-0a65-48ec-81a4-089ac65a2619&token=cf2b4cb8b6c96ab86daee4299c792295",
       "category": "sports",
       "country": "United States",
       "countryCode": "us",
-      "quality": "720p",
-      "code": "CH-0261",
-      "active": false
+      "quality": "720p"
     },
     {
       "id": "fifa-tv-us",
@@ -3345,9 +3321,7 @@
       "category": "sports",
       "country": "United States",
       "countryCode": "us",
-      "quality": "720p",
-      "code": "CH-0266",
-      "active": false
+      "quality": "720p"
     },
     {
       "id": "fox-weather-us",
@@ -3369,9 +3343,7 @@
       "category": "sports",
       "country": "United States",
       "countryCode": "us",
-      "quality": "720p",
-      "code": "CH-0268",
-      "active": true
+      "quality": "720p"
     },
     {
       "id": "golf-channel-us",
@@ -3381,9 +3353,7 @@
       "category": "sports",
       "country": "United States",
       "countryCode": "us",
-      "quality": "720p",
-      "code": "CH-0269",
-      "active": false
+      "quality": "720p"
     },
     {
       "id": "inazuma-eleven-pluto-tv-us",
@@ -3417,9 +3387,7 @@
       "category": "sports",
       "country": "United States",
       "countryCode": "us",
-      "quality": "720p",
-      "code": "CH-0272",
-      "active": true
+      "quality": "720p"
     },
     {
       "id": "motor1tv-us",
@@ -3441,9 +3409,7 @@
       "category": "sports",
       "country": "United States",
       "countryCode": "us",
-      "quality": "720p",
-      "code": "CH-0274",
-      "active": true
+      "quality": "720p"
     },
     {
       "id": "nbc-sports-us",
@@ -3453,9 +3419,7 @@
       "category": "sports",
       "country": "United States",
       "countryCode": "us",
-      "quality": "720p",
-      "code": "CH-0275",
-      "active": true
+      "quality": "720p"
     },
     {
       "id": "nfl-network-us",
@@ -3465,9 +3429,7 @@
       "category": "sports",
       "country": "United States",
       "countryCode": "us",
-      "quality": "720p",
-      "code": "CH-0276",
-      "active": false
+      "quality": "720p"
     },
     {
       "id": "sky-news-uk-us",
@@ -3519,15 +3481,13 @@
     },
     {
       "id": "speed-sports-1-us",
-      "name": "Speed Sports 1",
+      "name": "speed sports 1",
       "logo": "https://s3.aynaott.com/storage/06f5b193bfa4d31310ee934eb3c2222e",
       "stream": "https://linear-599.frequency.stream/dist/stirr/599/hls/master/playlist.m3u8",
       "category": "sports",
       "country": "United States",
       "countryCode": "us",
-      "quality": "720p",
-      "code": "CH-0281",
-      "active": true
+      "quality": "720p"
     },
     {
       "id": "sport-pluto-tv-us",
@@ -3585,9 +3545,7 @@
       "category": "sports",
       "country": "United States",
       "countryCode": "us",
-      "quality": "720p",
-      "code": "CH-0286",
-      "active": true
+      "quality": "720p"
     },
     {
       "id": "sports-grid-us",
@@ -3597,9 +3555,7 @@
       "category": "sports",
       "country": "United States",
       "countryCode": "us",
-      "quality": "720p",
-      "code": "CH-0287",
-      "active": true
+      "quality": "720p"
     },
     {
       "id": "stadium-us",
@@ -3621,9 +3577,7 @@
       "category": "sports",
       "country": "United States",
       "countryCode": "us",
-      "quality": "720p",
-      "code": "CH-0289",
-      "active": true
+      "quality": "720p"
     },
     {
       "id": "ultimate-classic-wrestling-pluto-tv-us",
@@ -3657,9 +3611,7 @@
       "category": "sports",
       "country": "United States",
       "countryCode": "us",
-      "quality": "720p",
-      "code": "CH-0292",
-      "active": false
+      "quality": "720p"
     }
   ],
   "Uruguay": [
@@ -3723,6 +3675,17 @@
       "category": "sports",
       "country": "International",
       "countryCode": "intl",
+      "active": true
+    },
+    {
+      "id": "fifa-7-intl",
+      "name": "Bein Sports 1 MAX",
+      "logo": "https://i.ibb.co.com/vnbkF0r/fifa-world-cup-2026-logo-png-seeklogo-665644.png",
+      "stream": "https://pruiaaaaaaa.yallaliveshoot.info/hls/ch1/master.m3u8",
+      "category": "sports",
+      "country": "International",
+      "countryCode": "intl",
+      "quality": "720p",
       "active": true
     },
     {
@@ -3865,17 +3828,6 @@
       "name": "FIFA 6 (Alt)",
       "logo": "https://i.ibb.co.com/vnbkF0r/fifa-world-cup-2026-logo-png-seeklogo-665644.png",
       "stream": "https://s3.us-east-1.amazonaws.com/simkr1/hls/0/stream_640x360_800k.m3u8",
-      "category": "sports",
-      "country": "International",
-      "countryCode": "intl",
-      "quality": "720p",
-      "active": true
-    },
-    {
-      "id": "fifa-7-intl",
-      "name": "Bein Sports 1 MAX",
-      "logo": "https://i.ibb.co.com/vnbkF0r/fifa-world-cup-2026-logo-png-seeklogo-665644.png",
-      "stream": "https://pruiaaaaaaa.yallaliveshoot.info/hls/ch1/master.m3u8",
       "category": "sports",
       "country": "International",
       "countryCode": "intl",

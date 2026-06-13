@@ -5,12 +5,15 @@ import { ArrowLeft, Signal } from 'lucide-react';
 import VideoPlayer from '@/components/VideoPlayer';
 import ChannelCard from '@/components/ChannelCard';
 import ChannelLogo from '@/components/ChannelLogo';
-import LiveViewerCount from '@/components/LiveViewerCount';
 import CountryFlag from '@/components/CountryFlag';
+import ShareButton from '@/components/ShareButton';
 import ServerSwitcher from '@/components/ServerSwitcher';
 import { getChannel, getCountry, getAllChannels } from '@/lib/search';
 import { slugify } from '@/lib/utils';
 import WatchRecorder from '@/components/WatchRecorder';
+import SidebarAd from '@/components/SidebarAd';
+import connectDB from '@/lib/db';
+import { Store } from '@/lib/models';
 
 interface Props {
   params: { channelId: string };
@@ -18,13 +21,13 @@ interface Props {
 
 // Generate static params for all channels (SSG)
 export async function generateStaticParams() {
-  const channels = getAllChannels();
+  const channels = await getAllChannels();
   return channels.map((c) => ({ channelId: c.id }));
 }
 
 // Dynamic metadata per channel
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const channel = getChannel(params.channelId);
+  const channel = await getChannel(params.channelId);
   if (!channel) return { title: 'Channel Not Found' };
 
   return {
@@ -46,11 +49,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 /**
  * Watch page — HLS video player, channel info, related channels
  */
-export default function WatchPage({ params }: Props) {
-  const channel = getChannel(params.channelId);
+export default async function WatchPage({ params }: Props) {
+  const channel = await getChannel(params.channelId);
   if (!channel) notFound();
 
-  const country = getCountry(channel.country);
+  await connectDB();
+  const adsStore = await Store.findOne({ key: 'ads' });
+  const adConfig = adsStore?.data || { enabled: false, type: 'custom', customHtml: '', adsenseClientId: '', adsenseSlotId: '' };
+
+  const country = await getCountry(channel.country);
   // Related channels = all channels from same country in fixed positions
   const related = country?.channels ?? [];
 
@@ -93,13 +100,15 @@ export default function WatchPage({ params }: Props) {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Main: player + info */}
         <div className="lg:col-span-2 space-y-6">
-          {/* Player */}
-          <VideoPlayer src={channel.stream} channelName={channel.name} />
+          {/* Player (Sticky on mobile) */}
+          <div className="sticky top-16 z-30 -mx-4 px-4 bg-zinc-50 dark:bg-zinc-950 sm:static sm:mx-0 sm:px-0 sm:z-auto sm:bg-transparent dark:sm:bg-transparent">
+            <VideoPlayer src={channel.stream} channelName={channel.name} />
+          </div>
 
           {/* Channel info */}
-          <div className="flex items-start gap-4 p-5 rounded-2xl bg-white dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-700/60 shadow-sm">
+          <div className="flex items-start gap-3 p-3 rounded-xl bg-white dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-700/60 shadow-sm">
             {/* Logo */}
-            <div className="w-14 h-14 shrink-0 rounded-xl overflow-hidden bg-zinc-50 dark:bg-zinc-800 border border-zinc-100 dark:border-zinc-700/50 flex items-center justify-center">
+            <div className="w-12 h-12 shrink-0 rounded-lg overflow-hidden bg-zinc-50 dark:bg-zinc-800 border border-zinc-100 dark:border-zinc-700/50 flex items-center justify-center">
               <ChannelLogo
                 src={channel.logo}
                 alt={`${channel.name} logo`}
@@ -109,36 +118,35 @@ export default function WatchPage({ params }: Props) {
             </div>
 
             <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-2 flex-wrap">
-                <h1 className="text-lg font-bold text-zinc-900 dark:text-white truncate">
-                  {channel.name}
-                </h1>
-                {channel.code && (
-                  <span className="text-xs px-1.5 py-0.5 rounded bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-400 font-semibold border border-emerald-200 dark:border-emerald-800/60">
-                    {channel.code}
+              <div className="flex items-center gap-2 flex-wrap justify-between">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <h1 className="text-base font-bold text-zinc-900 dark:text-white truncate">
+                    {channel.name}
+                  </h1>
+                  {channel.code && (
+                    <span className="text-[10px] px-1.5 py-0.5 rounded bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-400 font-semibold border border-emerald-200 dark:border-emerald-800/60">
+                      {channel.code}
+                    </span>
+                  )}
+                  {/* Live indicator */}
+                  <span className="flex items-center gap-1 px-1.5 py-0.5 rounded md bg-red-500 text-white text-[10px] font-bold shrink-0">
+                    <Signal className="w-2.5 h-2.5" aria-hidden="true" />
+                    LIVE
                   </span>
-                )}
-                {/* Live indicator */}
-                <span className="flex items-center gap-1 px-2 py-0.5 rounded-md bg-red-500 text-white text-xs font-bold shrink-0">
-                  <Signal className="w-3 h-3" aria-hidden="true" />
-                  LIVE
-                </span>
-                {/* Real-time Viewer count */}
-                <LiveViewerCount
-                  channelId={channel.id}
-                  className="text-xs font-semibold px-2 py-0.5 rounded-md bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 border border-zinc-200 dark:border-zinc-700/50"
-                />
+                </div>
+                
+                <ShareButton />
               </div>
-              <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400 flex items-center gap-1.5">
-                {country && <CountryFlag code={country.code} name={channel.country} className="w-4.5 h-3 object-cover rounded-sm shadow-sm" />}
+              <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400 flex items-center gap-1.5">
+                {country && <CountryFlag code={country.code} name={channel.country} className="w-4 h-3 object-cover rounded-sm shadow-sm" />}
                 <span>{channel.country}</span>
                 {channel.quality && (
-                  <span className="ml-2 text-xs px-1.5 py-0.5 rounded bg-zinc-100 dark:bg-zinc-800 text-zinc-500 dark:text-zinc-400 border border-zinc-200 dark:border-zinc-700/50">
+                  <span className="ml-2 text-[10px] px-1.5 py-0.5 rounded bg-zinc-100 dark:bg-zinc-800 text-zinc-500 dark:text-zinc-400 border border-zinc-200 dark:border-zinc-700/50">
                     {channel.quality}
                   </span>
                 )}
               </p>
-              <p className="mt-1 text-xs text-zinc-400 dark:text-zinc-500 capitalize">
+              <p className="mt-0.5 text-[10px] text-zinc-400 dark:text-zinc-500 capitalize">
                 Category: {channel.category}
               </p>
             </div>
@@ -155,6 +163,9 @@ export default function WatchPage({ params }: Props) {
 
         {/* Sidebar: related channels */}
         <aside aria-labelledby="related-heading" className="space-y-4 lg:sticky lg:top-6 lg:self-start lg:max-h-[calc(100vh-2rem)] overflow-y-auto pr-2 custom-scrollbar">
+          
+          <SidebarAd adConfig={adConfig} />
+
           <div className="flex items-center gap-2">
             <ArrowLeft className="w-4 h-4 text-emerald-500 rotate-180" aria-hidden="true" />
             <h2
@@ -213,7 +224,7 @@ export default function WatchPage({ params }: Props) {
             thumbnailUrl: channel.logo,
             uploadDate: new Date().toISOString().split('T')[0],
             contentUrl: channel.stream,
-            embedUrl: `https://goalcast.live/watch/${channel.id}`,
+            embedUrl: `https://goalcast-tv.vercel.app/watch/${channel.id}`,
             author: {
               '@type': 'Organization',
               name: 'GoalCast',

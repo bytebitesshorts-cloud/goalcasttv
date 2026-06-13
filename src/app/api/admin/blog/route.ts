@@ -1,19 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { readFileSync, writeFileSync } from 'fs';
-import path from 'path';
-
-const BLOG_PATH = path.join(process.cwd(), 'src/data/blog.json');
+import connectDB from '@/lib/db';
+import { Store } from '@/lib/models';
 
 function isAuthenticated(req: NextRequest) {
   return req.cookies.get('admin_session')?.value === 'authenticated';
-}
-
-function getPosts() {
-  return JSON.parse(readFileSync(BLOG_PATH, 'utf-8'));
-}
-
-function savePosts(posts: unknown[]) {
-  writeFileSync(BLOG_PATH, JSON.stringify(posts, null, 2), 'utf-8');
 }
 
 function slugify(title: string) {
@@ -24,15 +14,21 @@ function slugify(title: string) {
 }
 
 export async function GET(req: NextRequest) {
-  // Public endpoint for blog listing (no auth needed)
-  const posts = getPosts();
-  const url = new URL(req.url);
-  const adminMode = req.cookies.get('admin_session')?.value === 'authenticated';
+  try {
+    await connectDB();
+    const blogStore = await Store.findOne({ key: 'blog' });
+    const posts = (blogStore?.data || []) as any[];
 
-  if (adminMode || url.searchParams.get('all') === '1') {
-    return NextResponse.json(posts);
+    const url = new URL(req.url);
+    const adminMode = req.cookies.get('admin_session')?.value === 'authenticated';
+
+    if (adminMode || url.searchParams.get('all') === '1') {
+      return NextResponse.json(posts);
+    }
+    return NextResponse.json(posts.filter((p: { published: boolean }) => p.published));
+  } catch (error) {
+    return NextResponse.json({ error: 'Failed to fetch blog posts' }, { status: 500 });
   }
-  return NextResponse.json(posts.filter((p: { published: boolean }) => p.published));
 }
 
 export async function POST(req: NextRequest) {
@@ -41,8 +37,12 @@ export async function POST(req: NextRequest) {
   }
 
   try {
+    await connectDB();
     const body = await req.json();
-    const posts = getPosts();
+    
+    const blogStore = await Store.findOne({ key: 'blog' });
+    const posts = (blogStore?.data || []) as any[];
+    
     const now = new Date().toISOString();
 
     const newPost = {
@@ -59,7 +59,12 @@ export async function POST(req: NextRequest) {
     };
 
     posts.push(newPost);
-    savePosts(posts);
+    
+    await Store.findOneAndUpdate(
+      { key: 'blog' },
+      { data: posts },
+      { upsert: true }
+    );
 
     return NextResponse.json(newPost, { status: 201 });
   } catch {
