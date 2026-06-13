@@ -25,7 +25,7 @@ export async function GET() {
         await Store.findOneAndUpdate(
           { key },
           { data },
-          { upsert: true, new: true }
+          { upsert: true, returnDocument: 'after' }
         );
         results.push({ key, status: 'Seeded successfully' });
       } else {
