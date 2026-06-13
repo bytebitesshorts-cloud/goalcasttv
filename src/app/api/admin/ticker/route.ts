@@ -1,0 +1,118 @@
+import { NextRequest, NextResponse } from 'next/server';
+import { readFileSync, writeFileSync, existsSync } from 'fs';
+import path from 'path';
+
+const TICKER_PATH = path.join(process.cwd(), 'src/data/ticker.json');
+
+function isAuthenticated(req: NextRequest) {
+  return req.cookies.get('admin_session')?.value === 'authenticated';
+}
+
+function getTicker() {
+  if (!existsSync(TICKER_PATH)) {
+    return { active: false, useLiveFeed: true, matches: [] };
+  }
+  return JSON.parse(readFileSync(TICKER_PATH, 'utf-8'));
+}
+
+function saveTicker(data: unknown) {
+  writeFileSync(TICKER_PATH, JSON.stringify(data, null, 2), 'utf-8');
+}
+
+interface ESPNCompetitor {
+  homeAway: string;
+  score?: string;
+  team?: {
+    displayName?: string;
+    logo?: string;
+  };
+}
+
+interface ESPNEvent {
+  id?: string;
+  date: string;
+  status?: {
+    type?: {
+      state?: string;
+      detail?: string;
+    };
+  };
+  competitions?: Array<{
+    competitors?: ESPNCompetitor[];
+  }>;
+}
+
+export async function GET() {
+  try {
+    const data = getTicker();
+    
+    if (data.active) {
+      // Fetch live data from ESPN
+      const res = await fetch('https://site.api.espn.com/apis/site/v2/sports/soccer/all/scoreboard', {
+        next: { revalidate: 30 } // Cache for 30s
+      });
+      if (res.ok) {
+        const espnData = await res.json();
+        const events: ESPNEvent[] = espnData.events || [];
+        const liveMatches = events.map((event: ESPNEvent) => {
+          const competition = event.competitions?.[0];
+          const competitors = competition?.competitors || [];
+          
+          const home = competitors.find((c: ESPNCompetitor) => c.homeAway === 'home');
+          const away = competitors.find((c: ESPNCompetitor) => c.homeAway === 'away');
+          
+          const state = event.status?.type?.state; // "pre" | "in" | "post"
+          const isLive = state === 'in';
+          const isFinished = state === 'post';
+          
+          const dateObj = new Date(event.date);
+          const formattedDate = dateObj.toLocaleDateString('en-US', { day: 'numeric', month: 'short' });
+          const formattedTime = dateObj.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
+
+          return {
+            id: event.id || String(Math.random()),
+            status: isLive ? 'live' : isFinished ? 'finished' : 'upcoming',
+            minute: isLive ? `${event.status?.type?.detail}`.replace(" - Half", "") : undefined,
+            date: formattedDate,
+            time: formattedTime,
+            homeTeam: home?.team?.displayName || 'Home',
+            homeFlag: home?.team?.logo || '',
+            homeScore: home?.score !== undefined ? parseInt(home.score, 10) : 0,
+            awayTeam: away?.team?.displayName || 'Away',
+            awayFlag: away?.team?.logo || '',
+            awayScore: away?.score !== undefined ? parseInt(away.score, 10) : 0,
+          };
+        });
+        
+        return NextResponse.json({
+          active: data.active,
+          matches: liveMatches
+        });
+      }
+    }
+    
+    return NextResponse.json({ active: data.active, matches: [] });
+  } catch {
+    return NextResponse.json({ active: false, matches: [] });
+  }
+}
+
+export async function PUT(req: NextRequest) {
+  if (!isAuthenticated(req)) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
+  try {
+    const body = await req.json();
+    const current = getTicker();
+
+    const updated = {
+      active: body.active !== undefined ? body.active : current.active,
+    };
+
+    saveTicker(updated);
+    return NextResponse.json(updated);
+  } catch {
+    return NextResponse.json({ error: 'Failed to update ticker settings' }, { status: 500 });
+  }
+}
