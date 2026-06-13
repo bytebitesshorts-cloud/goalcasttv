@@ -35,10 +35,10 @@ export default function AdminChannelsPage() {
   const [page, setPage] = useState(1);
   const [filterStatus, setFilterStatus] = useState<'all' | 'active' | 'inactive'>('all');
   const [filterCategory, setFilterCategory] = useState<string>('All');
-  const [editingId, setEditingId] = useState<string | null>(null);
-  const [editData, setEditData] = useState<Partial<Channel>>({});
-  const [showAdd, setShowAdd] = useState(false);
-  const [newChannel, setNewChannel] = useState({ ...EMPTY });
+  
+  const [modalMode, setModalMode] = useState<'add' | 'edit' | null>(null);
+  const [formData, setFormData] = useState<Partial<Channel>>({ ...EMPTY });
+  
   const [toast, setToast] = useState<{ msg: string; type: 'success' | 'error' } | null>(null);
   const [deleting, setDeleting] = useState<string | null>(null);
   const [previewChannel, setPreviewChannel] = useState<Channel | null>(null);
@@ -76,8 +76,8 @@ export default function AdminChannelsPage() {
   const uniqueCountries = Array.from(new Map(channels.map(c => [c.country, c.countryCode])).entries());
 
   const filtered = channels.filter(c => {
-    const matchesSearch = c.name.toLowerCase().includes(search.toLowerCase()) ||
-                          c.country.toLowerCase().includes(search.toLowerCase());
+    const matchesSearch = (c.name || '').toLowerCase().includes(search.toLowerCase()) ||
+                          (c.country || '').toLowerCase().includes(search.toLowerCase());
     const matchesCategory = filterCategory === 'All' || (c.category || 'General') === filterCategory;
     const matchesStatus = filterStatus === 'all'
                           ? true
@@ -87,22 +87,43 @@ export default function AdminChannelsPage() {
     return matchesSearch && matchesCategory && matchesStatus;
   });
 
-  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
-  // Reverse to show newest first
-  const paged = filtered.slice().reverse().slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+  // Sort channels by descending timestamp to show newest at the top
+  const sorted = filtered.slice().sort((a, b) => {
+    const tsA = a.id.startsWith('ch_') ? parseInt(a.id.split('_')[1]) : 0;
+    const tsB = b.id.startsWith('ch_') ? parseInt(b.id.split('_')[1]) : 0;
+    return tsB - tsA;
+  });
 
-  async function saveEdit(id: string) {
-    const r = await fetch(`/api/admin/channels/${id}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(editData),
-    });
-    if (r.ok) {
-      showToast('Channel updated!');
-      setEditingId(null);
-      load();
-    } else {
-      showToast('Update failed', 'error');
+  const totalPages = Math.max(1, Math.ceil(sorted.length / PAGE_SIZE));
+  const paged = sorted.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+
+  async function saveForm() {
+    if (modalMode === 'add') {
+      const r = await fetch('/api/admin/channels', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+      if (r.ok) {
+        showToast('Channel added!');
+        setModalMode(null);
+        load();
+      } else {
+        showToast('Failed to add channel', 'error');
+      }
+    } else if (modalMode === 'edit' && formData.id) {
+      const r = await fetch(`/api/admin/channels/${formData.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+      if (r.ok) {
+        showToast('Channel updated!');
+        setModalMode(null);
+        load();
+      } else {
+        showToast('Update failed', 'error');
+      }
     }
   }
 
@@ -118,20 +139,14 @@ export default function AdminChannelsPage() {
     setDeleting(null);
   }
 
-  async function addChannel() {
-    const r = await fetch('/api/admin/channels', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(newChannel),
-    });
-    if (r.ok) {
-      showToast('Channel added!');
-      setShowAdd(false);
-      setNewChannel({ ...EMPTY });
-      load();
-    } else {
-      showToast('Failed to add channel', 'error');
-    }
+  function openAdd() {
+    setFormData({ ...EMPTY, code: getNextChannelCode() });
+    setModalMode('add');
+  }
+
+  function openEdit(ch: Channel) {
+    setFormData(ch);
+    setModalMode('edit');
   }
 
   return (
@@ -162,11 +177,7 @@ export default function AdminChannelsPage() {
         </div>
         <button
           id="add-channel-btn"
-          onClick={() => {
-            const nextCode = getNextChannelCode();
-            setNewChannel({ ...EMPTY, code: nextCode });
-            setShowAdd(true);
-          }}
+          onClick={openAdd}
           className="flex items-center gap-2 px-4 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-white font-semibold rounded-xl transition-all duration-150 shadow-lg shadow-emerald-500/20 hover:-translate-y-0.5"
         >
           <Plus className="w-4 h-4" />
@@ -228,117 +239,66 @@ export default function AdminChannelsPage() {
                 )}
                 {paged.map(ch => (
                   <tr key={ch.id} className="group hover:bg-zinc-800/40 transition-colors">
-                    {editingId === ch.id ? (
-                      <>
-                        <td className="px-4 py-2">
-                          <input value={editData.name ?? ch.name} onChange={e => setEditData(d => ({ ...d, name: e.target.value }))}
-                            className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-2 py-1.5 text-white text-sm focus:outline-none focus:ring-1 focus:ring-emerald-500" />
-                        </td>
-                        <td className="px-4 py-2 hidden sm:table-cell">
-                          <input list="edit-country-list" value={editData.country ?? ch.country} onChange={e => {
-                              const ctry = e.target.value;
-                              const code = uniqueCountries.find(u => u[0] === ctry)?.[1];
-                              setEditData(d => ({ ...d, country: ctry, ...(code ? { countryCode: code } : {}) }));
-                            }}
-                            className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-2 py-1.5 text-white text-sm focus:outline-none focus:ring-1 focus:ring-emerald-500" />
-                          <datalist id="edit-country-list">
-                            {uniqueCountries.map(([c]) => <option key={c} value={c} />)}
-                          </datalist>
-                        </td>
-                        <td className="px-4 py-2 hidden md:table-cell">
-                          <select value={editData.category ?? ch.category ?? 'Sports'}
-                            onChange={e => setEditData(d => ({ ...d, category: e.target.value }))}
-                            className="bg-zinc-800 border border-zinc-700 rounded-lg px-2 py-1.5 text-white text-sm focus:outline-none focus:ring-1 focus:ring-emerald-500">
-                            {CATEGORIES.map(c => <option key={c}>{c}</option>)}
-                          </select>
-                        </td>
-                        <td className="px-4 py-2 hidden lg:table-cell">
-                          <input value={editData.stream ?? ch.stream} onChange={e => setEditData(d => ({ ...d, stream: e.target.value }))}
-                            className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-2 py-1.5 text-white text-sm focus:outline-none focus:ring-1 focus:ring-emerald-500" />
-                        </td>
-                        <td className="px-4 py-2">
-                          <label className="relative inline-flex items-center cursor-pointer">
-                            <input type="checkbox" checked={editData.active ?? ch.active ?? true}
-                              onChange={e => setEditData(d => ({ ...d, active: e.target.checked }))}
-                              className="sr-only peer" />
-                            <div className="w-9 h-5 bg-zinc-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-zinc-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-emerald-500"></div>
-                          </label>
-                        </td>
-                        <td className="px-4 py-2">
-                          <div className="flex items-center gap-1">
-                            <button onClick={() => saveEdit(ch.id)} className="p-1.5 text-emerald-400 hover:bg-emerald-500/20 rounded-lg transition-colors" title="Save">
-                              <Save className="w-4 h-4" />
-                            </button>
-                            <button onClick={() => setEditingId(null)} className="p-1.5 text-zinc-400 hover:bg-zinc-700 rounded-lg transition-colors" title="Cancel">
-                              <X className="w-4 h-4" />
-                            </button>
+                    <td className="px-4 py-3">
+                      <div className="flex items-center gap-2.5">
+                        {ch.logo ? (
+                          <img src={ch.logo} alt="" onError={e => { (e.currentTarget as HTMLImageElement).style.display='none'; }} className="w-7 h-7 rounded object-cover" />
+                        ) : (
+                          <div className="w-7 h-7 rounded bg-emerald-500/20 flex items-center justify-center text-emerald-400 text-xs font-bold">
+                            {ch.name?.charAt(0) || '?'}
                           </div>
-                        </td>
-                      </>
-                    ) : (
-                      <>
-                        <td className="px-4 py-3">
-                          <div className="flex items-center gap-2.5">
-                            {ch.logo ? (
-                              <img src={ch.logo} alt="" onError={e => { (e.currentTarget as HTMLImageElement).style.display='none'; }} className="w-7 h-7 rounded object-cover" />
-                            ) : (
-                              <div className="w-7 h-7 rounded bg-emerald-500/20 flex items-center justify-center text-emerald-400 text-xs font-bold">
-                                {ch.name?.charAt(0) || '?'}
-                              </div>
-                            )}
-                            <span className="text-zinc-100 font-medium truncate max-w-[140px]">{ch.name}</span>
-                          </div>
-                        </td>
-                        <td className="px-4 py-3 hidden sm:table-cell text-zinc-400">{ch.country}</td>
-                        <td className="px-4 py-3 hidden md:table-cell">
-                          <span className="px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs">
-                            {ch.category || 'General'}
-                          </span>
-                        </td>
-                        <td className="px-4 py-3 hidden lg:table-cell text-zinc-500 text-xs max-w-[200px] truncate">{ch.stream}</td>
-                        <td className="px-4 py-3">
-                          <button
-                            onClick={async () => {
-                              const newActive = !(ch.active ?? true);
-                              const r = await fetch(`/api/admin/channels/${ch.id}`, {
-                                method: 'PUT',
-                                headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify({ active: newActive }),
-                              });
-                              if (r.ok) {
-                                showToast(`Channel ${newActive ? 'enabled' : 'disabled'}`);
-                                load();
-                              } else {
-                                showToast('Failed to update status', 'error');
-                              }
-                            }}
-                            className={`px-2.5 py-1 rounded-full text-xs font-semibold border transition-all ${
-                              (ch.active ?? true)
-                                ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/20'
-                                : 'bg-zinc-800 border-zinc-700 text-zinc-400 hover:bg-zinc-700'
-                            }`}
-                          >
-                            {(ch.active ?? true) ? 'Active' : 'Inactive'}
-                          </button>
-                        </td>
-                        <td className="px-4 py-3">
-                          <div className="flex items-center gap-1">
-                            <button onClick={() => setPreviewChannel(ch)}
-                              className="p-1.5 text-zinc-400 hover:text-blue-400 hover:bg-blue-500/10 rounded-lg transition-colors" title="Preview">
-                              <Play className="w-3.5 h-3.5" />
-                            </button>
-                            <button onClick={() => { setEditingId(ch.id); setEditData({}); }}
-                              className="p-1.5 text-zinc-400 hover:text-emerald-400 hover:bg-emerald-500/10 rounded-lg transition-colors" title="Edit">
-                              <Edit2 className="w-3.5 h-3.5" />
-                            </button>
-                            <button onClick={() => deleteChannel(ch.id)} disabled={deleting === ch.id}
-                              className="p-1.5 text-zinc-400 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-colors disabled:opacity-50" title="Delete">
-                              <Trash2 className="w-3.5 h-3.5" />
-                            </button>
-                          </div>
-                        </td>
-                      </>
-                    )}
+                        )}
+                        <span className="text-zinc-100 font-medium truncate max-w-[140px]">{ch.name}</span>
+                      </div>
+                    </td>
+                    <td className="px-4 py-3 hidden sm:table-cell text-zinc-400">{ch.country}</td>
+                    <td className="px-4 py-3 hidden md:table-cell">
+                      <span className="px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs">
+                        {ch.category || 'General'}
+                      </span>
+                    </td>
+                    <td className="px-4 py-3 hidden lg:table-cell text-zinc-500 text-xs max-w-[200px] truncate">{ch.stream}</td>
+                    <td className="px-4 py-3">
+                      <button
+                        onClick={async () => {
+                          const newActive = !(ch.active ?? true);
+                          const r = await fetch(`/api/admin/channels/${ch.id}`, {
+                            method: 'PUT',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ active: newActive }),
+                          });
+                          if (r.ok) {
+                            showToast(`Channel ${newActive ? 'enabled' : 'disabled'}`);
+                            load();
+                          } else {
+                            showToast('Failed to update status', 'error');
+                          }
+                        }}
+                        className={`px-2.5 py-1 rounded-full text-xs font-semibold border transition-all ${
+                          (ch.active ?? true)
+                            ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/20'
+                            : 'bg-zinc-800 border-zinc-700 text-zinc-400 hover:bg-zinc-700'
+                        }`}
+                      >
+                        {(ch.active ?? true) ? 'Active' : 'Inactive'}
+                      </button>
+                    </td>
+                    <td className="px-4 py-3">
+                      <div className="flex items-center gap-1">
+                        <button onClick={() => setPreviewChannel(ch)}
+                          className="p-1.5 text-zinc-400 hover:text-blue-400 hover:bg-blue-500/10 rounded-lg transition-colors" title="Preview">
+                          <Play className="w-3.5 h-3.5" />
+                        </button>
+                        <button onClick={() => openEdit(ch)}
+                          className="p-1.5 text-zinc-400 hover:text-emerald-400 hover:bg-emerald-500/10 rounded-lg transition-colors" title="Edit">
+                          <Edit2 className="w-3.5 h-3.5" />
+                        </button>
+                        <button onClick={() => deleteChannel(ch.id)} disabled={deleting === ch.id}
+                          className="p-1.5 text-zinc-400 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-colors disabled:opacity-50" title="Delete">
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -367,96 +327,137 @@ export default function AdminChannelsPage() {
         </div>
       )}
 
-      {/* Add Channel Modal */}
-      {showAdd && (
+      {/* Add / Edit Channel Modal */}
+      {modalMode && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-zinc-900 border border-zinc-700 rounded-2xl p-6 w-full max-w-lg shadow-2xl max-h-[90vh] overflow-y-auto">
+          <div className="bg-zinc-900 border border-zinc-700 rounded-2xl p-6 w-full max-w-2xl shadow-2xl max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-lg font-bold text-white">Add New Channel</h2>
-              <button onClick={() => setShowAdd(false)} className="text-zinc-400 hover:text-white transition-colors">
+              <h2 className="text-xl font-bold text-white">
+                {modalMode === 'add' ? 'Add New Channel' : 'Edit Channel'}
+              </h2>
+              <button onClick={() => setModalMode(null)} className="text-zinc-400 hover:text-white transition-colors">
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            <div className="space-y-4">
-              {/* Preset Country and Sync Country Code */}
+            <div className="space-y-8">
+              {/* Category 1: Location & Categorization */}
               <div>
-                <label className="block text-sm text-zinc-400 mb-1">Country</label>
-                <input
-                  list="add-country-list"
-                  value={newChannel.country}
-                  onChange={e => {
-                    const ctry = e.target.value;
-                    const code = uniqueCountries.find(u => u[0] === ctry)?.[1] || newChannel.countryCode;
-                    setNewChannel(n => ({ ...n, country: ctry, countryCode: code }));
-                  }}
-                  placeholder="e.g. United States"
-                  className="w-full bg-zinc-800 border border-zinc-700 rounded-xl px-3 py-2.5 text-white placeholder-zinc-500 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/40"
-                />
-                <datalist id="add-country-list">
-                  {uniqueCountries.map(([c]) => <option key={c} value={c} />)}
-                </datalist>
-              </div>
-
-              {/* Country Code (auto-filled but editable) */}
-              <div>
-                <label className="block text-sm text-zinc-400 mb-1">Country Code</label>
-                <input
-                  value={newChannel.countryCode}
-                  onChange={e => setNewChannel(n => ({ ...n, countryCode: e.target.value }))}
-                  placeholder="e.g. US"
-                  className="w-full bg-zinc-800 border border-zinc-700 rounded-xl px-3 py-2.5 text-white placeholder-zinc-500 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/40"
-                />
-              </div>
-
-              {[
-                { label: 'Channel Name *', key: 'name', placeholder: 'e.g. ESPN HD' },
-                { label: 'Channel Code', key: 'code', placeholder: 'e.g. espn.hd' },
-                { label: 'Logo URL', key: 'logo', placeholder: 'https://...' },
-                { label: 'Stream URL (M3U8) *', key: 'stream', placeholder: 'https://...' },
-              ].map(({ label, key, placeholder }) => (
-                <div key={key}>
-                  <label className="block text-sm text-zinc-400 mb-1">{label}</label>
-                  <input
-                    value={(newChannel[key as keyof typeof newChannel] as string) || ''}
-                    onChange={e => setNewChannel(n => ({ ...n, [key]: e.target.value }))}
-                    placeholder={placeholder}
-                    className="w-full bg-zinc-800 border border-zinc-700 rounded-xl px-3 py-2.5 text-white placeholder-zinc-500 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/40"
-                  />
+                <h3 className="text-emerald-400 text-sm font-semibold mb-4 border-b border-zinc-800 pb-2">Location & Categorization</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-medium text-zinc-400 mb-1.5 uppercase tracking-wider">Country</label>
+                    <input
+                      list="add-country-list"
+                      value={formData.country || ''}
+                      onChange={e => {
+                        const ctry = e.target.value;
+                        const code = uniqueCountries.find(u => u[0] === ctry)?.[1] || formData.countryCode || '';
+                        setFormData(n => ({ ...n, country: ctry, countryCode: code }));
+                      }}
+                      placeholder="e.g. United States"
+                      className="w-full bg-zinc-800/50 border border-zinc-700 rounded-xl px-3 py-2.5 text-white placeholder-zinc-600 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/40"
+                    />
+                    <datalist id="add-country-list">
+                      {uniqueCountries.map(([c]) => <option key={c} value={c} />)}
+                    </datalist>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-zinc-400 mb-1.5 uppercase tracking-wider">Country Code</label>
+                    <input
+                      value={formData.countryCode || ''}
+                      onChange={e => setFormData(n => ({ ...n, countryCode: e.target.value }))}
+                      placeholder="e.g. US"
+                      className="w-full bg-zinc-800/50 border border-zinc-700 rounded-xl px-3 py-2.5 text-white placeholder-zinc-600 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/40"
+                    />
+                  </div>
+                  <div className="sm:col-span-2">
+                    <label className="block text-xs font-medium text-zinc-400 mb-1.5 uppercase tracking-wider">Category</label>
+                    <select
+                      value={formData.category || 'Sports'}
+                      onChange={e => setFormData(n => ({ ...n, category: e.target.value }))}
+                      className="w-full bg-zinc-800/50 border border-zinc-700 rounded-xl px-3 py-2.5 text-white text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/40"
+                    >
+                      {CATEGORIES.map(c => <option key={c}>{c}</option>)}
+                    </select>
+                  </div>
                 </div>
-              ))}
-
-              <div>
-                <label className="block text-sm text-zinc-400 mb-1">Category</label>
-                <select
-                  value={newChannel.category || 'Sports'}
-                  onChange={e => setNewChannel(n => ({ ...n, category: e.target.value }))}
-                  className="w-full bg-zinc-800 border border-zinc-700 rounded-xl px-3 py-2.5 text-white text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/40"
-                >
-                  {CATEGORIES.map(c => <option key={c}>{c}</option>)}
-                </select>
               </div>
 
-              <div className="flex items-center justify-between py-2 border-t border-zinc-800/60 mt-2">
-                <span className="text-sm text-zinc-400">Active Status</span>
+              {/* Category 2: General Details */}
+              <div>
+                <h3 className="text-emerald-400 text-sm font-semibold mb-4 border-b border-zinc-800 pb-2">General Details</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-medium text-zinc-400 mb-1.5 uppercase tracking-wider">Channel Name *</label>
+                    <input
+                      value={formData.name || ''}
+                      onChange={e => setFormData(n => ({ ...n, name: e.target.value }))}
+                      placeholder="e.g. ESPN HD"
+                      className="w-full bg-zinc-800/50 border border-zinc-700 rounded-xl px-3 py-2.5 text-white placeholder-zinc-600 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/40"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-zinc-400 mb-1.5 uppercase tracking-wider">Channel Code</label>
+                    <input
+                      value={formData.code || ''}
+                      onChange={e => setFormData(n => ({ ...n, code: e.target.value }))}
+                      placeholder="e.g. espn.hd"
+                      className="w-full bg-zinc-800/50 border border-zinc-700 rounded-xl px-3 py-2.5 text-white placeholder-zinc-600 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/40"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Category 3: Media & Stream */}
+              <div>
+                <h3 className="text-emerald-400 text-sm font-semibold mb-4 border-b border-zinc-800 pb-2">Media & Stream</h3>
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-xs font-medium text-zinc-400 mb-1.5 uppercase tracking-wider">Logo URL</label>
+                    <input
+                      value={formData.logo || ''}
+                      onChange={e => setFormData(n => ({ ...n, logo: e.target.value }))}
+                      placeholder="https://..."
+                      className="w-full bg-zinc-800/50 border border-zinc-700 rounded-xl px-3 py-2.5 text-white placeholder-zinc-600 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/40"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-zinc-400 mb-1.5 uppercase tracking-wider">Stream URL (M3U8) *</label>
+                    <input
+                      value={formData.stream || ''}
+                      onChange={e => setFormData(n => ({ ...n, stream: e.target.value }))}
+                      placeholder="https://..."
+                      className="w-full bg-zinc-800/50 border border-zinc-700 rounded-xl px-3 py-2.5 text-white placeholder-zinc-600 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/40"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Status */}
+              <div className="flex items-center justify-between p-4 bg-zinc-800/30 rounded-xl border border-zinc-800">
+                <div>
+                  <span className="block text-sm font-medium text-zinc-200">Active Status</span>
+                  <span className="text-xs text-zinc-500">Enable or disable this channel globally</span>
+                </div>
                 <label className="relative inline-flex items-center cursor-pointer">
-                  <input type="checkbox" checked={newChannel.active ?? true}
-                    onChange={e => setNewChannel(n => ({ ...n, active: e.target.checked }))}
+                  <input type="checkbox" checked={formData.active ?? true}
+                    onChange={e => setFormData(n => ({ ...n, active: e.target.checked }))}
                     className="sr-only peer" />
-                  <div className="w-9 h-5 bg-zinc-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-zinc-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-emerald-500"></div>
+                  <div className="w-11 h-6 bg-zinc-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-zinc-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500"></div>
                 </label>
               </div>
             </div>
 
-            <div className="flex gap-3 mt-6">
-              <button onClick={() => setShowAdd(false)}
-                className="flex-1 py-2.5 rounded-xl border border-zinc-700 text-zinc-400 hover:text-white hover:border-zinc-600 transition-all text-sm">
+            <div className="flex gap-3 mt-8">
+              <button onClick={() => setModalMode(null)}
+                className="flex-1 py-3 rounded-xl border border-zinc-700 text-zinc-300 hover:text-white hover:bg-zinc-800 transition-all font-medium text-sm">
                 Cancel
               </button>
-              <button onClick={addChannel} disabled={!newChannel.name || !newChannel.stream}
+              <button onClick={saveForm} disabled={!formData.name || !formData.stream}
                 id="save-channel-btn"
-                className="flex-1 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold transition-all text-sm">
-                Add Channel
+                className="flex-1 py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold transition-all text-sm shadow-lg shadow-emerald-500/20">
+                {modalMode === 'add' ? 'Add Channel' : 'Save Changes'}
               </button>
             </div>
           </div>
