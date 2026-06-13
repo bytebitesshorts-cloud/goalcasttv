@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import connectDB from '@/lib/db';
 import { Store } from '@/lib/models';
 
+export const dynamic = 'force-dynamic';
+
 function isAuthenticated(req: NextRequest) {
   return req.cookies.get('admin_session')?.value === 'authenticated';
 }

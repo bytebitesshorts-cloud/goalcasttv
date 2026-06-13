@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 import { NextRequest, NextResponse } from 'next/server';
 import connectDB from '@/lib/db';
 import { Store } from '@/lib/models';
@@ -71,3 +72,4 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Failed to create post' }, { status: 500 });
   }
 }
+
