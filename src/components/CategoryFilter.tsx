@@ -57,6 +57,7 @@ export default function CategoryFilter({ categories, baseUrl, activeCategory, on
         // Emojis for common categories
         let emoji = '';
         const lower = cat.toLowerCase();
+        if (lower === 'fifa 2026') emoji = '⚽ ';
         if (lower === 'sports') emoji = '🏈 ';
         if (lower === 'movies') emoji = '🎬 ';
         if (lower === 'music') emoji = '🎵 ';

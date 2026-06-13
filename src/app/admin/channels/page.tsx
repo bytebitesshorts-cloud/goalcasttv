@@ -24,7 +24,7 @@ const EMPTY: Omit<Channel, 'id'> = {
   name: '', code: '', category: 'Sports', country: '', countryCode: '', logo: '', stream: '', languages: [], active: true,
 };
 
-const CATEGORIES = ['Sports', 'News', 'Movies', 'Entertainment', 'Music', 'Kids', 'Documentary', 'General'];
+const CATEGORIES = ['FIFA 2026', 'Sports', 'News', 'Movies', 'Entertainment', 'Music', 'Kids', 'Documentary', 'General'];
 
 const PAGE_SIZE = 20;
 

@@ -31,6 +31,13 @@ export default function CountryChannelGrid({ channels }: Props) {
     categories.push('General');
   }
 
+  // Ensure 'FIFA 2026' is absolute first
+  const fifaIdx = categories.indexOf('FIFA 2026');
+  if (fifaIdx > -1) {
+    categories.splice(fifaIdx, 1);
+  }
+  categories.unshift('FIFA 2026');
+
   // Deduplicate channels by name (keep first occurrence)
   const deduplicatedChannels = useMemo(() => {
     const map = new Map<string, Channel>();

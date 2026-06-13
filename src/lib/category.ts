@@ -27,6 +27,13 @@ export async function getAllCategories(): Promise<string[]> {
     categories.push('General');
   }
 
+  // Ensure 'FIFA 2026' is absolute first
+  const fifaIndex = categories.indexOf('FIFA 2026');
+  if (fifaIndex > -1) {
+    categories.splice(fifaIndex, 1);
+  }
+  categories.unshift('FIFA 2026');
+
   return categories;
 }
 
