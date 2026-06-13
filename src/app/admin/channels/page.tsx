@@ -33,6 +33,8 @@ export default function AdminChannelsPage() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(1);
+  const [filterStatus, setFilterStatus] = useState<'all' | 'active' | 'inactive'>('all');
+  const [filterCategory, setFilterCategory] = useState<string>('All');
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editData, setEditData] = useState<Partial<Channel>>({});
   const [showAdd, setShowAdd] = useState(false);
@@ -71,14 +73,23 @@ export default function AdminChannelsPage() {
 
   useEffect(() => { load(); }, [load]);
 
-  const filtered = channels.filter(c =>
-    c.name.toLowerCase().includes(search.toLowerCase()) ||
-    c.country.toLowerCase().includes(search.toLowerCase()) ||
-    (c.category || '').toLowerCase().includes(search.toLowerCase())
-  );
+  const uniqueCountries = Array.from(new Map(channels.map(c => [c.country, c.countryCode])).entries());
+
+  const filtered = channels.filter(c => {
+    const matchesSearch = c.name.toLowerCase().includes(search.toLowerCase()) ||
+                          c.country.toLowerCase().includes(search.toLowerCase());
+    const matchesCategory = filterCategory === 'All' || (c.category || 'General') === filterCategory;
+    const matchesStatus = filterStatus === 'all'
+                          ? true
+                          : filterStatus === 'active'
+                            ? (c.active !== false)
+                            : (c.active === false);
+    return matchesSearch && matchesCategory && matchesStatus;
+  });
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
-  const paged = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+  // Reverse to show newest first
+  const paged = filtered.slice().reverse().slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
   async function saveEdit(id: string) {
     const r = await fetch(`/api/admin/channels/${id}`, {
@@ -142,11 +153,11 @@ export default function AdminChannelsPage() {
             Channels
           </h1>
           <div className="flex items-center gap-2.5 mt-1 text-sm font-semibold">
-            <span className="text-zinc-400">{channels.length} total</span>
+            <button onClick={() => { setFilterStatus('all'); setPage(1); }} className={`hover:text-white transition-colors ${filterStatus === 'all' ? 'text-white underline underline-offset-4' : 'text-zinc-400'}`}>{channels.length} total</button>
             <span className="text-zinc-600">•</span>
-            <span className="text-emerald-400">{channels.filter(c => c.active !== false).length} active</span>
+            <button onClick={() => { setFilterStatus('active'); setPage(1); }} className={`hover:text-emerald-300 transition-colors ${filterStatus === 'active' ? 'text-emerald-300 underline underline-offset-4' : 'text-emerald-500'}`}>{channels.filter(c => c.active !== false).length} active</button>
             <span className="text-zinc-600">•</span>
-            <span className="text-zinc-500">{channels.filter(c => c.active === false).length} inactive</span>
+            <button onClick={() => { setFilterStatus('inactive'); setPage(1); }} className={`hover:text-zinc-300 transition-colors ${filterStatus === 'inactive' ? 'text-zinc-300 underline underline-offset-4' : 'text-zinc-500'}`}>{channels.filter(c => c.active === false).length} inactive</button>
           </div>
         </div>
         <button
@@ -163,22 +174,33 @@ export default function AdminChannelsPage() {
         </button>
       </div>
 
-      {/* Search */}
-      <div className="relative">
-        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
-        <input
-          id="channel-search"
-          type="text"
-          placeholder="Search by name, country, or category…"
-          value={search}
-          onChange={e => { setSearch(e.target.value); setPage(1); }}
-          className="w-full pl-11 pr-4 py-3 bg-zinc-900 border border-zinc-700/60 rounded-xl text-zinc-100 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/40 focus:border-emerald-500/50"
-        />
-        {search && (
-          <button onClick={() => setSearch('')} className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-zinc-300">
-            <X className="w-4 h-4" />
-          </button>
-        )}
+      {/* Search and Filters */}
+      <div className="flex flex-col sm:flex-row gap-3">
+        <div className="relative flex-1">
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
+          <input
+            id="channel-search"
+            type="text"
+            placeholder="Search by name or country…"
+            value={search}
+            onChange={e => { setSearch(e.target.value); setPage(1); }}
+            className="w-full pl-11 pr-4 py-3 bg-zinc-900 border border-zinc-700/60 rounded-xl text-zinc-100 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/40 focus:border-emerald-500/50"
+          />
+          {search && (
+            <button onClick={() => setSearch('')} className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-zinc-300">
+              <X className="w-4 h-4" />
+            </button>
+          )}
+        </div>
+        
+        <select
+          value={filterCategory}
+          onChange={e => { setFilterCategory(e.target.value); setPage(1); }}
+          className="w-full sm:w-48 bg-zinc-900 border border-zinc-700/60 rounded-xl px-4 py-3 text-zinc-100 focus:outline-none focus:ring-2 focus:ring-emerald-500/40 focus:border-emerald-500/50 appearance-none"
+        >
+          <option value="All">All Categories</option>
+          {CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
+        </select>
       </div>
 
       {/* Table */}
@@ -213,8 +235,15 @@ export default function AdminChannelsPage() {
                             className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-2 py-1.5 text-white text-sm focus:outline-none focus:ring-1 focus:ring-emerald-500" />
                         </td>
                         <td className="px-4 py-2 hidden sm:table-cell">
-                          <input value={editData.country ?? ch.country} onChange={e => setEditData(d => ({ ...d, country: e.target.value }))}
+                          <input list="edit-country-list" value={editData.country ?? ch.country} onChange={e => {
+                              const ctry = e.target.value;
+                              const code = uniqueCountries.find(u => u[0] === ctry)?.[1];
+                              setEditData(d => ({ ...d, country: ctry, ...(code ? { countryCode: code } : {}) }));
+                            }}
                             className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-2 py-1.5 text-white text-sm focus:outline-none focus:ring-1 focus:ring-emerald-500" />
+                          <datalist id="edit-country-list">
+                            {uniqueCountries.map(([c]) => <option key={c} value={c} />)}
+                          </datalist>
                         </td>
                         <td className="px-4 py-2 hidden md:table-cell">
                           <select value={editData.category ?? ch.category ?? 'Sports'}
@@ -350,11 +379,39 @@ export default function AdminChannelsPage() {
             </div>
 
             <div className="space-y-4">
+              {/* Preset Country and Sync Country Code */}
+              <div>
+                <label className="block text-sm text-zinc-400 mb-1">Country</label>
+                <input
+                  list="add-country-list"
+                  value={newChannel.country}
+                  onChange={e => {
+                    const ctry = e.target.value;
+                    const code = uniqueCountries.find(u => u[0] === ctry)?.[1] || newChannel.countryCode;
+                    setNewChannel(n => ({ ...n, country: ctry, countryCode: code }));
+                  }}
+                  placeholder="e.g. United States"
+                  className="w-full bg-zinc-800 border border-zinc-700 rounded-xl px-3 py-2.5 text-white placeholder-zinc-500 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/40"
+                />
+                <datalist id="add-country-list">
+                  {uniqueCountries.map(([c]) => <option key={c} value={c} />)}
+                </datalist>
+              </div>
+
+              {/* Country Code (auto-filled but editable) */}
+              <div>
+                <label className="block text-sm text-zinc-400 mb-1">Country Code</label>
+                <input
+                  value={newChannel.countryCode}
+                  onChange={e => setNewChannel(n => ({ ...n, countryCode: e.target.value }))}
+                  placeholder="e.g. US"
+                  className="w-full bg-zinc-800 border border-zinc-700 rounded-xl px-3 py-2.5 text-white placeholder-zinc-500 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/40"
+                />
+              </div>
+
               {[
                 { label: 'Channel Name *', key: 'name', placeholder: 'e.g. ESPN HD' },
                 { label: 'Channel Code', key: 'code', placeholder: 'e.g. espn.hd' },
-                { label: 'Country', key: 'country', placeholder: 'e.g. United States' },
-                { label: 'Country Code', key: 'countryCode', placeholder: 'e.g. US' },
                 { label: 'Logo URL', key: 'logo', placeholder: 'https://...' },
                 { label: 'Stream URL (M3U8) *', key: 'stream', placeholder: 'https://...' },
               ].map(({ label, key, placeholder }) => (
