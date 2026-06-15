@@ -61,11 +61,13 @@ export async function POST(req: NextRequest) {
 
     posts.push(newPost);
     
-    await Store.findOneAndUpdate(
-      { key: 'blog' },
-      { data: posts },
-      { upsert: true }
-    );
+    if (blogStore) {
+      blogStore.data = posts;
+      blogStore.markModified('data');
+      await blogStore.save();
+    } else {
+      await Store.create({ key: 'blog', data: posts });
+    }
 
     return NextResponse.json(newPost, { status: 201 });
   } catch {

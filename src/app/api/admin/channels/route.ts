@@ -51,6 +51,7 @@ export async function POST(req: NextRequest) {
       category: body.category || 'Sports',
       logo: body.logo || '',
       stream: body.stream || '',
+      embedCode: body.embedCode || '',
       languages: body.languages ? [body.languages] : [],
       active: body.active !== false,
       is_nsfw: false,
@@ -60,11 +61,13 @@ export async function POST(req: NextRequest) {
     if (!raw[targetCountry]) raw[targetCountry] = [];
     raw[targetCountry].push(newChannel);
 
-    await Store.findOneAndUpdate(
-      { key: 'channels' },
-      { data: raw },
-      { upsert: true }
-    );
+    if (channelsStore) {
+      channelsStore.data = raw;
+      channelsStore.markModified('data');
+      await channelsStore.save();
+    } else {
+      await Store.create({ key: 'channels', data: raw });
+    }
 
     return NextResponse.json({ ...newChannel, country: targetCountry }, { status: 201 });
   } catch {

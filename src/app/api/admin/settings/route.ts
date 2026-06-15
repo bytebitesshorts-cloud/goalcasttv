@@ -45,11 +45,13 @@ export async function PUT(req: NextRequest) {
       ...(body.adminUsername !== undefined && { adminUsername: body.adminUsername }),
     };
 
-    await Store.findOneAndUpdate(
-      { key: 'settings' },
-      { data: updated },
-      { upsert: true }
-    );
+    if (settingsStore) {
+      settingsStore.data = updated;
+      settingsStore.markModified('data');
+      await settingsStore.save();
+    } else {
+      await Store.create({ key: 'settings', data: updated });
+    }
 
     return NextResponse.json(updated);
   } catch (error) {

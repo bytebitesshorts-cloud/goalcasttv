@@ -16,12 +16,13 @@ interface Channel {
   countryCode: string;
   logo: string;
   stream: string;
+  embedCode?: string;
   languages: string[];
   active?: boolean;
 }
 
 const EMPTY: Omit<Channel, 'id'> = {
-  name: '', code: '', category: 'Sports', country: '', countryCode: '', logo: '', stream: '', languages: [], active: true,
+  name: '', code: '', category: 'Sports', country: '', countryCode: '', logo: '', stream: '', embedCode: '', languages: [], active: true,
 };
 
 const CATEGORIES = ['FIFA 2026', 'Sports', 'News', 'Movies', 'Entertainment', 'Music', 'Kids', 'Documentary', 'General'];
@@ -423,13 +424,24 @@ export default function AdminChannelsPage() {
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-medium text-zinc-400 mb-1.5 uppercase tracking-wider">Stream URL (M3U8) *</label>
+                    <label className="block text-xs font-medium text-zinc-400 mb-1.5 uppercase tracking-wider">Stream URL (M3U8)</label>
                     <input
                       value={formData.stream || ''}
                       onChange={e => setFormData(n => ({ ...n, stream: e.target.value }))}
                       placeholder="https://..."
                       className="w-full bg-zinc-800/50 border border-zinc-700 rounded-xl px-3 py-2.5 text-white placeholder-zinc-600 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/40"
                     />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-zinc-400 mb-1.5 uppercase tracking-wider">HTML Embed Code</label>
+                    <textarea
+                      value={formData.embedCode || ''}
+                      onChange={e => setFormData(n => ({ ...n, embedCode: e.target.value }))}
+                      placeholder='<iframe src="https://..." width="100%" height="100%" allowfullscreen></iframe>'
+                      rows={4}
+                      className="w-full bg-zinc-800/50 border border-zinc-700 rounded-xl px-3 py-2.5 text-white placeholder-zinc-600 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-emerald-500/40 resize-y"
+                    />
+                    <p className="text-xs text-zinc-600 mt-1">Paste iframe or HTML embed code. Used instead of Stream URL when provided.</p>
                   </div>
                 </div>
               </div>
@@ -454,7 +466,7 @@ export default function AdminChannelsPage() {
                 className="flex-1 py-3 rounded-xl border border-zinc-700 text-zinc-300 hover:text-white hover:bg-zinc-800 transition-all font-medium text-sm">
                 Cancel
               </button>
-              <button onClick={saveForm} disabled={!formData.name || !formData.stream}
+              <button onClick={saveForm} disabled={!formData.name || (!formData.stream && !formData.embedCode)}
                 id="save-channel-btn"
                 className="flex-1 py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold transition-all text-sm shadow-lg shadow-emerald-500/20">
                 {modalMode === 'add' ? 'Add Channel' : 'Save Changes'}

@@ -9,6 +9,7 @@ import CountryFlag from '@/components/CountryFlag';
 import ShareButton from '@/components/ShareButton';
 import ServerSwitcher from '@/components/ServerSwitcher';
 import { getChannel, getCountry, getAllChannels } from '@/lib/search';
+import { getChannelsByCategory } from '@/lib/category';
 import { slugify } from '@/lib/utils';
 import WatchRecorder from '@/components/WatchRecorder';
 import SidebarAd from '@/components/SidebarAd';
@@ -55,7 +56,10 @@ export default async function WatchPage({ params }: Props) {
 
   const country = await getCountry(channel.country);
   // Related channels = all channels from same country in fixed positions
-  const related = country?.channels ?? [];
+  const relatedCountry = (country?.channels ?? []).filter(c => c.id !== channel.id);
+
+  const categoryChannelsRaw = await getChannelsByCategory(channel.category);
+  const relatedCategory = categoryChannelsRaw.filter(c => c.id !== channel.id && !relatedCountry.some(rc => rc.id === c.id));
 
   // Find alternative servers (channels with the same normalized name)
   const servers = (country?.channels ?? []).filter(
@@ -98,7 +102,7 @@ export default async function WatchPage({ params }: Props) {
         <div className="lg:col-span-2 space-y-6">
           {/* Player (Sticky on mobile) */}
           <div className="sticky top-16 z-30 -mx-4 px-4 bg-zinc-50 dark:bg-zinc-950 sm:static sm:mx-0 sm:px-0 sm:z-auto sm:bg-transparent dark:sm:bg-transparent">
-            <VideoPlayer src={channel.stream} channelName={channel.name} />
+            <VideoPlayer src={channel.stream} channelName={channel.name} embedCode={channel.embedCode} />
           </div>
 
           {/* Channel info */}
@@ -162,28 +166,53 @@ export default async function WatchPage({ params }: Props) {
           
           <SidebarAd adConfig={adConfig} />
 
-          <div className="flex items-center gap-2">
-            <ArrowLeft className="w-4 h-4 text-emerald-500 rotate-180" aria-hidden="true" />
-            <h2
-              id="related-heading"
-              className="text-sm font-semibold text-zinc-700 dark:text-zinc-300"
-            >
-              More from {channel.country}
-            </h2>
-          </div>
+          {/* Related by Country */}
+          {relatedCountry.length > 0 && (
+            <>
+              <div className="flex items-center gap-2">
+                <ArrowLeft className="w-4 h-4 text-emerald-500 rotate-180" aria-hidden="true" />
+                <h2
+                  id="related-heading"
+                  className="text-sm font-semibold text-zinc-700 dark:text-zinc-300"
+                >
+                  More from {channel.country}
+                </h2>
+              </div>
+              <ul role="list" className="grid grid-cols-1 gap-3">
+                {relatedCountry.slice(0, 10).map((ch) => (
+                  <li key={ch.id}>
+                    <ChannelCard channel={ch} isActive={false} />
+                  </li>
+                ))}
+              </ul>
+            </>
+          )}
 
-          {related.length === 0 ? (
+          {/* Related by Category */}
+          {relatedCategory.length > 0 && (
+            <>
+              <div className={`flex items-center gap-2 ${relatedCountry.length > 0 ? 'mt-6' : ''}`}>
+                <ArrowLeft className="w-4 h-4 text-emerald-500 rotate-180" aria-hidden="true" />
+                <h2
+                  className="text-sm font-semibold text-zinc-700 dark:text-zinc-300 capitalize"
+                >
+                  More {channel.category} Channels
+                </h2>
+              </div>
+              <ul role="list" className="grid grid-cols-1 gap-3">
+                {relatedCategory.slice(0, 10).map((ch) => (
+                  <li key={ch.id}>
+                    <ChannelCard channel={ch} isActive={false} />
+                  </li>
+                ))}
+              </ul>
+            </>
+          )}
+
+          {relatedCountry.length === 0 && relatedCategory.length === 0 && (
             <p className="text-sm text-zinc-500 dark:text-zinc-400">
               No other channels available.
             </p>
-          ) : (
-            <ul role="list" className="grid grid-cols-1 gap-3">
-              {related.map((ch) => (
-                <li key={ch.id}>
-                  <ChannelCard channel={ch} isActive={ch.id === channel.id} />
-                </li>
-              ))}
-            </ul>
           )}
 
           {/* Back to country */}

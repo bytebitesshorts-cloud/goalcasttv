@@ -8,6 +8,7 @@ import { PlayerSkeleton } from './Skeletons';
 interface VideoPlayerProps {
   src: string;
   channelName: string;
+  embedCode?: string;
 }
 
 /** How long to wait for a stream before declaring it offline (ms) */
@@ -19,7 +20,7 @@ const CONNECTION_TIMEOUT = 15_000;
  * Includes Picture-in-Picture mode toggle
  * Optimized for fast startup with low-latency HLS config
  */
-export default function VideoPlayer({ src, channelName }: VideoPlayerProps) {
+export default function VideoPlayer({ src, channelName, embedCode }: VideoPlayerProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const hlsRef = useRef<Hls | null>(null);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -191,11 +192,19 @@ export default function VideoPlayer({ src, channelName }: VideoPlayerProps) {
 
   return (
     <div className="w-full animate-fade-in" role="region" aria-label={`${channelName} video player`}>
-      {/* Skeleton while loading */}
-      {loading && <PlayerSkeleton />}
+      {/* Embed code mode — render raw HTML */}
+      {embedCode && !src && (
+        <div
+          className="w-full aspect-video rounded-2xl bg-black shadow-lg overflow-hidden"
+          dangerouslySetInnerHTML={{ __html: embedCode }}
+        />
+      )}
 
-      {/* ── Offline / Error state ── */}
-      {error && !loading && (
+      {/* Skeleton while loading (HLS mode only) */}
+      {src && loading && <PlayerSkeleton />}
+
+      {/* ── Offline / Error state (HLS mode only) ── */}
+      {src && error && !loading && (
         <div className="w-full aspect-video rounded-2xl bg-gradient-to-br from-zinc-100 to-zinc-200 dark:from-zinc-800/90 dark:to-zinc-900/90 border border-zinc-200 dark:border-zinc-700 flex flex-col items-center justify-center gap-5 p-6 relative overflow-hidden">
           {/* Decorative static noise overlay */}
           <div className="absolute inset-0 opacity-[0.03] dark:opacity-[0.06]" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=%270 0 256 256%27 xmlns=%27http://www.w3.org/2000/svg%27%3E%3Cfilter id=%27noise%27%3E%3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%270.9%27 numOctaves=%274%27 stitchTiles=%27stitch%27/%3E%3C/filter%3E%3Crect width=%27100%25%27 height=%27100%25%27 filter=%27url(%23noise)%27/%3E%3C/svg%3E")', backgroundSize: '128px 128px' }} />
@@ -233,7 +242,8 @@ export default function VideoPlayer({ src, channelName }: VideoPlayerProps) {
         </div>
       )}
 
-      {/* Video element */}
+      {/* Video element (HLS mode only) */}
+      {src && (
       <video
         ref={videoRef}
         id="video-player"
@@ -247,9 +257,10 @@ export default function VideoPlayer({ src, channelName }: VideoPlayerProps) {
           ${loading || error ? 'hidden' : 'block'}
         `}
       />
+      )}
 
       {/* Picture-in-Picture Control Bar */}
-      {!loading && !error && pipSupported && (
+      {src && !loading && !error && pipSupported && (
         <div className="mt-3 flex items-center justify-between px-4 py-3 rounded-2xl bg-white dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-700/60 shadow-sm transition-colors duration-300">
           <div className="flex items-center gap-2">
             <span className="relative flex h-2 w-2">

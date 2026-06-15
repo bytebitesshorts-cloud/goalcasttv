@@ -5,6 +5,7 @@ export interface Channel {
   name: string;
   logo: string;
   stream: string;
+  embedCode?: string;
   category: string;
   country: string;
   countryCode: string;

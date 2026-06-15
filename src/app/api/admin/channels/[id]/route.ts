@@ -53,11 +53,13 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
       raw[foundCountry][foundIdx] = updatedChannel;
     }
 
-    await Store.findOneAndUpdate(
-      { key: 'channels' },
-      { data: raw },
-      { upsert: true }
-    );
+    if (channelsStore) {
+      channelsStore.data = raw;
+      channelsStore.markModified('data');
+      await channelsStore.save();
+    } else {
+      await Store.create({ key: 'channels', data: raw });
+    }
 
     return NextResponse.json({ ...updatedChannel, country: newCountry });
   } catch {
@@ -92,11 +94,13 @@ export async function DELETE(req: NextRequest, { params }: { params: { id: strin
     raw[foundCountry].splice(foundIdx, 1);
     if (raw[foundCountry].length === 0) delete raw[foundCountry];
 
-    await Store.findOneAndUpdate(
-      { key: 'channels' },
-      { data: raw },
-      { upsert: true }
-    );
+    if (channelsStore) {
+      channelsStore.data = raw;
+      channelsStore.markModified('data');
+      await channelsStore.save();
+    } else {
+      await Store.create({ key: 'channels', data: raw });
+    }
 
     return NextResponse.json({ success: true });
   } catch {

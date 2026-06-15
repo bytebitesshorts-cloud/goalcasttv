@@ -1,19 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { readFileSync, writeFileSync } from 'fs';
-import path from 'path';
+import connectDB from '@/lib/db';
+import { Store } from '@/lib/models';
 
-const BLOG_PATH = path.join(process.cwd(), 'src/data/blog.json');
+export const dynamic = 'force-dynamic';
 
 function isAuthenticated(req: NextRequest) {
   return req.cookies.get('admin_session')?.value === 'authenticated';
-}
-
-function getPosts(): Record<string, unknown>[] {
-  return JSON.parse(readFileSync(BLOG_PATH, 'utf-8'));
-}
-
-function savePosts(posts: unknown[]) {
-  writeFileSync(BLOG_PATH, JSON.stringify(posts, null, 2), 'utf-8');
 }
 
 export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
@@ -23,7 +15,11 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
 
   try {
     const body = await req.json();
-    const posts = getPosts();
+    await connectDB();
+    
+    const blogStore = await Store.findOne({ key: 'blog' });
+    const posts = (blogStore?.data || []) as any[];
+    
     const idx = posts.findIndex((p) => p.id === params.id);
 
     if (idx === -1) {
@@ -31,7 +27,9 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
     }
 
     posts[idx] = { ...posts[idx], ...body, updatedAt: new Date().toISOString() };
-    savePosts(posts);
+    
+    blogStore.markModified('data');
+    await blogStore.save();
 
     return NextResponse.json(posts[idx]);
   } catch {
@@ -45,14 +43,20 @@ export async function DELETE(req: NextRequest, { params }: { params: { id: strin
   }
 
   try {
-    const posts = getPosts();
+    await connectDB();
+    
+    const blogStore = await Store.findOne({ key: 'blog' });
+    const posts = (blogStore?.data || []) as any[];
     const filtered = posts.filter((p) => p.id !== params.id);
 
     if (filtered.length === posts.length) {
       return NextResponse.json({ error: 'Post not found' }, { status: 404 });
     }
 
-    savePosts(filtered);
+    blogStore.data = filtered;
+    blogStore.markModified('data');
+    await blogStore.save();
+
     return NextResponse.json({ success: true });
   } catch {
     return NextResponse.json({ error: 'Failed to delete post' }, { status: 500 });

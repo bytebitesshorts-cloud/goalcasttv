@@ -47,11 +47,13 @@ export async function PUT(req: NextRequest) {
       ...(body.adsenseSlotId !== undefined && { adsenseSlotId: body.adsenseSlotId }),
     };
 
-    await Store.findOneAndUpdate(
-      { key: 'ads' },
-      { data: updated },
-      { upsert: true }
-    );
+    if (adsStore) {
+      adsStore.data = updated;
+      adsStore.markModified('data');
+      await adsStore.save();
+    } else {
+      await Store.create({ key: 'ads', data: updated });
+    }
 
     return NextResponse.json(updated);
   } catch (error) {
