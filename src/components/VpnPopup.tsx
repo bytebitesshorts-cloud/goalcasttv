@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -6,7 +7,8 @@ import { ShieldCheck, X } from 'lucide-react';
 export default function VpnPopup() {
   const [isOpen, setIsOpen] = useState(false);
   const [shouldRender, setShouldRender] = useState(false);
-  const [config, setConfig] = useState<any>(null);
+  interface VpnPopupConfig { vpnPopupImage?: string; vpnPopupTitle?: string; vpnPopupMessage?: string; vpnPopupButtonLink?: string; vpnPopupButtonText?: string; vpnPopupEnabled?: boolean; }
+  const [config, setConfig] = useState<VpnPopupConfig | null>(null);
 
   useEffect(() => {
     const hasSeenPopup = localStorage.getItem('vpnPopupShown');
@@ -37,17 +39,15 @@ export default function VpnPopup() {
       {/* Backdrop */}
       <div
         onClick={handleClose}
-        className={`absolute inset-0 bg-black/40 backdrop-blur-sm pointer-events-auto transition-opacity duration-300 ${
-          isOpen ? 'opacity-100' : 'opacity-0'
-        }`}
+        className={`absolute inset-0 bg-black/40 backdrop-blur-sm pointer-events-auto transition-opacity duration-300 ${isOpen ? 'opacity-100' : 'opacity-0'
+          }`}
         aria-hidden="true"
       />
 
       {/* Modal */}
       <div
-        className={`relative w-full max-w-sm overflow-hidden rounded-3xl bg-white dark:bg-zinc-900 shadow-2xl ring-1 ring-zinc-200 dark:ring-zinc-800 pointer-events-auto transition-all duration-300 transform ${
-          isOpen ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-95 translate-y-8'
-        }`}
+        className={`relative w-full max-w-sm overflow-hidden rounded-3xl bg-white dark:bg-zinc-900 shadow-2xl ring-1 ring-zinc-200 dark:ring-zinc-800 pointer-events-auto transition-all duration-300 transform ${isOpen ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-95 translate-y-8'
+          }`}
       >
         {/* Top decorative gradient */}
         <div className="absolute top-0 inset-x-0 h-32 bg-gradient-to-br from-emerald-500/20 to-blue-500/20 dark:from-emerald-500/10 dark:to-blue-500/10" />
@@ -72,7 +72,7 @@ export default function VpnPopup() {
           <h2 className="mb-2 text-xl font-bold tracking-tight text-zinc-900 dark:text-white">
             {config?.vpnPopupTitle || 'Connect VPN For All Channel Access'}
           </h2>
-          
+
           <p className="mb-8 text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed">
             {config?.vpnPopupMessage || 'To ensure you have unrestricted access to all our global channels without interruption, we recommend connecting to a VPN.'}
           </p>

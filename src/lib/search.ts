@@ -59,7 +59,7 @@ export async function getChannel(id: string): Promise<Channel | undefined> {
 }
 
 let fuseInstance: Fuse<SearchResult> | null = null;
-let lastFuseUpdate = 0;
+
 
 async function getFuseInstance(): Promise<Fuse<SearchResult>> {
   // Disable memory cache so database changes reflect instantly in search
@@ -95,7 +95,7 @@ async function getFuseInstance(): Promise<Fuse<SearchResult>> {
     includeScore: true,
   });
   
-  lastFuseUpdate = Date.now();
+
   return fuseInstance;
 }
 

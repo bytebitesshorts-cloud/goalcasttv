@@ -2,10 +2,15 @@ import mongoose from 'mongoose';
 
 const MONGODB_URI = process.env.MONGODB_URI;
 
-let cached = (global as any).mongoose;
+// Typed cache for mongoose connection to avoid `any`
+interface CachedMongoose {
+  conn: typeof mongoose | null;
+  promise: Promise<typeof mongoose> | null;
+}
+let cached = (global as any).mongoose as CachedMongoose | undefined;
 
 if (!cached) {
-  cached = (global as any).mongoose = { conn: null, promise: null };
+  cached = (global as any).mongoose = { conn: null, promise: null } as CachedMongoose;
 }
 
 async function connectDB() {
