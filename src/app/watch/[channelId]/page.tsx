@@ -13,6 +13,7 @@ import { getChannelsByCategory } from '@/lib/category';
 import { slugify } from '@/lib/utils';
 import WatchRecorder from '@/components/WatchRecorder';
 import SidebarAd from '@/components/SidebarAd';
+import GoogleAd from '@/components/GoogleAd';
 import connectDB from '@/lib/db';
 import { Store } from '@/lib/models';
 
@@ -104,6 +105,8 @@ export default async function WatchPage({ params }: Props) {
           <div className="sticky top-16 z-30 -mx-4 px-4 bg-zinc-50 dark:bg-zinc-950 sm:static sm:mx-0 sm:px-0 sm:z-auto sm:bg-transparent dark:sm:bg-transparent">
             <VideoPlayer src={channel.stream} channelName={channel.name} embedCode={channel.embedCode} />
           </div>
+
+          <GoogleAd />
 
           {/* Channel info */}
           <div className="flex items-start gap-3 p-3 rounded-xl bg-white dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-700/60 shadow-sm">

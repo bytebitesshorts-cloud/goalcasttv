@@ -196,6 +196,20 @@ export default function BlogPostEditorPage() {
             />
             <p className="text-xs text-zinc-600 mt-1">Supports **bold**, *italic*, ## headings, - lists, [links](url)</p>
           </div>
+
+          {/* Bottom Save Buttons */}
+          <div className="flex items-center gap-2 pt-4 border-t border-zinc-800">
+            <button onClick={() => save()} disabled={saving || !form.title}
+              className="flex items-center gap-2 px-4 py-2.5 bg-zinc-800 hover:bg-zinc-700 disabled:opacity-40 text-zinc-200 font-medium rounded-xl transition-colors text-sm">
+              {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
+              Save Draft
+            </button>
+            <button onClick={() => save(!form.published)} disabled={saving || !form.title}
+              className="flex items-center gap-2 px-4 py-2.5 bg-emerald-500 hover:bg-emerald-400 disabled:opacity-40 text-white font-semibold rounded-xl transition-all shadow-lg shadow-emerald-500/20 text-sm">
+              {form.published ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+              {form.published ? 'Unpublish' : 'Publish'}
+            </button>
+          </div>
         </div>
 
         {/* Sidebar */}

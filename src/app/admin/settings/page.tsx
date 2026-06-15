@@ -8,6 +8,12 @@ interface SiteSettings {
   maintenanceMessage: string;
   adminPassword?: string;
   adminUsername?: string;
+  vpnPopupEnabled?: boolean;
+  vpnPopupTitle?: string;
+  vpnPopupMessage?: string;
+  vpnPopupButtonText?: string;
+  vpnPopupButtonLink?: string;
+  vpnPopupImage?: string;
 }
 
 export default function AdminSettingsPage() {
@@ -16,6 +22,12 @@ export default function AdminSettingsPage() {
     maintenanceMessage: "We're performing scheduled maintenance. We'll be back shortly!",
     adminPassword: '',
     adminUsername: 'admin',
+    vpnPopupEnabled: true,
+    vpnPopupTitle: 'Connect VPN For All Channel Access',
+    vpnPopupMessage: 'To ensure you have unrestricted access to all our global channels without interruption, we recommend connecting to a VPN.',
+    vpnPopupButtonText: 'Got it',
+    vpnPopupButtonLink: '',
+    vpnPopupImage: '',
   });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -164,6 +176,116 @@ export default function AdminSettingsPage() {
             className="mt-2 px-4 py-2 text-sm font-medium bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/20 rounded-xl transition-colors disabled:opacity-50"
           >
             Save Message
+          </button>
+        </div>
+      </div>
+
+      {/* Notification Popup Settings */}
+      <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 space-y-5">
+        <div className="flex items-start gap-3">
+          <div className="w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center shrink-0">
+            <AlertCircle className="w-5 h-5 text-blue-400" />
+          </div>
+          <div>
+            <h2 className="text-lg font-semibold text-white">Notification Popup (VPN / Telegram)</h2>
+            <p className="text-sm text-zinc-400 mt-0.5">
+              Configure the popup that appears for new users. You can use this for VPN warnings, Telegram join requests, etc.
+            </p>
+          </div>
+        </div>
+
+        {/* Toggle */}
+        <div className="flex items-center justify-between p-4 bg-zinc-800/60 rounded-xl border border-zinc-700/60">
+          <div>
+            <p className="text-sm font-medium text-zinc-200">Enable Popup</p>
+            <p className="text-xs text-zinc-500 mt-0.5">
+              Currently: {settings.vpnPopupEnabled ? (
+                <span className="text-emerald-400 font-medium">ON</span>
+              ) : (
+                <span className="text-zinc-500 font-medium">OFF</span>
+              )}
+            </p>
+          </div>
+          <button
+            onClick={() => saveSettings({ vpnPopupEnabled: !settings.vpnPopupEnabled })}
+            disabled={saving}
+            className="transition-colors disabled:opacity-50"
+            aria-label="Toggle popup"
+          >
+            {settings.vpnPopupEnabled ? (
+              <ToggleRight className="w-10 h-10 text-emerald-400" />
+            ) : (
+              <ToggleLeft className="w-10 h-10 text-zinc-500" />
+            )}
+          </button>
+        </div>
+
+        {/* Edit fields */}
+        <div className="space-y-4">
+          <div>
+            <label className="block text-sm text-zinc-400 mb-1">Popup Title</label>
+            <input
+              type="text"
+              value={settings.vpnPopupTitle || ''}
+              onChange={e => setSettings(s => ({ ...s, vpnPopupTitle: e.target.value }))}
+              placeholder="E.g., Join our Telegram!"
+              className="w-full bg-zinc-800 border border-zinc-700 rounded-xl px-4 py-3 text-zinc-200 placeholder-zinc-600 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/40"
+            />
+          </div>
+          <div>
+            <label className="block text-sm text-zinc-400 mb-1">Message</label>
+            <textarea
+              value={settings.vpnPopupMessage || ''}
+              onChange={e => setSettings(s => ({ ...s, vpnPopupMessage: e.target.value }))}
+              rows={3}
+              placeholder="Your message goes here..."
+              className="w-full bg-zinc-800 border border-zinc-700 rounded-xl px-4 py-3 text-zinc-200 placeholder-zinc-600 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/40 resize-none"
+            />
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm text-zinc-400 mb-1">Button Text</label>
+              <input
+                type="text"
+                value={settings.vpnPopupButtonText || ''}
+                onChange={e => setSettings(s => ({ ...s, vpnPopupButtonText: e.target.value }))}
+                placeholder="E.g., Join Now"
+                className="w-full bg-zinc-800 border border-zinc-700 rounded-xl px-4 py-3 text-zinc-200 placeholder-zinc-600 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/40"
+              />
+            </div>
+            <div>
+              <label className="block text-sm text-zinc-400 mb-1">Button Link</label>
+              <input
+                type="text"
+                value={settings.vpnPopupButtonLink || ''}
+                onChange={e => setSettings(s => ({ ...s, vpnPopupButtonLink: e.target.value }))}
+                placeholder="https://t.me/yourchannel (leave empty to just close)"
+                className="w-full bg-zinc-800 border border-zinc-700 rounded-xl px-4 py-3 text-zinc-200 placeholder-zinc-600 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/40"
+              />
+            </div>
+          </div>
+          <div>
+            <label className="block text-sm text-zinc-400 mb-1">Image URL (Optional)</label>
+            <input
+              type="text"
+              value={settings.vpnPopupImage || ''}
+              onChange={e => setSettings(s => ({ ...s, vpnPopupImage: e.target.value }))}
+              placeholder="https://..."
+              className="w-full bg-zinc-800 border border-zinc-700 rounded-xl px-4 py-3 text-zinc-200 placeholder-zinc-600 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/40"
+            />
+          </div>
+          <button
+            onClick={() => saveSettings({
+              vpnPopupTitle: settings.vpnPopupTitle,
+              vpnPopupMessage: settings.vpnPopupMessage,
+              vpnPopupButtonText: settings.vpnPopupButtonText,
+              vpnPopupButtonLink: settings.vpnPopupButtonLink,
+              vpnPopupImage: settings.vpnPopupImage,
+            })}
+            disabled={saving}
+            className="mt-2 px-4 py-2 text-sm font-medium bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/20 rounded-xl transition-colors disabled:opacity-50"
+          >
+            Save Popup Details
           </button>
         </div>
       </div>

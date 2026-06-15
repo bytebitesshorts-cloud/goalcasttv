@@ -490,7 +490,7 @@ export default function AdminChannelsPage() {
               </button>
             </div>
             <div className="p-4 bg-black">
-              <VideoPlayer src={previewChannel.stream} channelName={previewChannel.name} />
+              <VideoPlayer src={previewChannel.stream} channelName={previewChannel.name} embedCode={previewChannel.embedCode} />
             </div>
           </div>
         </div>

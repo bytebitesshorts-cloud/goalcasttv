@@ -43,6 +43,12 @@ export async function PUT(req: NextRequest) {
       ...(body.maintenanceMessage !== undefined && { maintenanceMessage: body.maintenanceMessage }),
       ...(body.adminPassword !== undefined && { adminPassword: body.adminPassword }),
       ...(body.adminUsername !== undefined && { adminUsername: body.adminUsername }),
+      ...(body.vpnPopupEnabled !== undefined && { vpnPopupEnabled: body.vpnPopupEnabled }),
+      ...(body.vpnPopupTitle !== undefined && { vpnPopupTitle: body.vpnPopupTitle }),
+      ...(body.vpnPopupMessage !== undefined && { vpnPopupMessage: body.vpnPopupMessage }),
+      ...(body.vpnPopupButtonText !== undefined && { vpnPopupButtonText: body.vpnPopupButtonText }),
+      ...(body.vpnPopupButtonLink !== undefined && { vpnPopupButtonLink: body.vpnPopupButtonLink }),
+      ...(body.vpnPopupImage !== undefined && { vpnPopupImage: body.vpnPopupImage }),
     };
 
     if (settingsStore) {
