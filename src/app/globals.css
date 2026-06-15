@@ -5,6 +5,7 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --bottom-nav-height: 64px;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -14,15 +15,55 @@
   }
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   color: var(--foreground);
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
+  /* safe area for bottom nav on mobile */
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* Hide scrollbars on mobile scroll rows */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Custom scrollbar for sidebar */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(100,100,100,0.4);
+  border-radius: 4px;
 }
 
 @layer utilities {
   .text-balance {
     text-wrap: balance;
+  }
+  /* Mobile bottom nav padding utility */
+  .pb-safe-nav {
+    padding-bottom: calc(var(--bottom-nav-height) + env(safe-area-inset-bottom, 0px));
+  }
+}
+
+/* Mobile dark gradient background */
+@media (max-width: 767px) {
+  body.dark-mode-body,
+  .dark body {
+    background: linear-gradient(135deg, #0d0d1a 0%, #0a0a0f 50%, #0d1020 100%);
+    min-height: 100vh;
   }
 }
 
@@ -66,3 +107,21 @@ body {
   width: max-content;
   animation: marquee 240s linear infinite;
 }
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.35s ease-out both;
+}
+
+/* Mobile bottom nav blur glass */
+.mobile-nav-glass {
+  background: rgba(10, 10, 15, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-top: 1px solid rgba(255,255,255,0.06);
+}
+

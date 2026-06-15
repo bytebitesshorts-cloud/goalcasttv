@@ -45,6 +45,11 @@ export async function PUT(req: NextRequest) {
       ...(body.customHtml !== undefined && { customHtml: body.customHtml }),
       ...(body.adsenseClientId !== undefined && { adsenseClientId: body.adsenseClientId }),
       ...(body.adsenseSlotId !== undefined && { adsenseSlotId: body.adsenseSlotId }),
+      // Mid-list ad fields
+      ...(body.midListAdEnabled !== undefined && { midListAdEnabled: body.midListAdEnabled }),
+      ...(body.midListAdType !== undefined && { midListAdType: body.midListAdType }),
+      ...(body.midListAdHtml !== undefined && { midListAdHtml: body.midListAdHtml }),
+      ...(body.midListAdAfterEvery !== undefined && { midListAdAfterEvery: body.midListAdAfterEvery }),
     };
 
     if (adsStore) {

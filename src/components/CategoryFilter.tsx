@@ -19,7 +19,7 @@ export default function CategoryFilter({ categories, baseUrl, activeCategory, on
   const pathname = usePathname();
 
   return (
-    <div className="flex gap-2 overflow-x-auto pb-3 pt-1 scrollbar-hide snap-x">
+    <div className="flex gap-2 overflow-x-auto pb-3 pt-1 no-scrollbar snap-x">
       {/* "All" button */}
       {baseUrl ? (
         <Link

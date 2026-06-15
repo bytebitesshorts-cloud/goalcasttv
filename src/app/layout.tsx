@@ -8,6 +8,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import MaintenanceBanner from '@/components/MaintenanceBanner';
 import ScoresTicker from '@/components/ScoresTicker';
+import MobileBottomNav from '@/components/MobileBottomNav';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 
@@ -87,8 +88,9 @@ export default function RootLayout({
             <ScoresTicker />
             <MaintenanceBanner />
             <Header />
-            <main className="flex-1">{children}</main>
-            <Footer />
+            <main className="flex-1 pb-safe-nav md:pb-0">{children}</main>
+            <div className="hidden md:block"><Footer /></div>
+            <MobileBottomNav />
           </UserPrefsProvider>
         </ThemeProvider>
       </body>
