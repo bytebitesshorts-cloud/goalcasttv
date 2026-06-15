@@ -57,7 +57,8 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <head>
+      <link rel="icon" href="/logo.png" />
+<link rel="icon" type="image/png" href="/favicon.png" />
         {/* Prevent flash of wrong theme — inline script sets dark class before paint */}
         <script
           dangerouslySetInnerHTML={{

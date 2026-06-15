@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { useEffect, useRef } from 'react';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft, Signal } from 'lucide-react';
@@ -9,6 +10,7 @@ import CountryFlag from '@/components/CountryFlag';
 import ShareButton from '@/components/ShareButton';
 import ServerSwitcher from '@/components/ServerSwitcher';
 import { getChannel, getCountry, getAllChannels } from '@/lib/search';
+import FavoriteButton from '@/components/FavoriteButton';
 import { getChannelsByCategory } from '@/lib/category';
 import { slugify } from '@/lib/utils';
 import WatchRecorder from '@/components/WatchRecorder';
@@ -63,7 +65,7 @@ export default async function WatchPage({ params }: Props) {
     midListAdEnabled: false,
     midListAdType: 'adsense',
     midListAdHtml: '',
-    midListAdAfterEvery: 5,
+    midListAdAfterEvery: 2,
   };
 
   const country = await getCountry(channel.country);
@@ -75,10 +77,17 @@ export default async function WatchPage({ params }: Props) {
     c => c.id !== channel.id && !relatedCountry.some(rc => rc.id === c.id)
   );
 
-  // Alternative servers (same normalised name)
-  const servers = (country?.channels ?? []).filter(
-    (c) => c.name.trim().toLowerCase() === channel.name.trim().toLowerCase()
-  );
+// Alternative servers (same normalised name)
+const servers = (country?.channels ?? []).filter(
+  (c) => c.name.trim().toLowerCase() === channel.name.trim().toLowerCase()
+);
+// Ref for scrolling related channels list (mobile)
+const relatedRef = useRef<HTMLDivElement>(null);
+useEffect(() => {
+  if (relatedRef.current) {
+    relatedRef.current.scrollTop = relatedRef.current.scrollHeight;
+  }
+}, [channel.id]);
 
   // Helper: inject mid-list ad after every N channels
   const injectAds = (channels: typeof relatedCountry, adConf: typeof adConfig) => {
@@ -154,6 +163,7 @@ export default async function WatchPage({ params }: Props) {
                   </span>
                 </div>
                 <ShareButton />
+              <FavoriteButton type="channel" channel={channel} className="ml-2" />
               </div>
               <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400 flex items-center gap-1.5">
                 {country && <CountryFlag code={country.code} name={channel.country} className="w-4 h-3 object-cover rounded-sm shadow-sm" />}
@@ -181,7 +191,7 @@ export default async function WatchPage({ params }: Props) {
           {/* Mobile: Related channels horizontal scroll */}
           <div className="lg:hidden">
             {relatedCountry.length > 0 && (
-              <div className="mt-2">
+              <div className="mt-2" ref={relatedRef}>
                 <div className="flex items-center justify-between mb-2">
                   <h2 className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">More from {channel.country}</h2>
                   {country && (
@@ -190,9 +200,9 @@ export default async function WatchPage({ params }: Props) {
                     </Link>
                   )}
                 </div>
-                <div className="flex gap-3 overflow-x-auto pb-2 no-scrollbar snap-x">
+                <div className="flex flex-col-reverse gap-3 overflow-y-auto max-h-64 pb-2 no-scrollbar">
                   {relatedCountry.slice(0, 10).map(ch => (
-                    <div key={ch.id} className="shrink-0 w-32 snap-start">
+                    <div key={ch.id} className="w-full">
                       <ChannelCard channel={ch} isActive={false} />
                     </div>
                   ))}

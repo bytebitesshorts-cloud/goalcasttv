@@ -18,7 +18,7 @@ export default function AdsSettingsPage() {
   const [midListAdEnabled, setMidListAdEnabled] = useState(false);
   const [midListAdType, setMidListAdType] = useState<'custom' | 'adsense'>('adsense');
   const [midListAdHtml, setMidListAdHtml] = useState('');
-  const [midListAdAfterEvery, setMidListAdAfterEvery] = useState(5);
+  const [midListAdAfterEvery, setMidListAdAfterEvery] = useState(2);
 
   useEffect(() => {
     fetch('/api/admin/ads')

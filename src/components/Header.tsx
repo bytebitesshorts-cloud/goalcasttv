@@ -69,6 +69,15 @@ export default function Header() {
           </div>
         )}
       </div>
+        {/* Mobile secondary search button */}
+        <div className="md:hidden flex justify-center mt-2">
+          <button
+            onClick={() => setMobileSearch(true)}
+            className="px-4 py-2 rounded-full bg-emerald-500 text-white hover:bg-emerald-600 transition-colors"
+          >
+            Search
+          </button>
+        </div>
 
       {/* ── Desktop header (unchanged) ── */}
       <div className="hidden md:block max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

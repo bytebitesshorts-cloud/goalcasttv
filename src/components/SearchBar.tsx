@@ -9,7 +9,7 @@ import { slugify } from '@/lib/utils';
 import ChannelLogo from '@/components/ChannelLogo';
 import CountryFlag from '@/components/CountryFlag';
 
-export default function SearchBar() {
+export default function SearchBar({ autoFocus, onBlur }: { autoFocus?: boolean; onBlur?: () => void }) {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState<SearchResult[]>([]);
   const [isOpen, setIsOpen] = useState(false);
@@ -107,6 +107,8 @@ export default function SearchBar() {
         />
         <input
           ref={inputRef}
+          autoFocus={autoFocus}
+          onBlur={onBlur}
           id="search-input"
           type="search"
           role="combobox"
