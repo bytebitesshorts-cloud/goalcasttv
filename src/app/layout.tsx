@@ -57,8 +57,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <link rel="icon" href="/logo.png" />
-<link rel="icon" type="image/png" href="/favicon.png" />
+      <head>
+        <link rel="icon" href="/logo.png" />
+        <link rel="icon" type="image/png" href="/favicon.png" />
+        <link rel="manifest" href="/manifest.json" />
+        <meta name="theme-color" content="#10b981" />
+        <link rel="apple-touch-icon" href="/icons/icon-192.png" />
         {/* Prevent flash of wrong theme — inline script sets dark class before paint */}
         <script
           dangerouslySetInnerHTML={{

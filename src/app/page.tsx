@@ -22,7 +22,7 @@ export const metadata: Metadata = {
 export default async function HomePage() {
   const categories = await getAllCategories();
   // Fetch slider data from admin endpoint (stored in DB)
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL ?? ''}/api/admin/slider`);
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL ?? ''}/api/admin/slider`, { cache: 'no-store' });
   if (!res.ok) throw new Error('Failed to load slider');
   const { slides } = await res.json();
 
