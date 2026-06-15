@@ -113,27 +113,7 @@ export default async function HomePage() {
           <CategoryFilter categories={categories} baseUrl="/category" />
         </section>
 
-              All Countries ({countries.length})
-            </h2>
-          </div>
-
-          {countries.length === 0 ? (
-            <p className="text-center text-zinc-500 dark:text-zinc-400 py-16">
-              No countries found.
-            </p>
-          ) : (
-            <ul
-              role="list"
-              className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4"
-            >
-              {countries.map((country) => (
-                <li key={country.code}>
-                  <CountryCard country={country} />
-                </li>
-              ))}
-            </ul>
-          )}
-        </section>
+// Country list removed per user request – view is simplified
 
         {/* JSON-LD structured data */}
         <script
