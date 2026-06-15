@@ -1,10 +1,10 @@
 import type { Metadata } from 'next';
 import { Globe2, Tv2, Signal } from 'lucide-react';
-import CountryCard from '@/components/CountryCard';
 import HomePersonalSection from '@/components/HomePersonalSection';
 import CategoryFilter from '@/components/CategoryFilter';
-import { getAllCountries } from '@/lib/search';
 import { getAllCategories } from '@/lib/category';
+import SliderTemplate from '@/components/SliderTemplate';
+// import { Store } from '@/lib/models';
 import VpnPopup from '@/components/VpnPopup';
 import Link from 'next/link';
 
@@ -20,8 +20,11 @@ export const metadata: Metadata = {
  * Home page — mobile app-like UI on small screens, grid on desktop
  */
 export default async function HomePage() {
-  const countries = await getAllCountries();
   const categories = await getAllCategories();
+  // Fetch slider data from admin endpoint (stored in DB)
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL ?? ''}/api/admin/slider`);
+  if (!res.ok) throw new Error('Failed to load slider');
+  const { slides } = await res.json();
 
   return (
     <div className="max-w-7xl mx-auto">
@@ -43,7 +46,7 @@ export default async function HomePage() {
               Watch Sports <span className="text-emerald-400">Live, Free</span>
             </h1>
             <p className="text-zinc-300 text-sm mb-5 leading-relaxed">
-              {countries.length} countries · {categories.length} categories · 0 subscriptions
+              {categories.length} categories · 0 subscriptions
             </p>
             <Link
               href="/category/sports"
@@ -62,28 +65,15 @@ export default async function HomePage() {
 
         {/* Recently Watched + Favorites */}
         <div className="px-4">
-          <HomePersonalSection allCountries={countries} />
+          <HomePersonalSection />
         </div>
 
         {/* VPN Popup */}
         <VpnPopup />
 
-        {/* Countries list */}
+        {/* Slider Section (Admin configurable) */}
         <div className="px-4 mt-4 pb-4">
-          <div className="flex items-center justify-between mb-3">
-            <h2 className="text-base font-bold text-zinc-100 flex items-center gap-2">
-              <Globe2 className="w-4 h-4 text-emerald-400" />
-              All Countries
-            </h2>
-            <span className="text-xs text-zinc-500 font-medium">{countries.length} countries</span>
-          </div>
-          <ul role="list" className="space-y-2">
-            {countries.map((country) => (
-              <li key={country.code}>
-                <CountryCard country={country} />
-              </li>
-            ))}
-          </ul>
+          <SliderTemplate slides={slides} className="rounded-xl overflow-hidden" />
         </div>
       </div>
 
@@ -107,12 +97,12 @@ export default async function HomePage() {
             </span>
           </h1>
           <p className="text-base sm:text-lg text-zinc-500 dark:text-zinc-400 max-w-xl mx-auto">
-            Choose a country to browse its sports channels and start watching instantly.
+            Choose a category to browse sports channels and start watching instantly.
           </p>
         </section>
 
         {/* Recently Watched + Favorites */}
-        <HomePersonalSection allCountries={countries} />
+        <HomePersonalSection />
 
         {/* VPN Popup */}
         <VpnPopup />
@@ -123,14 +113,6 @@ export default async function HomePage() {
           <CategoryFilter categories={categories} baseUrl="/category" />
         </section>
 
-        {/* Countries grid */}
-        <section aria-labelledby="countries-heading">
-          <div className="flex items-center gap-2 mb-6">
-            <Globe2 className="w-5 h-5 text-emerald-500" aria-hidden="true" />
-            <h2
-              id="countries-heading"
-              className="text-lg font-semibold text-zinc-800 dark:text-zinc-200"
-            >
               All Countries ({countries.length})
             </h2>
           </div>
