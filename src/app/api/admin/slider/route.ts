@@ -2,6 +2,8 @@ import connectDB from '@/lib/db';
 import { Store } from '@/lib/models';
 import type { NextRequest } from 'next/server';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET(req: NextRequest) {
   await connectDB();
   const store = await Store.findOne({ key: 'slider' });
