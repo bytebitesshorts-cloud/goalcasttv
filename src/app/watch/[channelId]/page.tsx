@@ -74,9 +74,15 @@ export default async function WatchPage({ params }: Props) {
   const country = await getCountry(channel.country);
   const relatedCountry = (country?.channels ?? []).filter((c) => c.id !== channel.id);
   const categoryChannelsRaw = await getChannelsByCategory(channel.category);
-  const relatedCategory = categoryChannelsRaw.filter(
+  // For slider channels that have no real country, also grab all Sports channels
+  let relatedCategory = categoryChannelsRaw.filter(
     (c) => c.id !== channel.id && !relatedCountry.some((rc) => rc.id === c.id)
   );
+  // If we still have no related channels (slider items), pull from "Sports" explicitly
+  if (relatedCategory.length === 0 && relatedCountry.length === 0) {
+    const sportsChannels = await getChannelsByCategory('Sports');
+    relatedCategory = sportsChannels.filter((c) => c.id !== channel.id).slice(0, 20);
+  }
   const servers = (country?.channels ?? []).filter(
     (c) => c.name.trim().toLowerCase() === channel.name.trim().toLowerCase()
   );

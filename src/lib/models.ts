@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 
 const StoreSchema = new mongoose.Schema({
   key: { type: String, required: true, unique: true },
-  data: { type: mongoose.Schema.Types.Mixed, required: true },
+  data: { type: mongoose.Schema.Types.Mixed, required: false },
   // New field for admin-configurable slider items
   // Each slide contains an image URL, a target link, and an optional title
   slider: {
