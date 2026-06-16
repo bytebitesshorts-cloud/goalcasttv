@@ -22,20 +22,20 @@ export default function SliderTemplate({ slides, className }: SliderTemplateProp
   const goNext = () => setCurrent((c) => (c + 1) % slides.length);
 
   return (
-    <div className={`relative overflow-hidden rounded-xl ${className ?? ''}`}>
-      <a href={slides[current].link} target="_self" className="block relative group">
+    <div className={`relative overflow-hidden rounded-xl bg-zinc-950 ${className ?? ''}`}>
+      <a href={(slides[current] as any).streamUrl || (slides[current] as any).embedCode ? `/watch/slider-${current}` : slides[current].link || '#'} target="_self" className="block relative group aspect-[16/9] md:aspect-[21/9]">
         <img
           src={slides[current].image}
           alt={slides[current].title ?? `Slide ${current + 1}`}
-          className="w-full h-auto aspect-video object-cover cursor-pointer transition-transform duration-500 group-hover:scale-105"
+          className="w-full h-full object-cover cursor-pointer transition-transform duration-500 group-hover:scale-105"
         />
         {slides[current].title && (
-          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent flex flex-col justify-end p-6 pointer-events-none">
-            <h2 className="text-white text-2xl md:text-4xl font-extrabold shadow-black drop-shadow-lg">
+          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent flex flex-col justify-end p-4 md:p-6 pointer-events-none">
+            <h2 className="text-white text-xl md:text-4xl font-extrabold shadow-black drop-shadow-lg line-clamp-2">
               {slides[current].title}
             </h2>
             <div className="flex items-center gap-2 mt-2">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500 text-black text-xs font-bold uppercase tracking-wider">
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 md:px-3 md:py-1 rounded-full bg-emerald-500 text-black text-[10px] md:text-xs font-bold uppercase tracking-wider">
                 <span className="w-1.5 h-1.5 rounded-full bg-black animate-pulse" />
                 Live Now
               </span>

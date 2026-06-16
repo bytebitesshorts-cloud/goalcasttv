@@ -114,36 +114,71 @@ export default function SliderAdminPage() {
           <div key={idx} className="p-4 bg-zinc-900 border border-zinc-800 rounded-xl">
             <div className="flex justify-between items-center mb-2">
               <h2 className="text-lg font-semibold text-white">Slide {idx + 1}</h2>
-              <button type="button" onClick={() => handleRemove(idx)} className="text-red-500 hover:text-red-400">
-                <X className="w-5 h-5" />
-              </button>
+              <div className="flex items-center gap-3">
+                <a
+                  href={`/watch/slider-${idx}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-1.5 px-3 py-1.5 bg-blue-500/20 text-blue-400 hover:bg-blue-500/30 rounded-lg text-sm font-medium transition-colors"
+                  title="Save changes first before previewing"
+                >
+                  Preview Play
+                </a>
+                <button type="button" onClick={() => handleRemove(idx)} className="text-red-500 hover:text-red-400">
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
             </div>
+            
+            <label className="block text-sm font-medium text-zinc-300 mb-1">Slide Title</label>
+            <input
+              type="text"
+              className="w-full bg-zinc-950 border border-zinc-800 rounded-xl p-2 mb-4 text-white"
+              value={slide.title || ''}
+              onChange={(e) => handleChange(idx, 'title', e.target.value)}
+              placeholder="e.g. Argentina vs Brazil"
+            />
+            
             <label className="block text-sm font-medium text-zinc-300 mb-1">Image URL</label>
             <input
               type="text"
-              className="w-full bg-zinc-950 border border-zinc-800 rounded-xl p-2 mb-2 text-white"
-              value={slide.image}
+              className="w-full bg-zinc-950 border border-zinc-800 rounded-xl p-2 mb-4 text-white"
+              value={slide.image || ''}
               onChange={(e) => handleChange(idx, 'image', e.target.value)}
               placeholder="https://example.com/image.jpg"
               required
             />
-            <label className="block text-sm font-medium text-zinc-300 mb-1">Target Link</label>
-            <input
-              type="text"
-              className="w-full bg-zinc-950 border border-zinc-800 rounded-xl p-2 mb-2 text-white"
-              value={slide.link}
-              onChange={(e) => handleChange(idx, 'link', e.target.value)}
-              placeholder="https://example.com/match"
-              required
-            />
-            <label className="block text-sm font-medium text-zinc-300 mb-1">Title (optional)</label>
-            <input
-              type="text"
-              className="w-full bg-zinc-950 border border-zinc-800 rounded-xl p-2 mb-2 text-white"
-              value={slide.title || ''}
-              onChange={(e) => handleChange(idx, 'title', e.target.value)}
-              placeholder="Match title"
-            />
+            
+            <div className="p-4 bg-zinc-950/50 rounded-lg border border-zinc-800/50">
+              <p className="text-xs text-emerald-400 mb-3 font-semibold uppercase tracking-wider">Video Source (Fill one)</p>
+              
+              <label className="block text-sm font-medium text-zinc-300 mb-1">Stream URL (M3U8)</label>
+              <input
+                type="text"
+                className="w-full bg-zinc-950 border border-zinc-800 rounded-xl p-2 mb-3 text-white placeholder:text-zinc-600"
+                value={(slide as any).streamUrl || slide.link || ''}
+                onChange={(e) => {
+                  handleChange(idx, 'streamUrl' as any, e.target.value);
+                  handleChange(idx, 'link', ''); // Clear old link
+                }}
+                placeholder="https://example.com/live.m3u8"
+              />
+              
+              <div className="flex items-center gap-2 mb-3">
+                <hr className="flex-1 border-zinc-800" />
+                <span className="text-xs text-zinc-500 font-medium">OR</span>
+                <hr className="flex-1 border-zinc-800" />
+              </div>
+              
+              <label className="block text-sm font-medium text-zinc-300 mb-1">HTML Embed Code</label>
+              <textarea
+                className="w-full bg-zinc-950 border border-zinc-800 rounded-xl p-2 text-white placeholder:text-zinc-600 font-mono text-xs"
+                rows={3}
+                value={(slide as any).embedCode || ''}
+                onChange={(e) => handleChange(idx, 'embedCode' as any, e.target.value)}
+                placeholder='<iframe src="..." width="100%" height="100%"></iframe>'
+              />
+            </div>
           </div>
         ))}
         

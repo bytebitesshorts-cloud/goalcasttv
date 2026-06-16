@@ -73,7 +73,7 @@ export default function ChannelCard({ channel, isActive }: ChannelCardProps) {
           group flex flex-col items-center gap-3 p-4 rounded-2xl
           ${isActive
             ? 'bg-emerald-50/60 dark:bg-emerald-950/30 border-emerald-500 dark:border-emerald-500/80 shadow-md ring-1 ring-emerald-500/30'
-            : 'bg-white dark:bg-zinc-900/60 border-zinc-200 dark:border-zinc-700/60 shadow-sm hover:shadow-xl dark:hover:shadow-emerald-900/10 hover:-translate-y-1 hover:border-emerald-400/60 dark:hover:border-emerald-500/40'}
+            : 'bg-[#3BB8DB] border-[#3BB8DB]/50 shadow-sm hover:shadow-xl hover:-translate-y-1 hover:brightness-110'}
           transition-all duration-300 ease-out
           cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500
           overflow-hidden
@@ -115,7 +115,7 @@ export default function ChannelCard({ channel, isActive }: ChannelCardProps) {
 
         {/* Name and Code */}
         <div className="w-full text-center">
-          <h3 className="text-xs sm:text-sm font-semibold text-zinc-800 dark:text-zinc-100 leading-tight line-clamp-2">
+          <h3 className="text-xs sm:text-sm font-semibold text-white leading-tight line-clamp-2 drop-shadow-sm">
             {channel.name}
           </h3>
           {channel.code && (
@@ -127,7 +127,7 @@ export default function ChannelCard({ channel, isActive }: ChannelCardProps) {
 
         {/* Quality badge */}
         {channel.quality && (
-          <span className="text-[10px] px-2 py-0.5 rounded-full bg-zinc-100 dark:bg-zinc-800 text-zinc-500 dark:text-zinc-400 font-medium border border-zinc-200 dark:border-zinc-700/50">
+          <span className="text-[10px] px-2 py-0.5 rounded-full bg-black/20 text-white/90 font-medium border border-white/10 backdrop-blur-sm">
             {channel.quality}
           </span>
         )}

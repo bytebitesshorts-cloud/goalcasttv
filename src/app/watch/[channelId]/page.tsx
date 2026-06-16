@@ -35,7 +35,26 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function WatchPage({ params }: Props) {
-  const channel = await getChannel(params.channelId);
+  await connectDB();
+  let channel = await getChannel(params.channelId);
+  
+  if (!channel && params.channelId.startsWith('slider-')) {
+    const sliderIndex = parseInt(params.channelId.replace('slider-', ''), 10);
+    const sliderStore = await Store.findOne({ key: 'slider' });
+    const slides = sliderStore?.slider || [];
+    const slide = slides[sliderIndex];
+    if (slide && (slide.streamUrl || slide.embedCode)) {
+      channel = {
+        id: params.channelId,
+        name: slide.title || 'Live Stream',
+        url: slide.streamUrl || slide.embedCode,
+        logo: slide.image || '',
+        category: 'Sports',
+        country: 'Global',
+      } as any;
+    }
+  }
+
   if (!channel) notFound();
 
   await connectDB();

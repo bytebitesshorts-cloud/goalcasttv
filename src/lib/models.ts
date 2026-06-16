@@ -9,7 +9,9 @@ const StoreSchema = new mongoose.Schema({
     type: [
       new mongoose.Schema({
         image: { type: String, required: true },
-        link: { type: String, required: true },
+        link: { type: String, required: false },
+        streamUrl: { type: String, required: false },
+        embedCode: { type: String, required: false },
         title: { type: String },
       })
     ],
