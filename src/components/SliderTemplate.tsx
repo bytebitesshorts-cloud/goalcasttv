@@ -23,12 +23,25 @@ export default function SliderTemplate({ slides, className }: SliderTemplateProp
 
   return (
     <div className={`relative overflow-hidden rounded-xl ${className ?? ''}`}>
-      <a href={slides[current].link} target="_blank" rel="noopener noreferrer">
+      <a href={slides[current].link} target="_self" className="block relative group">
         <img
           src={slides[current].image}
           alt={slides[current].title ?? `Slide ${current + 1}`}
-          className="w-full h-auto object-cover cursor-pointer transition-opacity duration-300"
+          className="w-full h-auto aspect-video object-cover cursor-pointer transition-transform duration-500 group-hover:scale-105"
         />
+        {slides[current].title && (
+          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent flex flex-col justify-end p-6 pointer-events-none">
+            <h2 className="text-white text-2xl md:text-4xl font-extrabold shadow-black drop-shadow-lg">
+              {slides[current].title}
+            </h2>
+            <div className="flex items-center gap-2 mt-2">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500 text-black text-xs font-bold uppercase tracking-wider">
+                <span className="w-1.5 h-1.5 rounded-full bg-black animate-pulse" />
+                Live Now
+              </span>
+            </div>
+          </div>
+        )}
       </a>
       {/* Navigation arrows */}
       <button
