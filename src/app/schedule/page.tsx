@@ -260,8 +260,8 @@ const matchesData: Match[] = [
   }
 ];
 
-export default function SchedulePage({ hero: heroProp = {} }: { hero?: HeroData }) {
-  const [heroData, setHeroData] = useState<HeroData>(heroProp);
+export default function SchedulePage() {
+  const [heroData, setHeroData] = useState<HeroData>({});
 
   useEffect(() => {
     fetch('/api/admin/pages/page_schedule')

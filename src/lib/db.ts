@@ -7,10 +7,10 @@ interface CachedMongoose {
   conn: typeof mongoose | null;
   promise: Promise<typeof mongoose> | null;
 }
-let cached = (global as any).mongoose as CachedMongoose | undefined;
+let cached: CachedMongoose = (global as any).mongoose;
 
 if (!cached) {
-  cached = (global as any).mongoose = { conn: null, promise: null } as CachedMongoose;
+  cached = (global as any).mongoose = { conn: null, promise: null } satisfies CachedMongoose;
 }
 
 async function connectDB() {

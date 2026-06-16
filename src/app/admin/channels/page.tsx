@@ -83,8 +83,8 @@ export default function AdminChannelsPage() {
     const matchesStatus = filterStatus === 'all'
                           ? true
                           : filterStatus === 'active'
-                            ? (c.active !== false && c.active !== 'false')
-                            : (c.active === false || c.active === 'false');
+                            ? (c.active !== false)
+                            : (c.active === false);
     return matchesSearch && matchesCategory && matchesStatus;
   });
 
@@ -171,9 +171,9 @@ export default function AdminChannelsPage() {
           <div className="flex items-center gap-2.5 mt-1 text-sm font-semibold">
             <button onClick={() => { setFilterStatus('all'); setPage(1); }} className={`hover:text-white transition-colors ${filterStatus === 'all' ? 'text-white underline underline-offset-4' : 'text-zinc-400'}`}>{channels.length} total</button>
             <span className="text-zinc-600">•</span>
-            <button onClick={() => { setFilterStatus('active'); setPage(1); }} className={`hover:text-emerald-300 transition-colors ${filterStatus === 'active' ? 'text-emerald-300 underline underline-offset-4' : 'text-emerald-500'}`}>{channels.filter(c => c.active !== false && c.active !== 'false').length} active</button>
+            <button onClick={() => { setFilterStatus('active'); setPage(1); }} className={`hover:text-emerald-300 transition-colors ${filterStatus === 'active' ? 'text-emerald-300 underline underline-offset-4' : 'text-emerald-500'}`}>{channels.filter(c => c.active !== false).length} active</button>
             <span className="text-zinc-600">•</span>
-            <button onClick={() => { setFilterStatus('inactive'); setPage(1); }} className={`hover:text-zinc-300 transition-colors ${filterStatus === 'inactive' ? 'text-zinc-300 underline underline-offset-4' : 'text-zinc-500'}`}>{channels.filter(c => c.active === false || c.active === 'false').length} inactive</button>
+            <button onClick={() => { setFilterStatus('inactive'); setPage(1); }} className={`hover:text-zinc-300 transition-colors ${filterStatus === 'inactive' ? 'text-zinc-300 underline underline-offset-4' : 'text-zinc-500'}`}>{channels.filter(c => c.active === false).length} inactive</button>
           </div>
         </div>
         <button
@@ -262,7 +262,7 @@ export default function AdminChannelsPage() {
                     <td className="px-4 py-3">
                       <button
                         onClick={async () => {
-                          const newActive = !(ch.active !== false && ch.active !== 'false');
+                          const newActive = !(ch.active !== false);
                           const r = await fetch(`/api/admin/channels/${ch.id}`, {
                             method: 'PUT',
                             headers: { 'Content-Type': 'application/json' },
@@ -276,12 +276,12 @@ export default function AdminChannelsPage() {
                           }
                         }}
                         className={`px-2.5 py-1 rounded-full text-xs font-semibold border transition-all ${
-                          (ch.active !== false && ch.active !== 'false')
+                          (ch.active !== false)
                             ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/20'
                             : 'bg-zinc-800 border-zinc-700 text-zinc-400 hover:bg-zinc-700'
                         }`}
                       >
-                        {(ch.active !== false && ch.active !== 'false') ? 'Active' : 'Inactive'}
+                        {(ch.active !== false) ? 'Active' : 'Inactive'}
                       </button>
                     </td>
                     <td className="px-4 py-3">
