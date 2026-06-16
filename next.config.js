@@ -20,10 +20,12 @@ module.exports = withPWA({
   typescript: {
     ignoreBuildErrors: true,
   },
+  // Skip ESLint during build to avoid OOM
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
   // Reduce image processing overhead
   images: {
     disableStaticImages: true,
   },
-});
-  // any existing next config can be merged here
 });
