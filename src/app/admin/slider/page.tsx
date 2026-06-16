@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from 'react';
-import { Save, Plus, X } from 'lucide-react';
+import { Save, Plus, X, RefreshCw } from 'lucide-react';
 
 interface Slide {
   image: string;
@@ -11,6 +11,7 @@ interface Slide {
 
 export default function SliderAdminPage() {
   const [loading, setLoading] = useState(true);
+  const [syncing, setSyncing] = useState(false);
   const [slides, setSlides] = useState<Slide[]>([]);
   const [message, setMessage] = useState<{ text: string; type: 'success' | 'error' } | null>(null);
 
@@ -42,6 +43,26 @@ export default function SliderAdminPage() {
     setSlides(newSlides);
   };
 
+  const handleSyncMatches = async () => {
+    setSyncing(true);
+    setMessage(null);
+    try {
+      const res = await fetch('/api/admin/slider/sync');
+      if (!res.ok) throw new Error('Sync failed');
+      const data = await res.json();
+      
+      // Merge new slides with existing ones or replace entirely? 
+      // User said: "add the data of all the matches of the group stage to the slider"
+      // Replacing them might be destructive if they have custom slides, so we append them.
+      setSlides(prev => [...prev, ...data.slides]);
+      setMessage({ text: 'Live matches synced! Review them below and click Save.', type: 'success' });
+    } catch (err: any) {
+      setMessage({ text: err.message || 'Error syncing live matches', type: 'error' });
+    } finally {
+      setSyncing(false);
+    }
+  };
+
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     setMessage(null);
@@ -68,14 +89,26 @@ export default function SliderAdminPage() {
 
   return (
     <div className="max-w-4xl mx-auto p-4">
-      <h1 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
-        <Save className="w-6 h-6 text-emerald-500" /> Slider Management
-      </h1>
+      <div className="flex items-center justify-between mb-4">
+        <h1 className="text-2xl font-bold text-white flex items-center gap-2">
+          <Save className="w-6 h-6 text-emerald-500" /> Slider Management
+        </h1>
+        <button
+          onClick={handleSyncMatches}
+          disabled={syncing}
+          className="flex items-center gap-2 bg-blue-600/20 text-blue-400 hover:bg-blue-600/30 border border-blue-500/30 px-4 py-2 rounded-xl font-medium transition-colors"
+        >
+          <RefreshCw className={`w-4 h-4 ${syncing ? 'animate-spin' : ''}`} /> 
+          {syncing ? 'Syncing...' : 'Auto-Sync Live Matches'}
+        </button>
+      </div>
+
       {message && (
-        <div className={`mb-4 text-sm font-medium ${message.type === 'success' ? 'text-emerald-400' : 'text-red-400'}`}>
+        <div className={`mb-4 p-3 rounded-xl text-sm font-medium border ${message.type === 'success' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' : 'bg-red-500/10 text-red-400 border-red-500/20'}`}>
           {message.text}
         </div>
       )}
+
       <form onSubmit={handleSave} className="space-y-6">
         {slides.map((slide, idx) => (
           <div key={idx} className="p-4 bg-zinc-900 border border-zinc-800 rounded-xl">
@@ -113,19 +146,22 @@ export default function SliderAdminPage() {
             />
           </div>
         ))}
-        <button
-          type="button"
-          onClick={handleAdd}
-          className="flex items-center gap-2 bg-emerald-500 hover:bg-emerald-400 text-black px-4 py-2 rounded-xl font-medium"
-        >
-          <Plus className="w-4 h-4" /> Add Slide
-        </button>
-        <button
-          type="submit"
-          className="flex items-center gap-2 bg-emerald-500 hover:bg-emerald-400 text-black px-6 py-2.5 rounded-xl font-medium"
-        >
-          <Save className="w-4 h-4" /> Save Changes
-        </button>
+        
+        <div className="flex items-center gap-4">
+          <button
+            type="button"
+            onClick={handleAdd}
+            className="flex items-center gap-2 bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-400 border border-emerald-500/30 px-4 py-2 rounded-xl font-medium transition-colors"
+          >
+            <Plus className="w-4 h-4" /> Add Slide
+          </button>
+          <button
+            type="submit"
+            className="flex items-center gap-2 bg-emerald-500 hover:bg-emerald-400 text-black px-6 py-2.5 rounded-xl font-medium transition-colors ml-auto"
+          >
+            <Save className="w-4 h-4" /> Save Changes
+          </button>
+        </div>
       </form>
     </div>
   );
