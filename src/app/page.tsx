@@ -4,7 +4,8 @@ import HomePersonalSection from '@/components/HomePersonalSection';
 import CategoryFilter from '@/components/CategoryFilter';
 import { getAllCategories } from '@/lib/category';
 import SliderTemplate from '@/components/SliderTemplate';
-// import { Store } from '@/lib/models';
+import connectDB from '@/lib/db';
+import { Store } from '@/lib/models';
 import VpnPopup from '@/components/VpnPopup';
 import Link from 'next/link';
 
@@ -20,11 +21,9 @@ export const metadata: Metadata = {
  * Home page — mobile app-like UI on small screens, grid on desktop
  */
 export default async function HomePage() {
-  const categories = await getAllCategories();
-  // Fetch slider data from admin endpoint (stored in DB)
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL ?? ''}/api/admin/slider`, { cache: 'no-store' });
-  if (!res.ok) throw new Error('Failed to load slider');
-  const { slides } = await res.json();
+  await connectDB();
+  const sliderStore = await Store.findOne({ key: 'slider' });
+  const slides = sliderStore?.slider || [];
 
   return (
     <div className="max-w-7xl mx-auto min-h-screen flex flex-col pt-8">
