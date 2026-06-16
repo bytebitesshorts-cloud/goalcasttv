@@ -158,8 +158,9 @@ export default function SliderAdminPage() {
                 className="w-full bg-zinc-950 border border-zinc-800 rounded-xl p-2 mb-3 text-white placeholder:text-zinc-600"
                 value={(slide as any).streamUrl || slide.link || ''}
                 onChange={(e) => {
-                  handleChange(idx, 'streamUrl' as any, e.target.value);
-                  handleChange(idx, 'link', ''); // Clear old link
+                  const newSlides = [...slides];
+                  newSlides[idx] = { ...newSlides[idx], streamUrl: e.target.value, link: '' } as any;
+                  setSlides(newSlides);
                 }}
                 placeholder="https://example.com/live.m3u8"
               />
