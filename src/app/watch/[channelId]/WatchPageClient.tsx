@@ -15,7 +15,7 @@ interface WatchPageClientProps {
 }
 
 /** How long to wait for a stream before declaring it offline (ms) */
-const CONNECTION_TIMEOUT = 15_000;
+const CONNECTION_TIMEOUT = 20_000;
 
 export default function WatchPageClient({
   channel,
@@ -26,54 +26,65 @@ export default function WatchPageClient({
   adConfig,
 }: WatchPageClientProps) {
   const [activeStream, setActiveStream] = useState<any>(channel);
+  // Single, stable video element — NEVER re-keyed
   const videoRef = useRef<HTMLVideoElement>(null);
   const hlsRef = useRef<Hls | null>(null);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [retryKey, setRetryKey] = useState(0);
+  const [retryCount, setRetryCount] = useState(0);
 
-  // Determine stream type
-  const isM3u8 = activeStream?.url?.includes('.m3u8');
-  const isIframe = activeStream?.url?.includes('<iframe') || (!isM3u8 && activeStream?.url?.includes('http') && !activeStream?.url?.match(/\.(mp4|webm|ogg)$/));
-  const isDirectVideo = !isM3u8 && !isIframe;
+  // ── Classify stream type ──
+  const url = activeStream?.url ?? '';
+  const isEmbedHtml = url.includes('<iframe') || url.includes('<embed');
+  const isM3u8 = !isEmbedHtml && url.includes('.m3u8');
+  const isIframeUrl = !isEmbedHtml && !isM3u8 && url.startsWith('http') && !url.match(/\.(mp4|webm|ogg)$/i);
+  const isDirectVideo = !isEmbedHtml && !isM3u8 && !isIframeUrl && url.startsWith('http');
 
-  const clearConnectionTimeout = useCallback(() => {
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
-      timeoutRef.current = null;
-    }
+  const clearTimeout_ = useCallback(() => {
+    if (timeoutRef.current) { clearTimeout(timeoutRef.current); timeoutRef.current = null; }
   }, []);
 
-  // ── HLS / Video playback with error handling ──
+  // ── Main player effect — runs whenever stream or retry changes ──
   useEffect(() => {
-    const video = videoRef.current;
-    
-    // For iframe streams, skip video setup
-    if (isIframe) {
+    // iframe/embed types need no JS video setup
+    if (isEmbedHtml || isIframeUrl) {
       setLoading(false);
       setError(null);
       return;
     }
 
-    if (!video || !activeStream?.url) return;
+    if (!url) {
+      setError('No stream URL available for this channel.');
+      setLoading(false);
+      return;
+    }
 
+    const video = videoRef.current;
+    if (!video) return;  // guard — should always exist since we never re-key the element
+
+    // Reset state
     setLoading(true);
     setError(null);
-    clearConnectionTimeout();
+    clearTimeout_();
 
-    // Destroy previous HLS instance
+    // Destroy any existing HLS instance
     if (hlsRef.current) {
       hlsRef.current.destroy();
       hlsRef.current = null;
     }
 
-    // Start connection timeout
+    // Reset the video element cleanly
+    video.pause();
+    video.removeAttribute('src');
+    video.load();
+
+    // Start offline-detection timeout
     timeoutRef.current = setTimeout(() => {
       hlsRef.current?.destroy();
       hlsRef.current = null;
-      setError('This channel appears to be offline. Try another channel or retry.');
+      setError('This channel appears to be offline or taking too long. Try another channel or retry.');
       setLoading(false);
     }, CONNECTION_TIMEOUT);
 
@@ -83,99 +94,90 @@ export default function WatchPageClient({
           enableWorker: true,
           lowLatencyMode: true,
           startLevel: -1,
-          maxBufferLength: 10,
+          maxBufferLength: 15,
           maxMaxBufferLength: 30,
-          fragLoadingTimeOut: 8000,
-          fragLoadingMaxRetry: 3,
-          manifestLoadingTimeOut: 8000,
-          manifestLoadingMaxRetry: 2,
+          fragLoadingTimeOut: 10000,
+          fragLoadingMaxRetry: 4,
+          manifestLoadingTimeOut: 10000,
+          manifestLoadingMaxRetry: 3,
           startFragPrefetch: true,
+          xhrSetup: (xhr) => {
+            xhr.withCredentials = false;
+          },
         });
         hlsRef.current = hls;
 
-        hls.loadSource(activeStream.url);
+        hls.loadSource(url);
         hls.attachMedia(video);
 
         hls.on(Hls.Events.MANIFEST_PARSED, () => {
-          clearConnectionTimeout();
+          clearTimeout_();
           setLoading(false);
-          video.play().catch((e) => console.log('Autoplay blocked:', e));
+          video.play().catch(() => {/* autoplay policy — user must interact */});
         });
 
-        hls.on(Hls.Events.ERROR, (_, data) => {
+        hls.on(Hls.Events.ERROR, (_event, data) => {
           if (data.fatal) {
-            clearConnectionTimeout();
-            setError('This channel is currently offline. Please try another channel.');
+            hls.destroy();
+            hlsRef.current = null;
+            clearTimeout_();
+            setError('Stream error: This channel is currently offline or the stream is broken. Try another channel.');
             setLoading(false);
           }
         });
+
       } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-        // Safari native HLS
-        video.src = activeStream.url;
-        video.addEventListener('loadedmetadata', () => {
-          clearConnectionTimeout();
-          setLoading(false);
-          video.play().catch((e) => console.log('Native autoplay blocked:', e));
-        }, { once: true });
-        video.addEventListener('error', () => {
-          clearConnectionTimeout();
-          setError('This channel is currently offline. Please try another channel.');
-          setLoading(false);
-        }, { once: true });
+        // Safari / iOS native HLS
+        video.src = url;
+        const onMeta = () => { clearTimeout_(); setLoading(false); video.play().catch(() => {}); };
+        const onErr = () => { clearTimeout_(); setError('Stream unavailable on this device.'); setLoading(false); };
+        video.addEventListener('loadedmetadata', onMeta, { once: true });
+        video.addEventListener('error', onErr, { once: true });
+        video.load();
+      } else {
+        clearTimeout_();
+        setError('Your browser does not support HLS streams. Try opening in Chrome or Safari.');
+        setLoading(false);
       }
-    } else {
-      // Direct video (mp4, webm, etc.)
-      video.src = activeStream.url;
-      video.addEventListener('loadedmetadata', () => {
-        clearConnectionTimeout();
-        setLoading(false);
-        video.play().catch((e) => console.log('Direct autoplay blocked:', e));
-      }, { once: true });
-      video.addEventListener('error', () => {
-        clearConnectionTimeout();
-        setError('This channel is currently offline. Please try another channel.');
-        setLoading(false);
-      }, { once: true });
+    } else if (isDirectVideo) {
+      video.src = url;
+      const onMeta = () => { clearTimeout_(); setLoading(false); video.play().catch(() => {}); };
+      const onErr = () => { clearTimeout_(); setError('Stream unavailable for this channel.'); setLoading(false); };
+      video.addEventListener('loadedmetadata', onMeta, { once: true });
+      video.addEventListener('error', onErr, { once: true });
+      video.load();
     }
 
     return () => {
-      clearConnectionTimeout();
+      clearTimeout_();
       hlsRef.current?.destroy();
       hlsRef.current = null;
-      if (video) {
-        video.pause();
-        video.removeAttribute('src');
-        video.load();
-      }
     };
-  }, [activeStream, isM3u8, isIframe, retryKey, clearConnectionTimeout]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeStream?.url, retryCount]);
 
-  const handleRetry = () => {
-    setRetryKey(k => k + 1);
-  };
+  const handleRetry = () => setRetryCount(n => n + 1);
 
-  // Switch channel from sidebar (inline, no page reload)
   const handleSwitchChannel = (ch: any) => {
     setActiveStream(ch);
     setError(null);
     setLoading(true);
-    // Update URL without full reload
     window.history.pushState({}, '', `/watch/${ch.id}`);
   };
 
-  // Make sure the primary channel is included in the servers list
-  const allServers = servers.some(s => s.id === channel.id) 
-    ? servers 
+  // Server list for this channel
+  const allServers = servers.some(s => s.id === channel.id)
+    ? servers
     : [channel, ...servers];
 
-  // Combine related channels for sidebar
+  // Sidebar channel list
   const sidebarChannels = [...relatedCategory, ...relatedCountry]
     .filter((c, i, arr) => arr.findIndex(x => x.id === c.id) === i)
     .slice(0, 20);
 
   return (
     <div className="max-w-7xl mx-auto px-4 pt-6 pb-12 min-h-screen">
-      {/* Title */}
+      {/* Page title */}
       <div className="mb-5 flex flex-col md:flex-row md:items-center justify-between gap-3">
         <h1 className="text-xl md:text-3xl font-extrabold text-zinc-900 dark:text-white">
           {activeStream?.name}
@@ -186,101 +188,94 @@ export default function WatchPageClient({
         </h1>
       </div>
 
-      {/* ── Two-Column Layout: Player + Sidebar ── */}
+      {/* Two-column layout */}
       <div className="flex flex-col lg:flex-row gap-6">
 
         {/* ── LEFT: Player + Servers + Ad ── */}
         <div className="flex-1 min-w-0">
-          {/* Video Player Area */}
-          <div className="bg-zinc-950 rounded-2xl overflow-hidden aspect-video shadow-2xl shadow-emerald-900/10 border border-zinc-800/80 relative">
 
-            {/* Loading spinner */}
-            {loading && !error && !isIframe && (
-              <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-zinc-950">
-                <div className="w-10 h-10 border-3 border-emerald-500/30 border-t-emerald-500 rounded-full animate-spin mb-3" />
-                <p className="text-sm text-zinc-400">Connecting to stream...</p>
+          {/* Player wrapper */}
+          <div className="bg-zinc-950 rounded-2xl overflow-hidden aspect-video border border-zinc-800/80 relative shadow-2xl shadow-black/30">
+
+            {/* Loading overlay */}
+            {loading && !error && (isM3u8 || isDirectVideo) && (
+              <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-zinc-950 gap-3">
+                <div className="w-12 h-12 rounded-full border-4 border-emerald-500/20 border-t-emerald-500 animate-spin" />
+                <p className="text-sm text-zinc-400 animate-pulse">Connecting to stream…</p>
               </div>
             )}
 
-            {/* ── Offline / Error state ── */}
+            {/* Offline error overlay */}
             {error && !loading && (
-              <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-gradient-to-br from-zinc-100 to-zinc-200 dark:from-zinc-800/95 dark:to-zinc-900/95 p-6">
-                {/* Decorative noise */}
-                <div className="absolute inset-0 opacity-[0.03] dark:opacity-[0.06]" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=%270 0 256 256%27 xmlns=%27http://www.w3.org/2000/svg%27%3E%3Cfilter id=%27noise%27%3E%3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%270.9%27 numOctaves=%274%27 stitchTiles=%27stitch%27/%3E%3C/filter%3E%3Crect width=%27100%25%27 height=%27100%25%27 filter=%27url(%23noise)%27/%3E%3C/svg%3E")', backgroundSize: '128px 128px' }} />
-                
-                {/* TV icon with pulse */}
-                <div className="relative mb-4">
-                  <div className="absolute inset-0 rounded-full bg-red-500/20 animate-ping" style={{ animationDuration: '2s' }} />
-                  <div className="relative w-16 h-16 rounded-2xl bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 flex items-center justify-center shadow-lg">
-                    <Tv className="w-8 h-8 text-red-400 dark:text-red-500" />
+              <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-zinc-900/97 p-6 gap-4">
+                <div className="relative">
+                  <div className="w-16 h-16 rounded-2xl bg-red-500/10 border border-red-500/20 flex items-center justify-center">
+                    <Tv className="w-8 h-8 text-red-400" />
                   </div>
+                  <WifiOff className="absolute -bottom-1 -right-1 w-5 h-5 text-red-500 bg-zinc-900 rounded-full p-0.5" />
                 </div>
-
-                <WifiOff className="w-5 h-5 text-zinc-400 dark:text-zinc-500 mb-3" />
-
-                <p className="text-base font-semibold text-zinc-700 dark:text-zinc-200 mb-1 z-10">
-                  Channel Offline
-                </p>
-                <p className="text-sm text-zinc-500 dark:text-zinc-400 max-w-xs text-center mb-5 z-10">
-                  {error}
-                </p>
-
-                <div className="flex items-center gap-3 z-10">
+                <div className="text-center">
+                  <p className="text-base font-bold text-white mb-1">Channel Offline</p>
+                  <p className="text-xs text-zinc-400 max-w-xs leading-relaxed">{error}</p>
+                </div>
+                <div className="flex items-center gap-3">
                   <button
                     onClick={handleRetry}
-                    className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 active:scale-95 text-white text-sm font-semibold transition-all duration-200 shadow-md shadow-emerald-500/20"
+                    className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-black text-sm font-bold transition-all active:scale-95 shadow-lg shadow-emerald-500/25"
                   >
                     <RefreshCw className="w-4 h-4" />
                     Try Again
                   </button>
-                  {sidebarChannels.length > 0 && (
+                  {sidebarChannels[0] && (
                     <button
                       onClick={() => handleSwitchChannel(sidebarChannels[0])}
-                      className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-zinc-200 dark:bg-zinc-700 hover:bg-zinc-300 dark:hover:bg-zinc-600 text-zinc-700 dark:text-zinc-200 text-sm font-semibold transition-all duration-200"
+                      className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-200 text-sm font-semibold transition-all active:scale-95"
                     >
-                      <AlertTriangle className="w-4 h-4" />
-                      Switch Channel
+                      <AlertTriangle className="w-4 h-4 text-amber-400" />
+                      Next Channel
                     </button>
                   )}
                 </div>
               </div>
             )}
 
-            {/* Iframe player */}
-            {isIframe && (
-              activeStream?.url?.includes('<iframe') ? (
-                <div 
-                  className="w-full h-full flex items-center justify-center [&>iframe]:w-full [&>iframe]:h-full border-0" 
-                  dangerouslySetInnerHTML={{ __html: activeStream.url }} 
-                />
-              ) : (
-                <iframe 
-                  src={activeStream.url} 
-                  className="w-full h-full border-0 bg-black" 
-                  allowFullScreen 
-                  allow="autoplay; fullscreen"
-                />
-              )
+            {/* ── Embed HTML (iframe HTML string) ── */}
+            {isEmbedHtml && (
+              <div
+                className="w-full h-full [&>iframe]:w-full [&>iframe]:h-full [&>iframe]:border-0"
+                dangerouslySetInnerHTML={{ __html: url }}
+              />
             )}
 
-            {/* Video element (HLS / direct) */}
-            {!isIframe && (
+            {/* ── Iframe URL ── */}
+            {isIframeUrl && (
+              <iframe
+                src={url}
+                className="w-full h-full border-0 bg-black"
+                allowFullScreen
+                allow="autoplay; fullscreen; picture-in-picture"
+              />
+            )}
+
+            {/* ── HLS / Direct video element — ALWAYS in DOM, never re-keyed ── */}
+            {(isM3u8 || isDirectVideo) && (
               <video
-                key={activeStream?.id || retryKey}
                 ref={videoRef}
-                className={`w-full h-full bg-black outline-none ${loading || error ? 'hidden' : 'block'}`}
+                className={`w-full h-full bg-black outline-none ${loading || error ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
                 controls
                 playsInline
                 autoPlay
+                muted={false}
                 poster={activeStream?.logo}
+                style={{ transition: 'opacity 0.3s' }}
               />
             )}
           </div>
 
-          {/* Servers Selection */}
-          {allServers && allServers.length > 1 && (
-            <section className="mt-5 bg-zinc-100 dark:bg-zinc-900/50 rounded-2xl p-4 border border-zinc-200 dark:border-zinc-800/50">
-              <h2 className="text-sm md:text-base font-bold text-zinc-900 dark:text-white mb-3 flex items-center gap-2">
+          {/* Server switcher */}
+          {allServers.length > 1 && (
+            <section className="mt-4 bg-zinc-100 dark:bg-zinc-900/50 rounded-2xl p-4 border border-zinc-200 dark:border-zinc-800/50">
+              <h2 className="text-sm font-bold text-zinc-700 dark:text-zinc-300 mb-3 flex items-center gap-2">
                 <svg className="w-4 h-4 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01" />
                 </svg>
@@ -294,9 +289,9 @@ export default function WatchPageClient({
                       key={s.id || idx}
                       onClick={() => handleSwitchChannel(s)}
                       className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 flex items-center gap-2 ${
-                        isActive 
-                          ? 'bg-emerald-500 text-black shadow-lg shadow-emerald-500/20 scale-105' 
-                          : 'bg-white dark:bg-zinc-950 text-zinc-500 dark:text-zinc-400 hover:bg-zinc-200 dark:hover:bg-zinc-800 hover:text-zinc-900 dark:hover:text-white border border-zinc-200 dark:border-zinc-800'
+                        isActive
+                          ? 'bg-emerald-500 text-black shadow-lg shadow-emerald-500/20 scale-105'
+                          : 'bg-white dark:bg-zinc-950 text-zinc-500 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-800 border border-zinc-200 dark:border-zinc-800'
                       }`}
                     >
                       <span className={`w-2 h-2 rounded-full ${isActive ? 'bg-black' : 'bg-emerald-500'}`} />
@@ -318,17 +313,16 @@ export default function WatchPageClient({
 
         {/* ── RIGHT: Sidebar — Channels + Ad ── */}
         <aside className="w-full lg:w-80 xl:w-96 shrink-0">
-          {/* Ad at top of sidebar */}
           {adConfig?.enabled && (
             <div className="mb-4">
               <SidebarAd adConfig={adConfig} />
             </div>
           )}
 
-          {/* More Channels list */}
+          {/* Channel list */}
           <div className="bg-zinc-50 dark:bg-zinc-900/60 rounded-2xl border border-zinc-200 dark:border-zinc-800/50 overflow-hidden">
-            <div className="px-4 py-3 border-b border-zinc-200 dark:border-zinc-800/50">
-              <h2 className="text-sm font-bold text-zinc-900 dark:text-white uppercase tracking-wider flex items-center gap-2">
+            <div className="px-4 py-3 border-b border-zinc-200 dark:border-zinc-800/50 bg-white/60 dark:bg-zinc-900/80">
+              <h2 className="text-xs font-bold text-zinc-500 dark:text-zinc-400 uppercase tracking-widest flex items-center gap-2">
                 <svg className="w-4 h-4 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
                 </svg>
@@ -336,75 +330,50 @@ export default function WatchPageClient({
               </h2>
             </div>
 
-            <div className="max-h-[600px] overflow-y-auto divide-y divide-zinc-100 dark:divide-zinc-800/50">
-              {sidebarChannels.length > 0 ? (
-                sidebarChannels.map((c) => {
-                  const isPlaying = activeStream?.id === c.id;
-                  return (
-                    <button
-                      key={c.id}
-                      onClick={() => handleSwitchChannel(c)}
-                      className={`w-full flex items-center gap-3 px-4 py-3 transition-colors group text-left ${
-                        isPlaying
-                          ? 'bg-emerald-50 dark:bg-emerald-950/30 border-l-2 border-emerald-500'
-                          : 'hover:bg-zinc-100 dark:hover:bg-zinc-800/50 border-l-2 border-transparent'
-                      }`}
-                    >
-                      {/* Channel logo */}
-                      <div className="w-10 h-10 rounded-lg bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 flex items-center justify-center shrink-0 overflow-hidden">
-                        {c.logo ? (
-                          <img src={c.logo} alt={c.name} className="w-full h-full object-contain p-1 group-hover:scale-110 transition-transform" />
-                        ) : (
-                          <span className="text-zinc-400 text-xs font-bold">{c.name?.charAt(0)}</span>
-                        )}
+            <div className="max-h-[600px] lg:max-h-[500px] xl:max-h-[600px] overflow-y-auto divide-y divide-zinc-100 dark:divide-zinc-800/50">
+              {sidebarChannels.length > 0 ? sidebarChannels.map((c) => {
+                const isPlaying = activeStream?.id === c.id;
+                return (
+                  <button
+                    key={c.id}
+                    onClick={() => handleSwitchChannel(c)}
+                    className={`w-full flex items-center gap-3 px-4 py-3 transition-colors group text-left ${
+                      isPlaying
+                        ? 'bg-emerald-50 dark:bg-emerald-950/40 border-l-2 border-emerald-500'
+                        : 'hover:bg-zinc-100 dark:hover:bg-zinc-800/50 border-l-2 border-transparent'
+                    }`}
+                  >
+                    <div className="w-10 h-10 rounded-lg bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 flex items-center justify-center shrink-0 overflow-hidden">
+                      {c.logo
+                        ? <img src={c.logo} alt={c.name} className="w-full h-full object-contain p-1" />
+                        : <span className="text-zinc-400 text-xs font-bold">{c.name?.charAt(0)}</span>
+                      }
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <h3 className={`text-sm font-semibold truncate ${isPlaying ? 'text-emerald-600 dark:text-emerald-400' : 'text-zinc-800 dark:text-zinc-100 group-hover:text-emerald-600 dark:group-hover:text-emerald-400'}`}>
+                        {c.name}
+                      </h3>
+                      <div className="flex items-center gap-1.5 mt-0.5">
+                        <span className="text-[10px] text-zinc-400 truncate">{c.country}</span>
+                        {isPlaying
+                          ? <span className="text-[10px] text-emerald-500 font-bold ml-1">▶ NOW PLAYING</span>
+                          : <><span className="w-1 h-1 rounded-full bg-red-500 animate-pulse" /><span className="text-[10px] text-red-400 font-semibold">LIVE</span></>
+                        }
                       </div>
-                      {/* Channel info */}
-                      <div className="min-w-0 flex-1">
-                        <h3 className={`text-sm font-semibold truncate transition-colors ${
-                          isPlaying
-                            ? 'text-emerald-600 dark:text-emerald-400'
-                            : 'text-zinc-800 dark:text-zinc-100 group-hover:text-emerald-600 dark:group-hover:text-emerald-400'
-                        }`}>
-                          {c.name}
-                        </h3>
-                        <div className="flex items-center gap-2 mt-0.5">
-                          <span className="text-[10px] text-zinc-400">{c.country}</span>
-                          {isPlaying ? (
-                            <>
-                              <span className="text-[10px] text-emerald-500 font-bold">NOW PLAYING</span>
-                            </>
-                          ) : (
-                            <>
-                              <span className="w-1 h-1 rounded-full bg-red-500 animate-pulse" />
-                              <span className="text-[10px] text-red-400 font-semibold">LIVE</span>
-                            </>
-                          )}
-                        </div>
-                      </div>
-                      {/* Play / equalizer icon */}
-                      {isPlaying ? (
-                        <div className="flex items-end gap-0.5 h-4 shrink-0">
-                          <span className="w-0.5 bg-emerald-500 rounded-full animate-eq-1" />
-                          <span className="w-0.5 bg-emerald-500 rounded-full animate-eq-2" />
-                          <span className="w-0.5 bg-emerald-500 rounded-full animate-eq-3" />
-                        </div>
-                      ) : (
-                        <svg className="w-4 h-4 text-zinc-300 dark:text-zinc-600 group-hover:text-emerald-500 transition-colors shrink-0" fill="currentColor" viewBox="0 0 24 24">
-                          <path d="M8 5v14l11-7z" />
-                        </svg>
-                      )}
-                    </button>
-                  );
-                })
-              ) : (
-                <div className="px-4 py-8 text-center text-zinc-400 text-sm">
-                  No related channels found
-                </div>
+                    </div>
+                    {!isPlaying && (
+                      <svg className="w-4 h-4 text-zinc-300 dark:text-zinc-600 group-hover:text-emerald-500 transition-colors shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M8 5v14l11-7z" />
+                      </svg>
+                    )}
+                  </button>
+                );
+              }) : (
+                <div className="px-4 py-10 text-center text-zinc-400 text-sm">No related channels found</div>
               )}
             </div>
           </div>
 
-          {/* Ad at bottom of sidebar */}
           {adConfig?.enabled && (
             <div className="mt-4">
               <SidebarAd adConfig={adConfig} />
