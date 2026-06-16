@@ -99,7 +99,7 @@ export default function WatchPageClient({
         hls.on(Hls.Events.MANIFEST_PARSED, () => {
           clearConnectionTimeout();
           setLoading(false);
-          video.play().catch(() => {});
+          video.play().catch((e) => console.log('Autoplay blocked:', e));
         });
 
         hls.on(Hls.Events.ERROR, (_, data) => {
@@ -112,9 +112,10 @@ export default function WatchPageClient({
       } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
         // Safari native HLS
         video.src = activeStream.url;
-        video.addEventListener('loadeddata', () => {
+        video.addEventListener('loadedmetadata', () => {
           clearConnectionTimeout();
           setLoading(false);
+          video.play().catch((e) => console.log('Native autoplay blocked:', e));
         }, { once: true });
         video.addEventListener('error', () => {
           clearConnectionTimeout();
@@ -125,10 +126,10 @@ export default function WatchPageClient({
     } else {
       // Direct video (mp4, webm, etc.)
       video.src = activeStream.url;
-      video.addEventListener('loadeddata', () => {
+      video.addEventListener('loadedmetadata', () => {
         clearConnectionTimeout();
         setLoading(false);
-        video.play().catch(() => {});
+        video.play().catch((e) => console.log('Direct autoplay blocked:', e));
       }, { once: true });
       video.addEventListener('error', () => {
         clearConnectionTimeout();
@@ -141,6 +142,11 @@ export default function WatchPageClient({
       clearConnectionTimeout();
       hlsRef.current?.destroy();
       hlsRef.current = null;
+      if (video) {
+        video.pause();
+        video.removeAttribute('src');
+        video.load();
+      }
     };
   }, [activeStream, isM3u8, isIframe, retryKey, clearConnectionTimeout]);
 
@@ -260,6 +266,7 @@ export default function WatchPageClient({
             {/* Video element (HLS / direct) */}
             {!isIframe && (
               <video
+                key={activeStream?.id || retryKey}
                 ref={videoRef}
                 className={`w-full h-full bg-black outline-none ${loading || error ? 'hidden' : 'block'}`}
                 controls
