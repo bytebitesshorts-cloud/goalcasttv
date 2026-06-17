@@ -8,14 +8,14 @@ export async function getAllCountries(): Promise<Country[]> {
   await connectDB();
   const channelsStore = await Store.findOne({ key: 'channels' });
   const data = (channelsStore?.data || {}) as Record<string, Omit<Channel, 'country' | 'countryCode'>[]>;
-  
+
   const countries = Object.entries(data)
     .map(([countryName, channels]) => {
       const firstChannel = channels[0] as Channel;
       const code = firstChannel?.countryCode || countryName.toLowerCase().replace(/\s+/g, '-');
-      
+
       const activeChannels = (channels as Array<Omit<Channel, 'country' | 'countryCode'> & { active?: boolean }>)
-        .filter((ch) => ch.active !== false)
+        .filter((ch) => ch.active === true || !!ch.stream)
         .map((ch) => ({
           ...ch,
           country: countryName,
@@ -60,18 +60,17 @@ export async function getChannel(id: string): Promise<Channel | undefined> {
 
 let fuseInstance: Fuse<SearchResult> | null = null;
 
-
 async function getFuseInstance(): Promise<Fuse<SearchResult>> {
   // Disable memory cache so database changes reflect instantly in search
   // if (fuseInstance && Date.now() - lastFuseUpdate < 10 * 60 * 1000) return fuseInstance;
-  
+
   const countries = await getAllCountries();
   const searchItems: SearchResult[] = [];
-  
+
   countries.forEach((country) => {
     searchItems.push({ type: 'country', country });
   });
-  
+
   countries.forEach((country) => {
     country.channels.forEach((channel) => {
       searchItems.push({
@@ -81,7 +80,7 @@ async function getFuseInstance(): Promise<Fuse<SearchResult>> {
       });
     });
   });
-  
+
   fuseInstance = new Fuse(searchItems, {
     keys: [
       { name: 'country.name', weight: 2 },
@@ -94,7 +93,6 @@ async function getFuseInstance(): Promise<Fuse<SearchResult>> {
     minMatchCharLength: 1,
     includeScore: true,
   });
-  
 
   return fuseInstance;
 }

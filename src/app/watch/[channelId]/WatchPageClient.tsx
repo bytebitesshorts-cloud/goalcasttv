@@ -36,7 +36,7 @@ export default function WatchPageClient({
   const [retryCount, setRetryCount] = useState(0);
 
   // ── Classify stream type ──
-  const url = activeStream?.url ?? '';
+  const url = activeStream?.url ?? activeStream?.stream ?? '';
   const isEmbedHtml = url.includes('<iframe') || url.includes('<embed');
   const isM3u8 = !isEmbedHtml && url.includes('.m3u8');
   const isIframeUrl = !isEmbedHtml && !isM3u8 && url.startsWith('http') && !url.match(/\.(mp4|webm|ogg)$/i);
@@ -113,7 +113,7 @@ export default function WatchPageClient({
         hls.on(Hls.Events.MANIFEST_PARSED, () => {
           clearTimeout_();
           setLoading(false);
-          video.play().catch(() => {/* autoplay policy — user must interact */});
+          video.play().catch(() => {/* autoplay policy — user must interact */ });
         });
 
         hls.on(Hls.Events.ERROR, (_event, data) => {
@@ -129,7 +129,7 @@ export default function WatchPageClient({
       } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
         // Safari / iOS native HLS
         video.src = url;
-        const onMeta = () => { clearTimeout_(); setLoading(false); video.play().catch(() => {}); };
+        const onMeta = () => { clearTimeout_(); setLoading(false); video.play().catch(() => { }); };
         const onErr = () => { clearTimeout_(); setError('Stream unavailable on this device.'); setLoading(false); };
         video.addEventListener('loadedmetadata', onMeta, { once: true });
         video.addEventListener('error', onErr, { once: true });
@@ -141,7 +141,7 @@ export default function WatchPageClient({
       }
     } else if (isDirectVideo) {
       video.src = url;
-      const onMeta = () => { clearTimeout_(); setLoading(false); video.play().catch(() => {}); };
+      const onMeta = () => { clearTimeout_(); setLoading(false); video.play().catch(() => { }); };
       const onErr = () => { clearTimeout_(); setError('Stream unavailable for this channel.'); setLoading(false); };
       video.addEventListener('loadedmetadata', onMeta, { once: true });
       video.addEventListener('error', onErr, { once: true });
@@ -153,7 +153,7 @@ export default function WatchPageClient({
       hlsRef.current?.destroy();
       hlsRef.current = null;
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeStream?.url, retryCount]);
 
   const handleRetry = () => setRetryCount(n => n + 1);
@@ -288,11 +288,10 @@ export default function WatchPageClient({
                     <button
                       key={s.id || idx}
                       onClick={() => handleSwitchChannel(s)}
-                      className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 flex items-center gap-2 ${
-                        isActive
+                      className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 flex items-center gap-2 ${isActive
                           ? 'bg-emerald-500 text-black shadow-lg shadow-emerald-500/20 scale-105'
                           : 'bg-white dark:bg-zinc-950 text-zinc-500 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-800 border border-zinc-200 dark:border-zinc-800'
-                      }`}
+                        }`}
                     >
                       <span className={`w-2 h-2 rounded-full ${isActive ? 'bg-black' : 'bg-emerald-500'}`} />
                       Server {idx + 1}
@@ -337,11 +336,10 @@ export default function WatchPageClient({
                   <button
                     key={c.id}
                     onClick={() => handleSwitchChannel(c)}
-                    className={`w-full flex items-center gap-3 px-4 py-3 transition-colors group text-left ${
-                      isPlaying
+                    className={`w-full flex items-center gap-3 px-4 py-3 transition-colors group text-left ${isPlaying
                         ? 'bg-emerald-50 dark:bg-emerald-950/40 border-l-2 border-emerald-500'
                         : 'hover:bg-zinc-100 dark:hover:bg-zinc-800/50 border-l-2 border-transparent'
-                    }`}
+                      }`}
                   >
                     <div className="w-10 h-10 rounded-lg bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 flex items-center justify-center shrink-0 overflow-hidden">
                       {c.logo
