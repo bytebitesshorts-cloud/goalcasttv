@@ -37,7 +37,6 @@ export default function ScoresTicker() {
       }
     }
     loadTicker();
-    // Refresh scores every 30 seconds
     const timer = setInterval(loadTicker, 30000);
     return () => clearInterval(timer);
   }, []);
@@ -51,21 +50,21 @@ export default function ScoresTicker() {
 
   if (!active || matches.length === 0) return null;
 
-  // Duplicate matches list to ensure smooth infinite marquee scroll
+  // Duplicate matches for infinite scroll
   const displayMatches = matches.length < 5
     ? [...matches, ...matches, ...matches, ...matches]
     : [...matches, ...matches];
 
   return (
     <div className="relative w-full h-[44px] bg-[#1a0404] border-b border-[#2b0808] flex items-center overflow-hidden select-none z-50">
-      {/* Golden Trophy Emblem (Left Box) */}
+      {/* Trophy Emblem */}
       <div className="absolute left-0 top-0 bottom-0 w-12 bg-white flex items-center justify-center border-r border-[#2b0808] z-20 shadow-md">
         <Trophy className="w-5.5 h-5.5 text-[#c4923e] animate-pulse" />
       </div>
 
       {/* Marquee Wrapper */}
       <div className="flex-1 h-full overflow-hidden flex items-center pl-16 pr-12 text-sm">
-        <div 
+        <div
           className="animate-marquee gap-8"
           style={{ animationPlayState: paused ? 'paused' : 'running' }}
         >
@@ -74,7 +73,6 @@ export default function ScoresTicker() {
             return (
               <div key={`${m.id}-${idx}`} className="flex items-center gap-5 text-zinc-100 font-medium mr-8">
                 {isLive ? (
-                  // Live score layout
                   <div className="flex items-center gap-2">
                     <span className="flex items-center gap-1 px-1.5 py-0.5 rounded bg-red-600 text-white text-[10.5px] font-bold animate-pulse">
                       <span>{m.minute || 'LIVE'}</span>
@@ -86,7 +84,6 @@ export default function ScoresTicker() {
                     </div>
                   </div>
                 ) : (
-                  // Upcoming matchup layout
                   <div className="flex items-center gap-2">
                     <span className="text-xs text-[#d2a14e] font-bold uppercase tracking-wider">{m.date}</span>
                     <div className="flex items-center gap-2 bg-[#2b0b0b]/40 border border-[#2b0b0b] px-3 py-1 rounded-xl">
@@ -105,7 +102,7 @@ export default function ScoresTicker() {
         </div>
       </div>
 
-      {/* Control Button (Right Box) */}
+      {/* Control Button */}
       <div className="absolute right-2 top-1/2 -translate-y-1/2 z-20 flex items-center">
         <button
           onClick={() => setPaused(!paused)}
