@@ -28,14 +28,20 @@ export default async function HomePage() {
   const countries = await getAllCountries();
   const allChannels = countries.flatMap((c) => c.channels);
   
-  // Deduplicate and sort A to Z
-  const uniqueChannelsMap = new Map();
-  allChannels.forEach((ch) => {
-    if (!uniqueChannelsMap.has(ch.id)) {
-      uniqueChannelsMap.set(ch.id, ch);
+  // Deduplicate by normalised name (channels often stored under multiple countries)
+  // Prefer the entry that has a logo URL when there's a collision
+  const byName = new Map<string, typeof allChannels[0]>();
+  for (const ch of allChannels) {
+    const key = ch.name.trim().toLowerCase();
+    const existing = byName.get(key);
+    if (!existing) {
+      byName.set(key, ch);
+    } else if (!existing.logo && ch.logo) {
+      // replace with the version that has a logo
+      byName.set(key, ch);
     }
-  });
-  const sortedChannels = Array.from(uniqueChannelsMap.values()).sort((a, b) => 
+  }
+  const sortedChannels = Array.from(byName.values()).sort((a, b) =>
     a.name.localeCompare(b.name)
   );
 
@@ -77,20 +83,31 @@ export default async function HomePage() {
         </h2>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
           {sortedChannels.map((channel) => (
-            <Link 
-              key={channel.id} 
+            <Link
+              key={channel.id}
               href={`/watch/${channel.id}`}
               className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-3 flex flex-col items-center gap-3 hover:bg-zinc-800 hover:border-emerald-500/50 transition-colors group"
             >
-              <div className="w-16 h-16 rounded-lg bg-zinc-950 flex items-center justify-center overflow-hidden border border-zinc-800 group-hover:border-emerald-500/30">
-                <img 
-                  src={channel.logo || '/placeholder.png'} 
-                  alt={channel.name}
-                  className="w-full h-full object-contain p-1"
-                />
+              <div className="w-16 h-16 rounded-lg bg-zinc-950 flex items-center justify-center overflow-hidden border border-zinc-800 group-hover:border-emerald-500/30 shrink-0">
+                {channel.logo ? (
+                  <img
+                    src={channel.logo}
+                    alt={channel.name}
+                    className="w-full h-full object-contain p-1"
+                    onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; (e.currentTarget.parentElement!).innerHTML = `<span style="color:#52525b;font-size:18px;font-weight:700">${channel.name.charAt(0).toUpperCase()}</span>`; }}
+                  />
+                ) : (
+                  <span className="text-zinc-500 text-xl font-bold">
+                    {channel.name.charAt(0).toUpperCase()}
+                  </span>
+                )}
               </div>
-              <span className="text-sm font-semibold text-zinc-300 text-center truncate w-full group-hover:text-white">
+              <span className="text-xs sm:text-sm font-semibold text-zinc-300 text-center line-clamp-2 w-full group-hover:text-white leading-tight">
                 {channel.name}
+              </span>
+              <span className="flex items-center gap-1 text-[10px] text-red-400 font-semibold">
+                <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
+                LIVE
               </span>
             </Link>
           ))}
