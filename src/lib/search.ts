@@ -3,9 +3,16 @@ import connectDB from '@/lib/db';
 import { Store } from '@/lib/models';
 import type { Channel, Country, SearchResult } from '@/types';
 import { slugify } from '@/lib/utils';
+import mongoose from 'mongoose';
+
+// Add mongoose import for readyState check
 
 export async function getAllCountries(): Promise<Country[]> {
   await connectDB();
+  // Add readyState check before querying
+  if (mongoose.connection.readyState !== 1) {
+    await connectDB(); // Ensure fresh connection
+  }
   const channelsStore = await Store.findOne({ key: 'channels' });
   const data = (channelsStore?.data || {}) as Record<string, Omit<Channel, 'country' | 'countryCode'>[]>;
 
@@ -48,9 +55,7 @@ export async function getAllChannels(): Promise<Channel[]> {
 
 export async function getCountry(name: string): Promise<Country | undefined> {
   const countries = await getAllCountries();
-  return countries.find(
-    (c) => slugify(c.name) === name
-  );
+  return countries.find((c) => slugify(c.name) === name);
 }
 
 export async function getChannel(id: string): Promise<Channel | undefined> {
@@ -61,26 +66,16 @@ export async function getChannel(id: string): Promise<Channel | undefined> {
 let fuseInstance: Fuse<SearchResult> | null = null;
 
 async function getFuseInstance(): Promise<Fuse<SearchResult>> {
-  // Disable memory cache so database changes reflect instantly in search
-  // if (fuseInstance && Date.now() - lastFuseUpdate < 10 * 60 * 1000) return fuseInstance;
-
   const countries = await getAllCountries();
   const searchItems: SearchResult[] = [];
-
   countries.forEach((country) => {
     searchItems.push({ type: 'country', country });
   });
-
   countries.forEach((country) => {
     country.channels.forEach((channel) => {
-      searchItems.push({
-        type: 'channel',
-        channel,
-        countryName: country.name,
-      });
+      searchItems.push({ type: 'channel', channel, countryName: country.name });
     });
   });
-
   fuseInstance = new Fuse(searchItems, {
     keys: [
       { name: 'country.name', weight: 2 },
@@ -93,7 +88,6 @@ async function getFuseInstance(): Promise<Fuse<SearchResult>> {
     minMatchCharLength: 1,
     includeScore: true,
   });
-
   return fuseInstance;
 }
 

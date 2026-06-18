@@ -2,11 +2,11 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, Search, Star, Tv2 } from 'lucide-react';
+import { Home, Trophy, Star, Tv2 } from 'lucide-react';
 
 const NAV_ITEMS = [
   { label: 'Home', href: '/', icon: Home },
-  { label: 'Discover', href: '/country', icon: Search },
+  { label: 'Scores', href: '/scores', icon: Trophy },
   { label: 'Favorites', href: '/favorites', icon: Star },
   { label: 'Live TV', href: '/category/sports', icon: Tv2 },
 ];

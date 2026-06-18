@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import {
   Plus, Search, Edit2, Trash2, X, Save, Radio,
-  ChevronLeft, ChevronRight, AlertCircle, CheckCircle2, Play
+  ChevronLeft, ChevronRight, AlertCircle, CheckCircle2, Play, Filter
 } from 'lucide-react';
 import VideoPlayer from '@/components/VideoPlayer';
 
@@ -25,7 +25,7 @@ const EMPTY: Omit<Channel, 'id'> = {
   name: '', code: '', category: 'Sports', country: '', countryCode: '', logo: '', stream: '', embedCode: '', languages: [], active: true,
 };
 
-const CATEGORIES = ['FIFA 2026', 'Sports', 'News', 'Movies', 'Entertainment', 'Music', 'Kids', 'Documentary', 'General'];
+const CATEGORIES = ['FIFA 2026', 'Sports'];
 
 const PAGE_SIZE = 20;
 
@@ -176,14 +176,34 @@ export default function AdminChannelsPage() {
             <button onClick={() => { setFilterStatus('inactive'); setPage(1); }} className={`hover:text-zinc-300 transition-colors ${filterStatus === 'inactive' ? 'text-zinc-300 underline underline-offset-4' : 'text-zinc-500'}`}>{channels.filter(c => c.active === false).length} inactive</button>
           </div>
         </div>
-        <button
-          id="add-channel-btn"
-          onClick={openAdd}
-          className="flex items-center gap-2 px-4 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-white font-semibold rounded-xl transition-all duration-150 shadow-lg shadow-emerald-500/20 hover:-translate-y-0.5"
-        >
-          <Plus className="w-4 h-4" />
-          Add Channel
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={async () => {
+              if (!confirm('⚠️ This will permanently delete ALL channels that are NOT in Sports or FIFA 2026 category. This cannot be undone. Continue?')) return;
+              const r = await fetch('/api/admin/cleanup', { method: 'POST' });
+              const data = await r.json();
+              if (r.ok) {
+                showToast(`✅ ${data.message}`, 'success');
+                load();
+              } else {
+                showToast(`❌ ${data.error}`, 'error');
+              }
+            }}
+            className="flex items-center gap-2 px-3 py-2.5 bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/20 font-semibold rounded-xl transition-all text-sm"
+            title="Delete all non-Sports/FIFA channels"
+          >
+            <Filter className="w-4 h-4" />
+            Cleanup
+          </button>
+          <button
+            id="add-channel-btn"
+            onClick={openAdd}
+            className="flex items-center gap-2 px-4 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-white font-semibold rounded-xl transition-all duration-150 shadow-lg shadow-emerald-500/20 hover:-translate-y-0.5"
+          >
+            <Plus className="w-4 h-4" />
+            Add Channel
+          </button>
+        </div>
       </div>
 
       {/* Search and Filters */}

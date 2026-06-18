@@ -16,7 +16,16 @@ export async function GET() {
       if (res.ok) {
         const espnData = await res.json();
         const events: ESPNEvent[] = espnData.events || [];
-        const liveMatches = events.map((event: ESPNEvent) => {
+
+        // Filter to only today's matches (UTC)
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        const eventsToday = events.filter(event => {
+          const eventDate = new Date(event.date);
+          return eventDate >= today && eventDate < new Date(today.getTime() + 24 * 60 * 60 * 1000);
+        });
+
+        const liveMatches = eventsToday.map((event: ESPNEvent) => {
           const competition = event.competitions?.[0];
           // Include all matches (no competition name filter)
           const competitors = competition?.competitors || [];
@@ -45,6 +54,16 @@ export async function GET() {
             awayFlag: away?.team?.logo || '',
             awayScore: away?.score !== undefined ? parseInt(away.score, 10) : 0,
           };
+        });
+
+        // Sort: live matches first, then upcoming by kickoff time
+        liveMatches.sort((a, b) => {
+          if (a.status === 'live' && b.status !== 'live') return -1;
+          if (a.status !== 'live' && b.status === 'live') return 1;
+          if (a.status === 'upcoming' && b.status === 'upcoming') {
+            return new Date(`1970-01-01 ${a.time}`).getTime() - new Date(`1970-01-01 ${b.time}`).getTime();
+          }
+          return 0;
         });
 
         return NextResponse.json({
@@ -119,8 +138,5 @@ interface ESPNEvent {
       state?: string;
     };
   };
-  competitions?: Array<{
-    competitors?: ESPNCompetitor[];
-    name?: string;
-  }>;
+  competitions?: Array<{ competitors?: ESPNCompetitor[]; name?: string }>;
 }
