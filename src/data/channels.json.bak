@@ -271,6 +271,21 @@
       "active": true
     },
     {
+      "id": "ch_1781277934968",
+      "name": "ATN Bangla UK",
+      "code": "",
+      "category": "News",
+      "country": "Bangladesh",
+      "countryCode": "UN",
+      "logo": "https://sunplex.net/iptv/logo/atn-bangla.jpg",
+      "stream": "https://app.ncare.live/c3VydmVyX8RpbEU9Mi8xNy8yMDE0GIDU6RgzQ6NTAgdEoaeFzbF92YWxIZTO0U0ezN1IzMyfvcGVMZEJCTEFWeVN3PTOmdFsaWRtaW51aiPhnPTI2/atnbanglauk-off.stream/playlist.m3u8",
+      "languages": [
+        []
+      ],
+      "active": true,
+      "is_nsfw": false
+    },
+    {
       "id": "bangla-vision-hd",
       "name": "BANGLA VISION HD",
       "logo": "https://sunplex.net/iptv/logo/banglavision.jpg",
