@@ -3,7 +3,7 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import Hls from 'hls.js';
 import SidebarAd from '@/components/SidebarAd';
-import { RefreshCw, WifiOff, Tv, AlertTriangle, Maximize2 } from 'lucide-react';
+import { RefreshCw, WifiOff, Tv, AlertTriangle, Maximize2, Loader2 } from 'lucide-react';
 
 interface WatchPageClientProps {
   channel: any;
@@ -31,18 +31,23 @@ export default function WatchPageClient({
   const hlsRef = useRef<Hls | null>(null);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const autoRetryRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  // Incremented on every channel switch to force player useEffect to re-run
+  const switchKeyRef = useRef(0);
+  const [switchKey, setSwitchKey] = useState(0);
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [channelSwitching, setChannelSwitching] = useState(false);
   const [retryCount, setRetryCount] = useState(0);
   const [autoRetryCount, setAutoRetryCount] = useState(0);
   const [autoRetryCountdown, setAutoRetryCountdown] = useState<number | null>(null);
 
   // ── Classify stream type ──
-  const url = activeStream?.url ?? activeStream?.stream ?? '';
+  // Channel type uses `stream` as the primary field; `url` is a legacy fallback
+  const url = activeStream?.stream ?? activeStream?.url ?? '';
   const isEmbedHtml = url.includes('<iframe') || url.includes('<embed');
-  const isM3u8 = !isEmbedHtml && url.includes('.m3u8');
-  const isIframeUrl = !isEmbedHtml && !isM3u8 && url.startsWith('http') && !url.match(/\.(mp4|webm|ogg)$/i);
+  const isM3u8 = !isEmbedHtml && (url.includes('.m3u8') || url.includes('m3u8'));
+  const isIframeUrl = !isEmbedHtml && !isM3u8 && url.startsWith('http') && url.match(/\.(mp4|webm|ogg)$/i) === null && activeStream?.embedCode;
   const isDirectVideo = !isEmbedHtml && !isM3u8 && !isIframeUrl && url.startsWith('http');
 
   const clearTimeout_ = useCallback(() => {
@@ -192,19 +197,43 @@ export default function WatchPageClient({
       hlsRef.current = null;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeStream?.url, retryCount]);
+  }, [activeStream?.id, url, retryCount, switchKey]);
 
   const handleRetry = () => {
     setAutoRetryCount(0);
     setRetryCount(n => n + 1);
   };
 
-  const handleSwitchChannel = (ch: any) => {
+  const handleSwitchChannel = async (ch: any) => {
+    if (ch.id === activeStream?.id) return; // already playing
     clearAutoRetry();
-    setActiveStream(ch);
+    setAutoRetryCount(0);
     setError(null);
-    setLoading(true);
-    window.history.pushState({}, '', `/watch/${ch.id}`);
+    setChannelSwitching(true);
+    setRetryCount(0);
+
+    try {
+      // Fetch the full channel data so we always have the stream URL
+      const res = await fetch(`/api/channel/${encodeURIComponent(ch.id)}`);
+      const fullChannel = res.ok ? await res.json() : ch;
+
+      // Bump switch key to guarantee the player useEffect always re-runs
+      switchKeyRef.current += 1;
+      setSwitchKey(switchKeyRef.current);
+
+      setLoading(true);
+      setActiveStream(fullChannel);
+      window.history.pushState({}, '', `/watch/${ch.id}`);
+    } catch {
+      // Fallback: use whatever data we have from the sidebar
+      switchKeyRef.current += 1;
+      setSwitchKey(switchKeyRef.current);
+      setLoading(true);
+      setActiveStream(ch);
+      window.history.pushState({}, '', `/watch/${ch.id}`);
+    } finally {
+      setChannelSwitching(false);
+    }
   };
 
   const handleFullscreen = () => {
@@ -251,6 +280,14 @@ export default function WatchPageClient({
             style={{ paddingTop: 'min(56.25%, 56vw)' }}
           >
             <div className="absolute inset-0">
+
+              {/* Channel-switching overlay (fetch in progress) */}
+              {channelSwitching && (
+                <div className="absolute inset-0 z-30 flex flex-col items-center justify-center bg-zinc-950/90 gap-3">
+                  <Loader2 className="w-8 h-8 text-emerald-500 animate-spin" />
+                  <p className="text-xs sm:text-sm text-zinc-400">Switching channel…</p>
+                </div>
+              )}
 
               {/* Loading overlay */}
               {loading && !error && (isM3u8 || isDirectVideo) && (
