@@ -22,7 +22,7 @@ export async function getAllCountries(): Promise<Country[]> {
       const code = firstChannel?.countryCode || countryName.toLowerCase().replace(/\s+/g, '-');
 
       const activeChannels = (channels as Array<Omit<Channel, 'country' | 'countryCode'> & { active?: boolean }>)
-        .filter((ch) => ch.active === true)
+        .filter((ch) => ch.active !== false)
         .map((ch) => ({
           ...ch,
           country: countryName,
