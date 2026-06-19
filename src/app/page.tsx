@@ -1,11 +1,12 @@
 import type { Metadata } from 'next';
-import { Globe2, Tv2, Trophy, Activity } from 'lucide-react';
+import { Tv2, Trophy, Activity } from 'lucide-react';
 import SliderTemplate from '@/components/SliderTemplate';
 import connectDB from '@/lib/db';
 import { Store } from '@/lib/models';
 import VpnPopup from '@/components/VpnPopup';
 import Link from 'next/link';
 import { getAllCountries } from '@/lib/search';
+import ChannelLogoImg from '@/components/ChannelLogoImg';
 
 export const dynamic = 'force-dynamic';
 
@@ -90,11 +91,10 @@ export default async function HomePage() {
             >
               <div className="w-16 h-16 rounded-lg bg-zinc-950 flex items-center justify-center overflow-hidden border border-zinc-800 group-hover:border-emerald-500/30 shrink-0">
                 {channel.logo ? (
-                  <img
+                  <ChannelLogoImg
                     src={channel.logo}
                     alt={channel.name}
-                    className="w-full h-full object-contain p-1"
-                    onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; (e.currentTarget.parentElement!).innerHTML = `<span style="color:#52525b;font-size:18px;font-weight:700">${channel.name.charAt(0).toUpperCase()}</span>`; }}
+                    fallbackLetter={channel.name.charAt(0).toUpperCase()}
                   />
                 ) : (
                   <span className="text-zinc-500 text-xl font-bold">
