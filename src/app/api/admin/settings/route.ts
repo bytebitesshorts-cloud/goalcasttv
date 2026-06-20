@@ -17,6 +17,12 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({
         maintenanceMode: settings.maintenanceMode,
         maintenanceMessage: settings.maintenanceMessage,
+        vpnPopupEnabled: settings.vpnPopupEnabled,
+        vpnPopupTitle: settings.vpnPopupTitle,
+        vpnPopupMessage: settings.vpnPopupMessage,
+        vpnPopupButtonText: settings.vpnPopupButtonText,
+        vpnPopupButtonLink: settings.vpnPopupButtonLink,
+        vpnPopupImage: settings.vpnPopupImage,
       });
     }
     return NextResponse.json(settings);
