@@ -8,7 +8,7 @@ const NAV_ITEMS = [
   { label: 'Home', href: '/', icon: Home },
   { label: 'Scores', href: '/scores', icon: Trophy },
   { label: 'Favorites', href: '/favorites', icon: Star },
-  { label: 'Live TV', href: '/category/sports', icon: Tv2 },
+  { label: 'Live TV', href: '/watch/active', icon: Tv2 },
 ];
 
 export default function MobileBottomNav() {

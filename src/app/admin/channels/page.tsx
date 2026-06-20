@@ -62,17 +62,21 @@ export default function AdminChannelsPage() {
     setTimeout(() => setToast(null), 3000);
   };
 
-  const load = useCallback(async () => {
-    setLoading(true);
+  const load = useCallback(async (silent = false) => {
+    if (!silent) setLoading(true);
     try {
       const r = await fetch('/api/admin/channels');
       if (r.ok) setChannels(await r.json());
     } finally {
-      setLoading(false);
+      if (!silent) setLoading(false);
     }
   }, []);
 
-  useEffect(() => { load(); }, [load]);
+  useEffect(() => { 
+    load();
+    const interval = setInterval(() => load(true), 10000);
+    return () => clearInterval(interval);
+  }, [load]);
 
   const uniqueCountries = Array.from(new Map(channels.map(c => [c.country, c.countryCode])).entries());
 
@@ -194,6 +198,24 @@ export default function AdminChannelsPage() {
           >
             <Filter className="w-4 h-4" />
             Cleanup
+          </button>
+          <button
+            onClick={async () => {
+              if (!confirm('⚠️ This will permanently delete ALL inactive channels from the database. This cannot be undone. Continue?')) return;
+              const r = await fetch('/api/admin/channels/remove-inactive', { method: 'POST' });
+              const data = await r.json();
+              if (r.ok) {
+                showToast(`✅ ${data.message}`, 'success');
+                load();
+              } else {
+                showToast(`❌ ${data.error}`, 'error');
+              }
+            }}
+            className="flex items-center gap-2 px-3 py-2.5 bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/20 font-semibold rounded-xl transition-all text-sm"
+            title="Delete all inactive channels"
+          >
+            <Trash2 className="w-4 h-4" />
+            Delete Inactive
           </button>
           <button
             id="add-channel-btn"
