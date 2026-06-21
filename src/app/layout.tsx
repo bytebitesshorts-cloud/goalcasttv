@@ -9,6 +9,7 @@ import Footer from '@/components/Footer';
 import MaintenanceBanner from '@/components/MaintenanceBanner';
 import ScoresTicker from '@/components/ScoresTicker';
 import MobileBottomNav from '@/components/MobileBottomNav';
+import { Analytics } from '@vercel/analytics/next';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 
@@ -102,6 +103,7 @@ export default function RootLayout({
             <MobileBottomNav />
           </UserPrefsProvider>
         </ThemeProvider>
+        <Analytics />
       </body>
     </html>
   );
