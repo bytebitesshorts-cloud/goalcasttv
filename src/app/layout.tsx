@@ -29,7 +29,7 @@ export const metadata: Metadata = {
     'IPTV sports',
   ],
   verification: {
-    google: 'jHkWu5HCllqaFiRIOgBbfLvrmrAtiosBT8kEkbLmI0k',
+    google: '3KMaGr-FD5qKeak2soKz_P6w1rBY0TQ4jDLCkKiVo10',
   },
   openGraph: {
     type: 'website',
