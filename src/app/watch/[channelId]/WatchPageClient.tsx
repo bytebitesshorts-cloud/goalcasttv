@@ -36,7 +36,7 @@ export default function WatchPageClient({
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [channelSwitching, setChannelSwitching] = useState(false);
-  const [levels, setLevels] = useState<Hls.Level[]>([]);
+  const [levels, setLevels] = useState<any[]>([]);
   const [currentLevel, setCurrentLevel] = useState<number>(-1);
   const [retryCount, setRetryCount] = useState(0);
   const [autoRetryCount, setAutoRetryCount] = useState(0);

@@ -29,7 +29,7 @@ export default function VideoPlayer({ src, channelName, embedCode }: VideoPlayer
   const [retryKey, setRetryKey] = useState(0);
   const [pipSupported, setPipSupported] = useState(false);
   const [isPipActive, setIsPipActive] = useState(false);
-  const [levels, setLevels] = useState<Hls.Level[]>([]);
+  const [levels, setLevels] = useState<any[]>([]);
   const [currentLevel, setCurrentLevel] = useState<number>(-1);
 
   const clearConnectionTimeout = useCallback(() => {
