@@ -1,5 +1,6 @@
 {
   "expo": {
+    "owner": "bytebitess-organization",
     "name": "Goal Cast",
     "slug": "goalcast-app",
     "version": "1.0.0",
