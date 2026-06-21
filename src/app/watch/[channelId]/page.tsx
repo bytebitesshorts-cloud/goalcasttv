@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { getChannel, getCountry, getAllChannels } from '@/lib/search';
+import { getChannel, getCountry, getAllCountries } from '@/lib/search';
 import { getChannelsByCategory } from '@/lib/category';
 import { slugify } from '@/lib/utils';
 import connectDB from '@/lib/db';
@@ -72,27 +72,31 @@ export default async function WatchPage({ params }: Props) {
   };
 
   const country = await getCountry(channel.country);
-  const relatedCountry = (country?.channels ?? []).filter((c) => c.id !== channel.id);
-  const categoryChannelsRaw = await getChannelsByCategory(channel.category);
-  // For slider channels that have no real country, also grab all Sports channels
-  let relatedCategory = categoryChannelsRaw.filter(
-    (c) => c.id !== channel.id && !relatedCountry.some((rc) => rc.id === c.id)
-  );
-  // If we still have no related channels (slider items), pull from "Sports" explicitly
-  if (relatedCategory.length === 0 && relatedCountry.length === 0) {
-    const sportsChannels = await getChannelsByCategory('Sports');
-    relatedCategory = sportsChannels.filter((c) => c.id !== channel.id).slice(0, 20);
-  }
   const servers = (country?.channels ?? []).filter(
     (c) => c.name.trim().toLowerCase() === channel.name.trim().toLowerCase()
+  );
+
+  const countriesData = await getAllCountries();
+  const allChannelsRaw = countriesData.flatMap((c) => c.channels);
+  
+  const byName = new Map<string, typeof allChannelsRaw[0]>();
+  for (const ch of allChannelsRaw) {
+    if (ch.active === false) continue;
+    const key = ch.name.trim().toLowerCase();
+    const existing = byName.get(key);
+    if (!existing || (!existing.logo && ch.logo)) {
+      byName.set(key, ch);
+    }
+  }
+  const allChannels = Array.from(byName.values()).sort((a, b) =>
+    a.name.localeCompare(b.name)
   );
 
   return (
     <WatchPageClient
       channel={channel}
       country={country}
-      relatedCountry={relatedCountry}
-      relatedCategory={relatedCategory}
+      allChannels={allChannels}
       servers={servers}
       adConfig={adConfig}
     />

@@ -29,6 +29,8 @@ export default function VideoPlayer({ src, channelName, embedCode }: VideoPlayer
   const [retryKey, setRetryKey] = useState(0);
   const [pipSupported, setPipSupported] = useState(false);
   const [isPipActive, setIsPipActive] = useState(false);
+  const [levels, setLevels] = useState<Hls.Level[]>([]);
+  const [currentLevel, setCurrentLevel] = useState<number>(-1);
 
   const clearConnectionTimeout = useCallback(() => {
     if (timeoutRef.current) {
@@ -125,12 +127,18 @@ export default function VideoPlayer({ src, channelName, embedCode }: VideoPlayer
       hls.loadSource(src);
       hls.attachMedia(video);
 
-      hls.on(Hls.Events.MANIFEST_PARSED, () => {
+      hls.on(Hls.Events.MANIFEST_PARSED, (event, data) => {
         clearConnectionTimeout();
         setLoading(false);
+        setLevels(data.levels);
+        setCurrentLevel(hls.currentLevel);
         video.play().catch(() => {
           // Autoplay may be blocked by browser policy — OK
         });
+      });
+
+      hls.on(Hls.Events.LEVEL_SWITCHED, (event, data) => {
+        setCurrentLevel(data.level);
       });
 
       hls.on(Hls.Events.ERROR, (_, data) => {
@@ -245,19 +253,44 @@ export default function VideoPlayer({ src, channelName, embedCode }: VideoPlayer
 
       {/* Video element (HLS mode only) */}
       {src && (
-      <video
-        ref={videoRef}
-        id="video-player"
-        controls
-        playsInline
-        preload="auto"
-        autoPlay
-        aria-label={`${channelName} live stream`}
-        className={`
-          w-full aspect-video rounded-2xl bg-black shadow-lg
-          ${loading || error ? 'hidden' : 'block'}
-        `}
-      />
+        <div className={`relative group/quality ${loading || error ? 'hidden' : 'block'}`}>
+          <video
+            ref={videoRef}
+            id="video-player"
+            controls
+            playsInline
+            preload="auto"
+            autoPlay
+            aria-label={`${channelName} live stream`}
+            className="w-full aspect-video rounded-2xl bg-black shadow-lg"
+          />
+          {/* Quality Selector */}
+          {!loading && !error && levels.length > 0 && (
+            <div className="absolute top-2 right-2 z-10">
+              <select
+                value={currentLevel}
+                onChange={(e) => {
+                  const val = parseInt(e.target.value, 10);
+                  if (hlsRef.current) {
+                    hlsRef.current.currentLevel = val;
+                  }
+                  setCurrentLevel(val);
+                }}
+                className="bg-black/50 hover:bg-black/80 text-white text-[11px] sm:text-xs font-semibold rounded-lg pl-2 pr-5 py-1.5 border border-zinc-700/50 focus:outline-none appearance-none transition-colors backdrop-blur-sm cursor-pointer opacity-60 hover:opacity-100 focus:opacity-100"
+              >
+                <option value="-1">Auto</option>
+                {levels.map((level, index) => (
+                  <option key={index} value={index}>
+                    {level.height ? `${level.height}p` : `${Math.round(level.bitrate / 1000)}k`}
+                  </option>
+                ))}
+              </select>
+              <div className="pointer-events-none absolute inset-y-0 right-1 flex items-center text-white opacity-60 group-hover/quality:opacity-100">
+                <svg className="fill-current h-3 w-3" viewBox="0 0 20 20"><path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/></svg>
+              </div>
+            </div>
+          )}
+        </div>
       )}
 
       {/* Picture-in-Picture Control Bar */}
