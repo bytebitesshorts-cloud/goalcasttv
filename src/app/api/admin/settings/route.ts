@@ -23,6 +23,7 @@ export async function GET(req: NextRequest) {
         vpnPopupButtonText: settings.vpnPopupButtonText,
         vpnPopupButtonLink: settings.vpnPopupButtonLink,
         vpnPopupImage: settings.vpnPopupImage,
+        showBlogsOnHome: settings.showBlogsOnHome ?? false,
       });
     }
     return NextResponse.json(settings);
@@ -55,6 +56,7 @@ export async function PUT(req: NextRequest) {
       ...(body.vpnPopupButtonText !== undefined && { vpnPopupButtonText: body.vpnPopupButtonText }),
       ...(body.vpnPopupButtonLink !== undefined && { vpnPopupButtonLink: body.vpnPopupButtonLink }),
       ...(body.vpnPopupImage !== undefined && { vpnPopupImage: body.vpnPopupImage }),
+      ...(body.showBlogsOnHome !== undefined && { showBlogsOnHome: body.showBlogsOnHome }),
     };
 
     if (settingsStore) {

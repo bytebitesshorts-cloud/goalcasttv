@@ -117,7 +117,8 @@ export default function VideoPlayer({ src, channelName, embedCode }: VideoPlayer
         startFragPrefetch: true,        // prefetch first fragment while parsing manifest
         testBandwidth: true,
         progressive: true,              // enable progressive loading for faster start
-        abrEwmaDefaultEstimate: 1_000_000, // assume 1 Mbps initially (optimistic)
+        abrEwmaDefaultEstimate: 300_000, // assume 300 Kbps initially to prevent buffering
+        capLevelToPlayerSize: true,     // cap video resolution to player size
       });
       hlsRef.current = hls;
 

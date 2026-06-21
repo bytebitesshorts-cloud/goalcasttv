@@ -148,6 +148,8 @@ export default function WatchPageClient({
           manifestLoadingTimeOut: 10000,
           manifestLoadingMaxRetry: 3,
           startFragPrefetch: true,
+          abrEwmaDefaultEstimate: 300_000,
+          capLevelToPlayerSize: true,
           xhrSetup: (xhr) => { xhr.withCredentials = false; },
         });
         hlsRef.current = hls;
@@ -452,41 +454,8 @@ export default function WatchPageClient({
               </h2>
             </div>
 
-            {/* Mobile: horizontal scroll row. Desktop: vertical list */}
-            <div className="lg:hidden flex overflow-x-auto gap-3 p-3 no-scrollbar">
-              {sidebarChannels.length > 0 ? sidebarChannels.map((c) => {
-                const isPlaying = activeStream?.id === c.id;
-                return (
-                  <button
-                    key={c.id}
-                    onClick={() => handleSwitchChannel(c)}
-                    className={`flex-shrink-0 flex flex-col items-center gap-1.5 p-2.5 rounded-xl w-20 transition-all ${
-                      isPlaying
-                        ? 'bg-emerald-50 dark:bg-emerald-950/50 ring-2 ring-emerald-500'
-                        : 'bg-white dark:bg-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-700'
-                    }`}
-                  >
-                    <div className="w-10 h-10 rounded-lg bg-zinc-100 dark:bg-zinc-700 flex items-center justify-center overflow-hidden border border-zinc-200 dark:border-zinc-600">
-                      {c.logo
-                        ? <img src={c.logo} alt={c.name} className="w-full h-full object-contain p-1" />
-                        : <span className="text-zinc-400 text-xs font-bold">{c.name?.charAt(0)}</span>
-                      }
-                    </div>
-                    <span className={`text-[9px] font-semibold text-center leading-tight line-clamp-2 ${
-                      isPlaying ? 'text-emerald-600 dark:text-emerald-400' : 'text-zinc-700 dark:text-zinc-200'
-                    }`}>
-                      {c.name}
-                    </span>
-                    {isPlaying && <span className="text-[8px] text-emerald-500 font-bold">▶ NOW</span>}
-                  </button>
-                );
-              }) : (
-                <p className="text-zinc-400 text-xs py-4 px-2">No related channels</p>
-              )}
-            </div>
-
-            {/* Desktop: vertical list */}
-            <div className="hidden lg:block max-h-[500px] xl:max-h-[600px] overflow-y-auto divide-y divide-zinc-100 dark:divide-zinc-800/50">
+            {/* Vertical channel list (Mobile & Desktop) */}
+            <div className="block max-h-[500px] xl:max-h-[600px] overflow-y-auto divide-y divide-zinc-100 dark:divide-zinc-800/50">
               {sidebarChannels.length > 0 ? sidebarChannels.map((c) => {
                 const isPlaying = activeStream?.id === c.id;
                 return (

@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import {
   Plus, FileText, Trash2, Edit2, Eye, EyeOff,
-  AlertCircle, CheckCircle2, Calendar, User,
+  AlertCircle, CheckCircle2, Calendar, User, ToggleLeft, ToggleRight
 } from 'lucide-react';
 
 interface BlogPost {
@@ -23,6 +23,8 @@ export default function AdminBlogPage() {
   const router = useRouter();
   const [posts, setPosts] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
+  const [showBlogsOnHome, setShowBlogsOnHome] = useState(false);
+  const [savingSettings, setSavingSettings] = useState(false);
   const [toast, setToast] = useState<{ msg: string; type: 'success' | 'error' } | null>(null);
 
   const showToast = (msg: string, type: 'success' | 'error' = 'success') => {
@@ -33,8 +35,15 @@ export default function AdminBlogPage() {
   const load = useCallback(async () => {
     setLoading(true);
     try {
-      const r = await fetch('/api/admin/blog?all=1');
-      if (r.ok) setPosts(await r.json());
+      const [r1, r2] = await Promise.all([
+        fetch('/api/admin/blog?all=1'),
+        fetch('/api/admin/settings')
+      ]);
+      if (r1.ok) setPosts(await r1.json());
+      if (r2.ok) {
+        const settings = await r2.json();
+        setShowBlogsOnHome(settings.showBlogsOnHome || false);
+      }
     } finally {
       setLoading(false);
     }
@@ -51,6 +60,23 @@ export default function AdminBlogPage() {
     if (r.ok) {
       showToast(post.published ? 'Post unpublished' : 'Post published!');
       load();
+    }
+  }
+
+  async function toggleShowBlogs() {
+    setSavingSettings(true);
+    const newValue = !showBlogsOnHome;
+    const r = await fetch('/api/admin/settings', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ showBlogsOnHome: newValue }),
+    });
+    setSavingSettings(false);
+    if (r.ok) {
+      setShowBlogsOnHome(newValue);
+      showToast(`Blogs on Home Page ${newValue ? 'Enabled' : 'Disabled'}`);
+    } else {
+      showToast('Failed to update setting', 'error');
     }
   }
 
@@ -93,6 +119,26 @@ export default function AdminBlogPage() {
           <Plus className="w-4 h-4" />
           New Post
         </Link>
+      </div>
+
+      {/* Blog Display Setting */}
+      <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-5 flex items-center justify-between">
+        <div>
+          <h2 className="text-white font-semibold">Show Blogs on Home Page</h2>
+          <p className="text-zinc-400 text-sm mt-0.5">Toggle whether recent blog posts appear at the bottom of the main site.</p>
+        </div>
+        <button
+          onClick={toggleShowBlogs}
+          disabled={savingSettings}
+          className="transition-colors disabled:opacity-50"
+          aria-label="Toggle blogs on home page"
+        >
+          {showBlogsOnHome ? (
+            <ToggleRight className="w-10 h-10 text-emerald-400" />
+          ) : (
+            <ToggleLeft className="w-10 h-10 text-zinc-500" />
+          )}
+        </button>
       </div>
 
       {/* Posts list */}

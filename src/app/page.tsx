@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Tv2, Trophy, Activity } from 'lucide-react';
+import { Tv2, Trophy, Activity, FileText, Calendar } from 'lucide-react';
 import SliderTemplate from '@/components/SliderTemplate';
 import connectDB from '@/lib/db';
 import { Store } from '@/lib/models';
@@ -24,6 +24,20 @@ export default async function HomePage() {
   // 1. Fetch Slider
   const sliderStore = await Store.findOne({ key: 'slider' });
   const slides = sliderStore?.slider || [];
+
+  // 1.5 Fetch Settings and Blogs
+  const settingsStore = await Store.findOne({ key: 'settings' });
+  const settings = settingsStore?.data || {};
+
+  let recentBlogs = [];
+  if (settings.showBlogsOnHome) {
+    const blogStore = await Store.findOne({ key: 'blog' });
+    const allBlogs = (blogStore?.data || []) as any[];
+    recentBlogs = allBlogs
+      .filter((b) => b.published)
+      .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
+      .slice(0, 3);
+  }
 
   // 2. Fetch all channels and flatten them (A to Z)
   const countries = await getAllCountries();
@@ -113,6 +127,48 @@ export default async function HomePage() {
           ))}
         </div>
       </div>
+
+      {/* Blog Section */}
+      {settings.showBlogsOnHome && recentBlogs.length > 0 && (
+        <div className="px-4 max-w-5xl mx-auto w-full mt-16">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-2xl font-bold text-white flex items-center gap-2">
+              <FileText className="text-emerald-500" />
+              Latest News
+            </h2>
+            <Link href="/blog" className="text-sm text-emerald-400 hover:text-emerald-300 font-medium">
+              View All
+            </Link>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {recentBlogs.map((post: any) => (
+              <Link
+                key={post.id}
+                href={`/blog/${post.slug}`}
+                className="bg-zinc-900 border border-zinc-800 rounded-2xl overflow-hidden hover:border-emerald-500/50 transition-colors group flex flex-col"
+              >
+                {post.imageUrl ? (
+                  <div className="w-full h-40 overflow-hidden bg-zinc-800">
+                    <img src={post.imageUrl} alt={post.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                  </div>
+                ) : (
+                  <div className="w-full h-40 bg-zinc-800 flex items-center justify-center">
+                    <FileText className="w-12 h-12 text-zinc-600" />
+                  </div>
+                )}
+                <div className="p-4 flex-1 flex flex-col">
+                  <h3 className="text-white font-bold text-lg mb-2 line-clamp-2 group-hover:text-emerald-400 transition-colors">{post.title}</h3>
+                  <p className="text-zinc-400 text-sm line-clamp-2 mb-4 flex-1">{post.excerpt}</p>
+                  <div className="flex items-center gap-2 text-xs text-zinc-500 mt-auto">
+                    <Calendar className="w-3.5 h-3.5" />
+                    {new Date(post.publishedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* VPN Popup */}
       <VpnPopup />
