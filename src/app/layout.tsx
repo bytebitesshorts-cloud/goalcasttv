@@ -28,6 +28,9 @@ export const metadata: Metadata = {
     'sports channels worldwide',
     'IPTV sports',
   ],
+  verification: {
+    google: 'jHkWu5HCllqaFiRIOgBbfLvrmrAtiosBT8kEkbLmI0k',
+  },
   openGraph: {
     type: 'website',
     locale: 'en_US',
