@@ -101,6 +101,18 @@ export default function Header() {
           <div className="ml-auto flex items-center gap-2.5 shrink-0">
             <HeaderFavLink />
             <Link
+              href="/watch/active"
+              id="header-live-tv"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-red-50 hover:bg-red-100/80 dark:bg-zinc-900/60 dark:hover:bg-zinc-800/80 border border-red-200 dark:border-zinc-800 text-red-700 dark:text-red-400 dark:hover:text-red-300 text-xs font-bold transition-all duration-200 shadow-sm"
+              aria-label="Live TV"
+            >
+              <span className="relative">
+                <Tv2 className="w-3.5 h-3.5" aria-hidden="true" />
+                <span className="absolute -top-0.5 -right-0.5 w-1.5 h-1.5 bg-red-500 rounded-full animate-pulse" />
+              </span>
+              <span>Live TV</span>
+            </Link>
+            <Link
               href="/blog"
               id="header-blog"
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-50 hover:bg-amber-100/80 dark:bg-zinc-900/60 dark:hover:bg-zinc-800/80 border border-amber-200 dark:border-zinc-800 text-amber-700 dark:text-amber-400 dark:hover:text-amber-300 text-xs font-bold transition-all duration-200 shadow-sm"
