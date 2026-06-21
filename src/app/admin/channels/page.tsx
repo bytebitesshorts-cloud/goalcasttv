@@ -183,24 +183,6 @@ export default function AdminChannelsPage() {
         <div className="flex items-center gap-2">
           <button
             onClick={async () => {
-              if (!confirm('⚠️ This will permanently delete ALL channels that are NOT in Sports or FIFA 2026 category. This cannot be undone. Continue?')) return;
-              const r = await fetch('/api/admin/cleanup', { method: 'POST' });
-              const data = await r.json();
-              if (r.ok) {
-                showToast(`✅ ${data.message}`, 'success');
-                load();
-              } else {
-                showToast(`❌ ${data.error}`, 'error');
-              }
-            }}
-            className="flex items-center gap-2 px-3 py-2.5 bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/20 font-semibold rounded-xl transition-all text-sm"
-            title="Delete all non-Sports/FIFA channels"
-          >
-            <Filter className="w-4 h-4" />
-            Cleanup
-          </button>
-          <button
-            onClick={async () => {
               if (!confirm('⚠️ This will permanently delete ALL inactive channels from the database. This cannot be undone. Continue?')) return;
               const r = await fetch('/api/admin/channels/remove-inactive', { method: 'POST' });
               const data = await r.json();

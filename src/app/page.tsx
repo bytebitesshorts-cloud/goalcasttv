@@ -20,7 +20,7 @@ export const metadata: Metadata = {
  */
 export default async function HomePage() {
   await connectDB();
-  
+
   // 1. Fetch Slider
   const sliderStore = await Store.findOne({ key: 'slider' });
   const slides = sliderStore?.slider || [];
@@ -42,7 +42,7 @@ export default async function HomePage() {
   // 2. Fetch all channels and flatten them (A to Z)
   const countries = await getAllCountries();
   const allChannels = countries.flatMap((c) => c.channels);
-  
+
   // Deduplicate by normalised name (channels often stored under multiple countries)
   // Prefer the entry that has a logo URL when there's a collision
   const byName = new Map<string, typeof allChannels[0]>();
