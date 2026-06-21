@@ -1,0 +1,26 @@
+node_modules/
+.expo/
+dist/
+npm-debug.*
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+*.orig.*
+web-build/
+
+# macOS
+.DS_Store
+
+# Android
+android/
+.idea
+.gradle
+local.properties
+*.iml
+
+# iOS
+ios/
+Pods/
+*.xcworkspace

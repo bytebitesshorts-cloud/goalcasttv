@@ -1,0 +1,1079 @@
+{
+  "Australia": [
+    {
+      "id": "krave-sports-au",
+      "name": "MTRSPT 1",
+      "logo": "https://a.jsrdn.com/hls/23099/mtrspt1/logo_20250122_232635_70.png",
+      "stream": "https://amg02873-kravemedia-mtrspt1-samsungau-2anp4.amagi.tv/playlist/amg02873-kravemedia-mtrspt1-samsungau/playlist.m3u8",
+      "category": "sports",
+      "country": "Australia",
+      "countryCode": "au",
+      "quality": "1080p",
+      "code": "CH-0007",
+      "active": true
+    }
+  ],
+  "Sweden": [
+    {
+      "id": "fighter-tv-bd",
+      "name": "FIGHTER TV",
+      "logo": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgNTVL_Em_EdwVB2BrdBsyD6vxWv3VoEcBlDLj2qpE_jdxCDlIAqp07_ToS5ZFAB2ThnA04BYdC9T7pgwPy5HWX8IwL74oCwsNXdVANpHq7x98tgvaEBCGMkYBQqAUfj5W9un5H8BckX7TgB5pVV3g7kGMRc_vLGyY5XfmsLtrEEmgJJ5-q5eNqBZp8qA/s1080/1000059174.png",
+      "stream": "https://nomawnoijl.gpcdn.net/akash/fighter/chunks.m3u8",
+      "category": "sports",
+      "country": "Sweden",
+      "countryCode": "se",
+      "quality": "720p",
+      "code": "CH-0013",
+      "active": true
+    }
+  ],
+  "Pakistan": [
+    {
+      "id": "gtv-bd",
+      "name": "Sports",
+      "logo": "https://upload.wikimedia.org/wikipedia/en/thumb/4/44/GTV_%28Bangladeshi_TV_channel%29_logo.svg/200px-GTV_%28Bangladeshi_TV_channel%29_logo.svg.png",
+      "stream": "https://d3qs3d2rkhfqrt.cloudfront.net/out/v1/b17adfe543354fdd8d189b110617cddd/index_3.m3u8",
+      "category": "sports",
+      "country": "Pakistan",
+      "countryCode": "pk",
+      "quality": "720p",
+      "code": "CH-0015",
+      "active": true
+    }
+  ],
+  "Bangladesh": [
+    {
+      "id": "atn-bangla",
+      "name": "ATN BANGLA",
+      "logo": "https://sunplex.net/iptv/logo/atn-bangla.jpg",
+      "stream": "https://tvsen5.aynaott.com/atnbangla/index.m3u8",
+      "category": "sports",
+      "country": "Bangladesh",
+      "countryCode": "bd",
+      "quality": "HD",
+      "code": "CH-0035",
+      "active": true
+    }
+  ],
+  "Spain": [
+    {
+      "id": "bein-sports-es",
+      "name": "beIN Sports España",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8b/BeIN_Sports_logo.svg/200px-BeIN_Sports_logo.svg.png",
+      "stream": "https://bein-xtra-bein.amagi.tv/playlist.m3u8",
+      "category": "sports",
+      "country": "Spain",
+      "countryCode": "es",
+      "quality": "720p",
+      "code": "CH-0217",
+      "active": true
+    },
+    {
+      "id": "sports-legends-bd",
+      "name": "Sports Legends",
+      "logo": "https://tstatic.akash-go.com/cms-ui/images/custom-content/1770377900139.png",
+      "stream": "https://nomawnoijl.gpcdn.net/akash/sportslegends/playlist.m3u8",
+      "category": "sports",
+      "country": "Spain",
+      "countryCode": "es",
+      "quality": "720p",
+      "code": "CH-0016",
+      "active": true
+    }
+  ],
+  "China": [
+    {
+      "id": "cctv-16-cn",
+      "name": "CCTV-16 Olympic",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/39/CCTV-5.svg/200px-CCTV-5.svg.png",
+      "stream": "https://iptv.catvod.com/live.php?id=CCTV16&line=1",
+      "category": "sports",
+      "country": "China",
+      "countryCode": "cn",
+      "quality": "720p",
+      "code": "CH-0082",
+      "active": true
+    },
+    {
+      "id": "cctv-5-hd-cn",
+      "name": "CCTV-5 HD",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/39/CCTV-5.svg/200px-CCTV-5.svg.png",
+      "stream": "https://iptv.catvod.com/live.php?id=CCTV5&line=6",
+      "category": "sports",
+      "country": "China",
+      "countryCode": "cn",
+      "quality": "1080p",
+      "code": "CH-0083",
+      "active": true
+    },
+    {
+      "id": "cctv-5plus-hd-cn",
+      "name": "CCTV-5+ HD",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bd/CCTV-5plus.svg/200px-CCTV-5plus.svg.png",
+      "stream": "http://38.75.136.137:98/gslb/dsdqpub/cctv5hd.m3u8?auth=testpub",
+      "category": "sports",
+      "country": "China",
+      "countryCode": "cn",
+      "quality": "1080p",
+      "code": "CH-0085",
+      "active": true
+    },
+    {
+      "id": "fengyun-football-cn",
+      "name": "Fengyun Football",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/39/CCTV-5.svg/200px-CCTV-5.svg.png",
+      "stream": "http://38.75.136.137:98/gslb/dsdqpub/fyzq.m3u8?auth=testpub",
+      "category": "sports",
+      "country": "China",
+      "countryCode": "cn",
+      "quality": "720p",
+      "code": "CH-0087",
+      "active": true
+    },
+    {
+      "id": "golf-tennis-cn",
+      "name": "Golf & Tennis",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/39/CCTV-5.svg/200px-CCTV-5.svg.png",
+      "stream": "http://38.75.136.137:98/gslb/dsdqpub/gefwq.m3u8?auth=testpub",
+      "category": "sports",
+      "country": "China",
+      "countryCode": "cn",
+      "quality": "720p",
+      "code": "CH-0088",
+      "active": true
+    },
+    {
+      "id": "guangdong-sports-cn",
+      "name": "Guangdong Sports",
+      "logo": "https://upload.wikimedia.org/wikipedia/en/thumb/e/e6/Guangdong_Television_Logo.svg/200px-Guangdong_Television_Logo.svg.png",
+      "stream": "https://epg.pw/stream/7b470f9fc5c305db0c8622117b7b25ca00eb35ba3e93e865cf0ff9df5c736681.m3u8",
+      "category": "sports",
+      "country": "China",
+      "countryCode": "cn",
+      "quality": "720p",
+      "code": "CH-0089",
+      "active": true
+    }
+  ],
+  "Czechia": [
+    {
+      "id": "t-sport-cz",
+      "name": "ČT sport",
+      "logo": "https://i.imgur.com/I2dltZW.png",
+      "stream": "https://sktv.plainrock127.xyz/get.php?x=CTsport",
+      "category": "sports",
+      "country": "Czechia",
+      "countryCode": "cz",
+      "quality": "720p",
+      "code": "CH-0093",
+      "active": true
+    },
+    {
+      "id": "t-sport-plus-cz",
+      "name": "ČT sport Plus",
+      "logo": "https://i.imgur.com/5JiMynW.png",
+      "stream": "https://sktv.plainrock127.xyz/get.php?x=CTsportPlus",
+      "category": "sports",
+      "country": "Czechia",
+      "countryCode": "cz",
+      "quality": "720p",
+      "code": "CH-0094",
+      "active": true
+    }
+  ],
+  "Egypt": [
+    {
+      "id": "bein-sports-eg",
+      "name": "beIN Sports Egypt",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8b/BeIN_Sports_logo.svg/200px-BeIN_Sports_logo.svg.png",
+      "stream": "https://bein-xtra-bein.amagi.tv/playlist.m3u8",
+      "category": "sports",
+      "country": "Egypt",
+      "countryCode": "eg",
+      "quality": "720p",
+      "code": "CH-0095",
+      "active": true
+    }
+  ],
+  "France": [
+    {
+      "id": "ch_import_1781275737868_208",
+      "name": "Bein Sports 2 - France (FIFA)",
+      "logo": "https://imglink.cc/cdn/kIiut6WBq0.jpg",
+      "stream": "http://145.239.5.177/559/mpegts",
+      "category": "sports",
+      "country": "France",
+      "countryCode": "fr",
+      "active": true
+    },
+    {
+      "id": "ch_import_1781275737868_651",
+      "name": "Bein Sports 2 B- France (FIFA)",
+      "logo": "https://imglink.cc/cdn/kIiut6WBq0.jpg",
+      "stream": "http://145.239.5.177:80/559/index.m3u8",
+      "category": "sports",
+      "country": "France",
+      "countryCode": "fr",
+      "active": true
+    }
+  ],
+  "Greece": [
+    {
+      "id": "blue-sky-gr",
+      "name": "Blue Sky",
+      "logo": "https://i.imgur.com/rzuQslM.png",
+      "stream": "https://cdn5.smart-tv-data.com/bluesky/bluesky-live/playlist.m3u8",
+      "category": "sports",
+      "country": "Greece",
+      "countryCode": "gr",
+      "quality": "720p",
+      "code": "CH-0108",
+      "active": true
+    }
+  ],
+  "Italy": [
+    {
+      "id": "motor-trend-it",
+      "name": "Motor Trend",
+      "logo": "https://i.imgur.com/ipj2H0n.png",
+      "stream": "https://d205m6k582pec4.cloudfront.net/v1/master/3722c60a815c199d9c0ef36c5b73da68a62b09d1/cc-asg5puyzdtnqu/Motortrend_IT.m3u8",
+      "category": "sports",
+      "country": "Italy",
+      "countryCode": "it",
+      "quality": "720p",
+      "code": "CH-0160",
+      "active": true
+    },
+    {
+      "id": "motori-tv-it",
+      "name": "Motori Tv",
+      "logo": "https://i.imgur.com/NWXQKbl.png",
+      "stream": "https://5f22d76e220e1.streamlock.net/servizio01/servizio01/playlist.m3u8",
+      "category": "sports",
+      "country": "Italy",
+      "countryCode": "it",
+      "quality": "720p",
+      "code": "CH-0161",
+      "active": true
+    },
+    {
+      "id": "rete-8-sport-it",
+      "name": "Rete 8 Sport",
+      "logo": "https://i.imgur.com/uUAjWlF.png",
+      "stream": "https://64b16f23efbee.streamlock.net/rete8sport/rete8sport/playlist.m3u8",
+      "category": "sports",
+      "country": "Italy",
+      "countryCode": "it",
+      "quality": "720p",
+      "code": "CH-0163",
+      "active": true
+    },
+    {
+      "id": "supertennis-it",
+      "name": "SuperTennis",
+      "logo": "https://i.imgur.com/GzsPlbX.png",
+      "stream": "https://live-embed.supertennix.hiway.media/restreamer/supertennix_client/gpu-a-c0-16/restreamer/outgest/aa3673f1-e178-44a9-a947-ef41db73211a/manifest.m3u8",
+      "category": "sports",
+      "country": "Italy",
+      "countryCode": "it",
+      "quality": "720p",
+      "code": "CH-0168",
+      "active": true
+    }
+  ],
+  "Morocco": [
+    {
+      "id": "bein-sports-ma",
+      "name": "beIN Sports Morocco",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8b/BeIN_Sports_logo.svg/200px-BeIN_Sports_logo.svg.png",
+      "stream": "https://bein-xtra-bein.amagi.tv/playlist.m3u8",
+      "category": "sports",
+      "country": "Morocco",
+      "countryCode": "ma",
+      "quality": "720p",
+      "code": "CH-0184",
+      "active": true
+    }
+  ],
+  "Netherlands": [
+    {
+      "id": "ziggo-sport-nl",
+      "name": "Ziggo Sport",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/Ziggo_Sport_Logo.svg/200px-Ziggo_Sport_Logo.svg.png",
+      "stream": "https://bein-xtra-bein.amagi.tv/playlist.m3u8",
+      "category": "sports",
+      "country": "Netherlands",
+      "countryCode": "nl",
+      "quality": "720p",
+      "code": "CH-0186",
+      "active": true
+    }
+  ],
+  "North Macedonia": [
+    {
+      "id": "m-net-sport-mk",
+      "name": "M»Net Sport",
+      "logo": "https://i.imgur.com/q3DV2gP.png",
+      "stream": "http://ares.mnet.mk/hls/mnet-sport.m3u8",
+      "category": "sports",
+      "country": "North Macedonia",
+      "countryCode": "mk",
+      "quality": "720p",
+      "code": "CH-0189",
+      "active": true
+    },
+    {
+      "id": "sky-folk-mk",
+      "name": "Sky Folk",
+      "logo": "https://i.imgur.com/xRw4Hmu.png",
+      "stream": "https://skyfolk.mk/live.m3u8",
+      "category": "sports",
+      "country": "North Macedonia",
+      "countryCode": "mk",
+      "quality": "720p",
+      "code": "CH-0190",
+      "active": true
+    }
+  ],
+  "Qatar": [
+    {
+      "id": "bein-sports-xtra-qa",
+      "name": "beIN Sports XTRA Qatar",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8b/BeIN_Sports_logo.svg/200px-BeIN_Sports_logo.svg.png",
+      "stream": "https://bein-xtra-bein.amagi.tv/playlist.m3u8",
+      "category": "sports",
+      "country": "Qatar",
+      "countryCode": "qa",
+      "quality": "720p",
+      "code": "CH-0205",
+      "active": true
+    }
+  ],
+  "Saudi Arabia": [
+    {
+      "id": "bein-sports-sa",
+      "name": "beIN Sports Arabia",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8b/BeIN_Sports_logo.svg/200px-BeIN_Sports_logo.svg.png",
+      "stream": "https://bein-xtra-bein.amagi.tv/playlist.m3u8",
+      "category": "sports",
+      "country": "Saudi Arabia",
+      "countryCode": "sa",
+      "quality": "720p",
+      "code": "CH-0209",
+      "active": true
+    }
+  ],
+  "Ukraine": [
+    {
+      "id": "suspilne-sport-ua",
+      "name": "Suspilne Sport",
+      "logo": "https://i.imgur.com/16IhU0M.png",
+      "stream": "http://cdnua05.hls.tv/934/hls/8743361621b245838bee193c9ec28322/4856/stream.m3u8",
+      "category": "sports",
+      "country": "Ukraine",
+      "countryCode": "ua",
+      "quality": "720p",
+      "code": "CH-0229",
+      "active": true
+    },
+    {
+      "id": "xsport-ua",
+      "name": "XSport",
+      "logo": "https://i.imgur.com/CHDcfrT.png",
+      "stream": "http://cdnua05.hls.tv/946/hls/8743361621b245838bee193c9ec28322/3999/stream.m3u8",
+      "category": "sports",
+      "country": "Ukraine",
+      "countryCode": "ua",
+      "quality": "SD",
+      "code": "CH-0230",
+      "active": true
+    },
+    {
+      "id": "kropyvnytskyi-ua",
+      "name": "Суспільне Kropyvnytskyi",
+      "logo": "https://i.imgur.com/zzYJr87.png",
+      "stream": "http://cdnua05.hls.tv/650/hls/f62d71219200da4130d13b21d23fb23c/4788/stream.m3u8",
+      "category": "sports",
+      "country": "Ukraine",
+      "countryCode": "ua",
+      "quality": "720p",
+      "code": "CH-0231",
+      "active": true
+    }
+  ],
+  "United Arab Emirates": [
+    {
+      "id": "bein-sports-ae",
+      "name": "beIN Sports UAE",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8b/BeIN_Sports_logo.svg/200px-BeIN_Sports_logo.svg.png",
+      "stream": "https://bein-xtra-bein.amagi.tv/playlist.m3u8",
+      "category": "sports",
+      "country": "United Arab Emirates",
+      "countryCode": "ae",
+      "quality": "720p",
+      "code": "CH-0235",
+      "active": true
+    },
+    {
+      "id": "sky-news-arabia-ae",
+      "name": "Sky News Arabia",
+      "logo": "https://i.imgur.com/SvjU4h6.png",
+      "stream": "https://stream.skynewsarabia.com/hls/sna.m3u8",
+      "category": "sports",
+      "country": "United Arab Emirates",
+      "countryCode": "ae",
+      "quality": "720p",
+      "code": "CH-0244",
+      "active": true
+    }
+  ],
+  "United Kingdom": [
+    {
+      "id": "ch_import_1781275737869_491",
+      "name": "TNT Sports 1",
+      "logo": "https://imglink.cc/cdn/VHUi569tAW.jpg",
+      "stream": "http://27.124.71.27/TNT_Sports_1/index.m3u8",
+      "category": "sports",
+      "country": "United Kingdom",
+      "countryCode": "gb",
+      "active": true
+    },
+    {
+      "id": "ch_import_1781275737869_893",
+      "name": "TNT Sports 2",
+      "logo": "https://imglink.cc/cdn/VHUi569tAW.jpg",
+      "stream": "http://27.124.71.27/TNT_Sports_2/index.m3u8",
+      "category": "sports",
+      "country": "United Kingdom",
+      "countryCode": "gb",
+      "active": true
+    },
+    {
+      "id": "ch_import_1781275737869_260",
+      "name": "TNT Sports 3",
+      "logo": "https://imglink.cc/cdn/VHUi569tAW.jpg",
+      "stream": "http://27.124.71.27/TNT_Sports_3/index.m3u8",
+      "category": "sports",
+      "country": "United Kingdom",
+      "countryCode": "gb",
+      "active": true
+    }
+  ],
+  "United States": [
+    {
+      "id": "bein-sports-xtra-us",
+      "name": "beIN SPORTS XTRA",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8b/BeIN_Sports_logo.svg/200px-BeIN_Sports_logo.svg.png",
+      "stream": "https://bein-xtra-bein.amagi.tv/playlist.m3u8",
+      "category": "sports",
+      "country": "United States",
+      "countryCode": "us",
+      "quality": "1080p",
+      "code": "CH-0255",
+      "active": true
+    },
+    {
+      "id": "fifa-tv-us",
+      "name": "FIFA+ Live",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/FIFA_logo_without_slogan.svg/200px-FIFA_logo_without_slogan.svg.png",
+      "stream": "https://a62dad94.wurl.com/master/f36d25e7e52f1ba8d7e56eb859c636563214f541/UmFrdXRlblRWLWV1X0ZJRkFQbHVzRW5nbGlzaF9ITFM/playlist.m3u8",
+      "category": "sports",
+      "country": "United States",
+      "countryCode": "us",
+      "quality": "1080p",
+      "code": "CH-0262",
+      "active": true
+    },
+    {
+      "id": "sky-news-uk-us",
+      "name": "Sky News (UK)",
+      "logo": "https://d2n0069hmnqmmx.cloudfront.net/epgdata/1.0/newchanlogos/512/512/skychb1404.png",
+      "stream": "https://ythls.armelin.one/channel/UCoMdktPbSTixAyNGwb-UYkQ.m3u8",
+      "category": "sports",
+      "country": "United States",
+      "countryCode": "us",
+      "quality": "720p",
+      "code": "CH-0277",
+      "active": true
+    },
+    {
+      "id": "sky-news-weather-us",
+      "name": "Sky News Weather",
+      "logo": "https://pbs.twimg.com/profile_images/1604994875459518464/lGt2wEqM_400x400.jpg",
+      "stream": "https://distro001-gb-hls1-prd.delivery.skycdp.com/easel_cdn/ngrp:weather_loop.stream_all/playlist.m3u8",
+      "category": "sports",
+      "country": "United States",
+      "countryCode": "us",
+      "quality": "720p",
+      "code": "CH-0279",
+      "active": true
+    },
+    {
+      "id": "sky-news-us",
+      "name": "Sky News العربية",
+      "logo": "https://upload.wikimedia.org/wikipedia/en/thumb/5/57/Sky_News_logo.svg/512px-Sky_News_logo.svg.png",
+      "stream": "https://stream.skynewsarabia.com/hls/sna.m3u8",
+      "category": "sports",
+      "country": "United States",
+      "countryCode": "us",
+      "quality": "720p",
+      "code": "CH-0280",
+      "active": true
+    },
+    {
+      "id": "sport2u-us",
+      "name": "Sport2U",
+      "logo": "https://i.imgur.com/WW0lNk1.png",
+      "stream": "https://stream9.xdevel.com/video0s976916-1685/stream/playlist_dvr.m3u8",
+      "category": "sports",
+      "country": "United States",
+      "countryCode": "us",
+      "quality": "720p",
+      "code": "CH-0283",
+      "active": true
+    },
+    {
+      "id": "sportoutdoor-tv-us",
+      "name": "SportOutdoor.tv",
+      "logo": "https://i.imgur.com/fwOuEBl.png",
+      "stream": "https://gto2000-sportoutdoortv-1-it.samsung.wurl.tv/playlist.m3u8",
+      "category": "sports",
+      "country": "United States",
+      "countryCode": "us",
+      "quality": "720p",
+      "code": "CH-0285",
+      "active": true
+    }
+  ],
+  "International": [
+    {
+      "id": "ch_import_1781275737868_105",
+      "name": "Bein Sports 1",
+      "logo": "https://imglink.cc/cdn/kIiut6WBq0.jpg",
+      "stream": "http://27.124.71.27/beIN_Sports_1/index.m3u8",
+      "category": "sports",
+      "country": "International",
+      "countryCode": "intl",
+      "active": true
+    },
+    {
+      "id": "ch_import_1781275737869_723",
+      "name": "Bein Sports 1 (Andro)",
+      "logo": "https://imglink.cc/cdn/kIiut6WBq0.jpg",
+      "stream": "https://andro.226503.xyz/checklist/androstreamlivebs1.m3u8",
+      "category": "sports",
+      "country": "International",
+      "countryCode": "intl",
+      "active": true
+    },
+    {
+      "id": "fifa-7-intl",
+      "name": "Bein Sports 1 MAX",
+      "logo": "https://i.ibb.co.com/vnbkF0r/fifa-world-cup-2026-logo-png-seeklogo-665644.png",
+      "stream": "https://pruiaaaaaaa.yallaliveshoot.info/hls/ch1/master.m3u8",
+      "category": "sports",
+      "country": "International",
+      "countryCode": "intl",
+      "quality": "720p",
+      "active": true
+    },
+    {
+      "id": "ch_import_1781275737869_650",
+      "name": "Bein Sports 2",
+      "logo": "https://imglink.cc/cdn/kIiut6WBq0.jpg",
+      "stream": "http://27.124.71.27/beIN_Sports_2/index.m3u8",
+      "category": "sports",
+      "country": "International",
+      "countryCode": "intl",
+      "active": true
+    },
+    {
+      "id": "ch_import_1781275737869_958",
+      "name": "Bein Sports 2 (Andro)",
+      "logo": "https://imglink.cc/cdn/kIiut6WBq0.jpg",
+      "stream": "https://andro.226503.xyz/checklist/androstreamlivebs2.m3u8",
+      "category": "sports",
+      "country": "International",
+      "countryCode": "intl",
+      "active": true
+    },
+    {
+      "id": "ch_import_1781275737869_818",
+      "name": "Bein Sports 3",
+      "logo": "https://imglink.cc/cdn/kIiut6WBq0.jpg",
+      "stream": "http://27.124.71.27/beIN_Sports_3/index.m3u8",
+      "category": "sports",
+      "country": "International",
+      "countryCode": "intl",
+      "active": true
+    },
+    {
+      "id": "ch_import_1781275737869_82",
+      "name": "Bein Sports 3 (Andro)",
+      "logo": "https://imglink.cc/cdn/kIiut6WBq0.jpg",
+      "stream": "https://andro.226503.xyz/checklist/androstreamlivebs3.m3u8",
+      "category": "sports",
+      "country": "International",
+      "countryCode": "intl",
+      "active": true
+    },
+    {
+      "id": "ch_import_1781275737869_229",
+      "name": "Bein Sports 4",
+      "logo": "https://imglink.cc/cdn/kIiut6WBq0.jpg",
+      "stream": "https://bein-esp-xumo.amagi.tv/playlistR1080p.m3u8",
+      "category": "sports",
+      "country": "International",
+      "countryCode": "intl",
+      "active": true
+    },
+    {
+      "id": "ch_import_1781275737869_817",
+      "name": "Bein Sports 4 (Andro)",
+      "logo": "https://imglink.cc/cdn/kIiut6WBq0.jpg",
+      "stream": "https://andro.226503.xyz/checklist/androstreamlivebs4.m3u8",
+      "category": "sports",
+      "country": "International",
+      "countryCode": "intl",
+      "active": true
+    },
+    {
+      "id": "ch_import_1781275737869_162",
+      "name": "Cricbuzz HD",
+      "logo": "https://imglink.cc/cdn/GGm9H9tLHP.png",
+      "stream": "http://4kgood.org:80/live/4o48up5evz/r4fiast66u/1163988.ts",
+      "category": "sports",
+      "country": "International",
+      "countryCode": "intl",
+      "active": true
+    },
+    {
+      "id": "ch_import_1781275737869_897",
+      "name": "Euro TV",
+      "logo": "https://imglink.cc/cdn/SZphbKsSMx.png",
+      "stream": "https://stream.ottplus.bd/live/euro_sports_hd_abr/live/euro_sports_hd/chunks.m3u8",
+      "category": "sports",
+      "country": "International",
+      "countryCode": "intl",
+      "active": true
+    },
+    {
+      "id": "fifa-1-intl",
+      "name": "FIFA 1",
+      "logo": "https://i.ibb.co.com/vnbkF0r/fifa-world-cup-2026-logo-png-seeklogo-665644.png",
+      "stream": "https://s3.us-east-1.amazonaws.com/simkr1/hls/0/stream.m3u8",
+      "category": "sports",
+      "country": "International",
+      "countryCode": "intl",
+      "quality": "720p",
+      "active": true
+    },
+    {
+      "id": "fifa-2-intl",
+      "name": "FIFA 2",
+      "logo": "https://i.ibb.co.com/vnbkF0r/fifa-world-cup-2026-logo-png-seeklogo-665644.png",
+      "stream": "https://vip.testro.online/channel1/live.m3u8",
+      "category": "sports",
+      "country": "International",
+      "countryCode": "intl",
+      "quality": "720p",
+      "active": true
+    },
+    {
+      "id": "fifa-3-intl",
+      "name": "FIFA 3",
+      "logo": "https://i.ibb.co.com/vnbkF0r/fifa-world-cup-2026-logo-png-seeklogo-665644.png",
+      "stream": "https://cdn.yallashooot.pp.ua/hls/ch1.m3u8",
+      "category": "sports",
+      "country": "International",
+      "countryCode": "intl",
+      "quality": "720p",
+      "active": true
+    },
+    {
+      "id": "fifa-4-intl",
+      "name": "FIFA 4",
+      "logo": "https://i.ibb.co.com/vnbkF0r/fifa-world-cup-2026-logo-png-seeklogo-665644.png",
+      "stream": "https://s3.eu-north-1.amazonaws.com/196.ccdd11/hls/1/stream.m3u8",
+      "category": "sports",
+      "country": "International",
+      "countryCode": "intl",
+      "quality": "720p",
+      "active": true
+    },
+    {
+      "id": "fifa-5-intl",
+      "name": "FIFA 5",
+      "logo": "https://i.ibb.co.com/vnbkF0r/fifa-world-cup-2026-logo-png-seeklogo-665644.png",
+      "stream": "https://2.78542.qzz.io/hls/1/stream.m3u8",
+      "category": "sports",
+      "country": "International",
+      "countryCode": "intl",
+      "quality": "720p",
+      "active": true
+    },
+    {
+      "id": "fifa-6-alt-intl",
+      "name": "FIFA 6 (Alt)",
+      "logo": "https://i.ibb.co.com/vnbkF0r/fifa-world-cup-2026-logo-png-seeklogo-665644.png",
+      "stream": "https://s3.us-east-1.amazonaws.com/simkr1/hls/0/stream_640x360_800k.m3u8",
+      "category": "sports",
+      "country": "International",
+      "countryCode": "intl",
+      "quality": "720p",
+      "active": true
+    },
+    {
+      "id": "fifa-8-intl",
+      "name": "FIFA 8",
+      "logo": "https://i.ibb.co.com/vnbkF0r/fifa-world-cup-2026-logo-png-seeklogo-665644.png",
+      "stream": "https://s3.us-east-1.amazonaws.com/yalapro1/hls/0/stream.m3u8",
+      "category": "sports",
+      "country": "International",
+      "countryCode": "intl",
+      "quality": "720p",
+      "active": true
+    },
+    {
+      "id": "fifa-9-intl",
+      "name": "FIFA 9",
+      "logo": "https://i.ibb.co.com/vnbkF0r/fifa-world-cup-2026-logo-png-seeklogo-665644.png",
+      "stream": "https://s3.eu-north-1.amazonaws.com/196.ccdd22/hls/0/stream.m3u8",
+      "category": "sports",
+      "country": "International",
+      "countryCode": "intl",
+      "quality": "720p",
+      "active": true
+    },
+    {
+      "id": "ch_import_1781275737868_797",
+      "name": "FIFA Plus B",
+      "logo": "https://i.ibb.co.com/vnbkF0r/fifa-world-cup-2026-logo-png-seeklogo-665644.png",
+      "stream": "https://37b4c228.wurl.com/manifest/f36d25e7e52f1ba8d7e56eb859c636563214f541/UmFrdXRlblRWLWZyX0ZJRkFQbHVzRnJlbmNoX0hMUw/6f5437c5-e015-4754-8476-c8c6d27d3a55/1.m3u8",
+      "category": "sports",
+      "country": "International",
+      "countryCode": "intl",
+      "active": true
+    },
+    {
+      "id": "ch_import_1781275737867_604",
+      "name": "FIFA Plus English",
+      "logo": "https://i.ibb.co.com/vnbkF0r/fifa-world-cup-2026-logo-png-seeklogo-665644.png",
+      "stream": "https://a62dad94.wurl.com/master/f36d25e7e52f1ba8d7e56eb859c636563214f541/UmFrdXRlblRWLWV1X0ZJRkFQbHVzRW5nbGlzaF9ITFM/playlist.m3u8",
+      "category": "sports",
+      "country": "International",
+      "countryCode": "intl",
+      "active": true
+    },
+    {
+      "id": "30a-golf-kingdom-intl",
+      "name": "30A Golf Kingdom",
+      "logo": "https://golfkingdom.net/wp-content/uploads/2022/04/golf-kingdom-st.jpg",
+      "stream": "https://30a-tv.com/feeds/vidaa/golf.m3u8",
+      "category": "sports",
+      "country": "International Sports",
+      "countryCode": "intl",
+      "quality": "720p",
+      "code": "CH-0157",
+      "active": true
+    },
+    {
+      "id": "accdn-intl",
+      "name": "ACCDN",
+      "logo": "https://i.imgur.com/V6Kaqha.png",
+      "stream": "https://raycom-accdn-firetv.amagi.tv/playlist.m3u8",
+      "category": "sports",
+      "country": "International Sports",
+      "countryCode": "intl",
+      "quality": "1080p",
+      "code": "CH-0150",
+      "active": true
+    },
+    {
+      "id": "africa-24-sport-intl",
+      "name": "Africa 24 Sport",
+      "logo": "https://i.imgur.com/YWIJdai.png",
+      "stream": "https://africa24.vedge.infomaniak.com/livecast/ik:africa24sport/manifest.m3u8",
+      "category": "sports",
+      "country": "International Sports",
+      "countryCode": "intl",
+      "quality": "1080p",
+      "code": "CH-0151",
+      "active": true
+    },
+    {
+      "id": "antena-sport-intl",
+      "name": "AntenaSport",
+      "logo": "https://yt3.googleusercontent.com/mXF6CZIe_yJNlPPQdqVvGNUbLY6V6N38hLKnWWKcOMhCDjuLTFZZ4QH_faUmo0pPXQBEIIIa=s512-c-k-c0x00ffffff-no-rj",
+      "stream": "https://stream1.antenaplay.ro/as/asrolive1/playlist.m3u8",
+      "category": "sports",
+      "country": "International Sports",
+      "countryCode": "intl",
+      "quality": "720p",
+      "code": "CH-0152",
+      "active": true
+    },
+    {
+      "id": "bek-tv-sports-west-intl",
+      "name": "BEK TV Sports West",
+      "logo": "https://i.imgur.com/1l3t5jd.png",
+      "stream": "https://cdn3.wowza.com/5/ZWQ1K2NYTmpFbGsr/BEK-WOWZA-1/smil:BEKPRIMEW.smil/playlist.m3u8",
+      "category": "sports",
+      "country": "International Sports",
+      "countryCode": "intl",
+      "quality": "720p",
+      "code": "CH-0154",
+      "active": true
+    },
+    {
+      "id": "canal-motor-intl",
+      "name": "Canal Motor",
+      "logo": "https://i.imgur.com/BHm0wem.png",
+      "stream": "https://digicom.hls.iptvdc.com/canalmotor/index.m3u8",
+      "category": "sports",
+      "country": "International Sports",
+      "countryCode": "intl",
+      "quality": "720p",
+      "code": "CH-0136",
+      "active": true
+    },
+    {
+      "id": "ct-sport-intl",
+      "name": "ČT Sport",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/%C4%8CT_sport_logo.png/512px-%C4%8CT_sport_logo.png",
+      "stream": "http://88.212.15.19/live/test_ctsport_25p/playlist.m3u8",
+      "category": "sports",
+      "country": "International Sports",
+      "countryCode": "intl",
+      "quality": "720p",
+      "code": "CH-0156",
+      "active": true
+    },
+    {
+      "id": "esports-max-intl",
+      "name": "eSports Max",
+      "logo": "https://i.imgur.com/ulGKX30.png",
+      "stream": "http://vcpar.myplaytv.com/esportsmax/live/playlist.m3u8",
+      "category": "sports",
+      "country": "International Sports",
+      "countryCode": "intl",
+      "quality": "480p",
+      "code": "CH-0158",
+      "active": true
+    },
+    {
+      "id": "hard-knocks-fighting-intl",
+      "name": "Hard Knocks Fighting Championship",
+      "logo": "https://i.imgur.com/ulGKX30.png",
+      "stream": "https://d39g1vxj2ef6in.cloudfront.net/v1/manifest/3fec3e5cac39a52b2132f9c66c83dae043dc17d4/prod-rakuten-stitched/2ee2b8d4-acc4-4296-9dc8-66f1ffd0fff8/5.m3u8",
+      "category": "sports",
+      "country": "International Sports",
+      "countryCode": "intl",
+      "quality": "720p",
+      "code": "CH-0130",
+      "active": true
+    },
+    {
+      "id": "la-redonda-tv-intl",
+      "name": "La Redonda TV",
+      "logo": "https://i.imgur.com/a5SxXvJ.jpg",
+      "stream": "https://ythls.armelin.one/channel/UCG_S--F4wcdre2-8PG9YlhA.m3u8",
+      "category": "sports",
+      "country": "International Sports",
+      "countryCode": "intl",
+      "quality": "1080p",
+      "code": "CH-0141",
+      "active": true
+    },
+    {
+      "id": "m-net-sport-intl",
+      "name": "M-Net Sport",
+      "logo": "https://i.imgur.com/7k8ar1Z.png",
+      "stream": "http://ares.mnet.mk/hls/mnet-sport.m3u8",
+      "category": "sports",
+      "country": "International Sports",
+      "countryCode": "intl",
+      "quality": "720p",
+      "code": "CH-0142",
+      "active": true
+    },
+    {
+      "id": "mma-tv-intl",
+      "name": "MMA-TV",
+      "logo": "https://i.imgur.com/ELXmaqg.png",
+      "stream": "https://streams2.sofast.tv/vglive-sk-462904/playlist.m3u8",
+      "category": "sports",
+      "country": "International Sports",
+      "countryCode": "intl",
+      "quality": "720p",
+      "code": "CH-0132",
+      "active": true
+    },
+    {
+      "id": "pac-12-insider-intl",
+      "name": "Pac 12 Insider",
+      "logo": "https://i.imgur.com/736QREy.png",
+      "stream": "https://pac12-roku-us.amagi.tv/playlist.m3u8",
+      "category": "sports",
+      "country": "International Sports",
+      "countryCode": "intl",
+      "quality": "1080p",
+      "code": "CH-0143",
+      "active": true
+    },
+    {
+      "id": "real-madrid-tv-intl",
+      "name": "Real Madrid TV",
+      "logo": "https://upload.wikimedia.org/wikipedia/en/5/56/Real_Madrid_CF.svg",
+      "stream": "https://rmtv.akamaized.net/hls/live/2043154/rmtv-en-web/master.m3u8",
+      "category": "sports",
+      "country": "International Sports",
+      "countryCode": "intl",
+      "quality": "1080p",
+      "code": "CH-0138",
+      "active": true
+    },
+    {
+      "id": "red-bull-tv-intl",
+      "name": "Red Bull TV",
+      "logo": "https://i.imgur.com/BcN8B3D.png",
+      "stream": "https://rbmn-live.akamaized.net/hls/live/590964/BoRB-AT/master.m3u8",
+      "category": "sports",
+      "country": "International Sports",
+      "countryCode": "intl",
+      "quality": "1080p",
+      "code": "CH-0133",
+      "active": true
+    },
+    {
+      "id": "sports-grid-intl",
+      "name": "SportsGrid",
+      "logo": "https://i.imgur.com/ulGKX30.png",
+      "stream": "https://sportsgrid-tribal.amagi.tv/playlist.m3u8",
+      "category": "sports",
+      "country": "International Sports",
+      "countryCode": "intl",
+      "quality": "1080p",
+      "code": "CH-0135",
+      "active": true
+    },
+    {
+      "id": "teletrak-intl",
+      "name": "Teletrak",
+      "logo": "https://i.imgur.com/NoJvlig.png",
+      "stream": "https://unlimited6-cl.dps.live/sportinghd/sportinghd.smil/playlist.m3u8",
+      "category": "sports",
+      "country": "International Sports",
+      "countryCode": "intl",
+      "quality": "720p",
+      "code": "CH-0144",
+      "active": true
+    },
+    {
+      "id": "tr-sport-intl",
+      "name": "TR Sport",
+      "logo": "https://i.imgur.com/FabFP5A.png",
+      "stream": "https://livetr.teleromagna.it/mia/live/playlist.m3u8",
+      "category": "sports",
+      "country": "International Sports",
+      "countryCode": "intl",
+      "quality": "480p",
+      "code": "CH-0145",
+      "active": true
+    },
+    {
+      "id": "trace-sports-stars-intl",
+      "name": "Trace Sports Stars",
+      "logo": "https://i.imgur.com/FabFP5A.png",
+      "stream": "https://trace-sportstars-samsungnz.amagi.tv/playlist.m3u8",
+      "category": "sports",
+      "country": "International Sports",
+      "countryCode": "intl",
+      "quality": "1080p",
+      "code": "CH-0146",
+      "active": true
+    },
+    {
+      "id": "turkmenistan-sport-intl",
+      "name": "Türkmenistan Sport",
+      "logo": "https://turkmentv.gov.tm/assets/img/live-imgs/sport.png",
+      "stream": "https://alpha.tv.online.tm/hls/ch004.m3u8",
+      "category": "sports",
+      "country": "International Sports",
+      "countryCode": "intl",
+      "quality": "480p",
+      "code": "CH-0147",
+      "active": true
+    },
+    {
+      "id": "unbeaten-intl",
+      "name": "Unbeaten",
+      "logo": "https://i.imgur.com/LmkNt3v.png",
+      "stream": "https://unbeaten-tcl.amagi.tv/playlist.m3u8",
+      "category": "sports",
+      "country": "International Sports",
+      "countryCode": "intl",
+      "quality": "1080p",
+      "code": "CH-0148",
+      "active": true
+    },
+    {
+      "id": "world-billiards-intl",
+      "name": "World Billiards",
+      "logo": "https://i.imgur.com/mbQCGm5.png",
+      "stream": "https://9a81dd4ee3884d0dbcacafaf0d81327a.mediatailor.us-east-1.amazonaws.com/v1/master/04fd913bb278d8775298c26fdca9d9841f37601f/RakutenTV-eu_BilliardsTV/playlist.m3u8",
+      "category": "sports",
+      "country": "International Sports",
+      "countryCode": "intl",
+      "quality": "720p",
+      "code": "CH-0128",
+      "active": true
+    },
+    {
+      "id": "world-of-freesports-intl",
+      "name": "World of FreeSports",
+      "logo": "https://i.imgur.com/BcN8B3D.png",
+      "stream": "https://rakutenaa-mainstreammediafreesportsintl-rakuten-t7dc0.amagi.tv/playlist/rakutenAA-mainstreammediafreesportsintl-rakuten/playlist.m3u8",
+      "category": "sports",
+      "country": "International Sports",
+      "countryCode": "intl",
+      "quality": "1080p",
+      "code": "CH-0129",
+      "active": true
+    },
+    {
+      "id": "world-poker-tour-intl",
+      "name": "World Poker Tour",
+      "logo": "https://upload.wikimedia.org/wikipedia/en/thumb/4/49/World_Poker_Tour_logo.svg/200px-World_Poker_Tour_logo.svg.png",
+      "stream": "https://d39g1vxj2ef6in.cloudfront.net/v1/manifest/3fec3e5cac39a52b2132f9c66c83dae043dc17d4/prod-rakuten-stitched/15d59f2f-80da-4448-9bce-775cc9f470f7/1.m3u8",
+      "category": "sports",
+      "country": "International Sports",
+      "countryCode": "intl",
+      "quality": "1080p",
+      "code": "CH-0127",
+      "active": true
+    }
+  ],
+  "Serbia": [
+    {
+      "id": "ch_import_1781275737868_220",
+      "name": "Bein Sports 1 - Serbia (FIFA)",
+      "logo": "https://imglink.cc/cdn/kIiut6WBq0.jpg",
+      "stream": "http://ua.online24.pm/play/1101/350B326FB34F4B8/video.m3u8",
+      "category": "sports",
+      "country": "Serbia",
+      "countryCode": "rs",
+      "active": true
+    },
+    {
+      "id": "ch_import_1781275737868_513",
+      "name": "Bein Sports 2 - Serbia (FIFA)",
+      "logo": "https://imglink.cc/cdn/kIiut6WBq0.jpg",
+      "stream": "http://ua.online24.pm/play/1102/350B326FB34F4B8/video.m3u8",
+      "category": "sports",
+      "country": "Serbia",
+      "countryCode": "rs",
+      "active": true
+    }
+  ]
+}
