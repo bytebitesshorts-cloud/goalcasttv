@@ -99,7 +99,6 @@ export default function Header() {
 
           {/* Actions */}
           <div className="ml-auto flex items-center gap-2.5 shrink-0">
-            <HeaderFavLink />
             <Link
               href="/watch/active"
               id="header-live-tv"
@@ -112,6 +111,7 @@ export default function Header() {
               </span>
               <span>Live TV</span>
             </Link>
+            <HeaderFavLink />
             <Link
               href="/blog"
               id="header-blog"
