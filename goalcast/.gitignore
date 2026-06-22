@@ -34,3 +34,8 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# backup data files (may contain tokens)
+*.bak
+*.backup.json
+*.backup-import.json

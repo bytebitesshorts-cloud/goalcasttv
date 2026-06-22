@@ -26,7 +26,9 @@ export async function GET(req: NextRequest) {
         showBlogsOnHome: settings.showBlogsOnHome ?? false,
       });
     }
-    return NextResponse.json(settings);
+    // Never expose credentials in API responses
+    const { adminPassword, adminUsername, ...safeSettings } = settings;
+    return NextResponse.json(safeSettings);
   } catch (error) {
     return NextResponse.json({ error: 'Failed to fetch settings' }, { status: 500 });
   }

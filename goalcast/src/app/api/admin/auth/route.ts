@@ -12,8 +12,8 @@ export async function POST(req: NextRequest) {
     const settingsStore = await Store.findOne({ key: 'settings' });
     const settings = settingsStore?.data || {};
     
-    const expectedUsername = settings.adminUsername || 'admin';
-    const expectedPassword = settings.adminPassword || 'admin';
+    const expectedUsername = process.env.ADMIN_USERNAME || settings.adminUsername || 'admin';
+    const expectedPassword = process.env.ADMIN_PASSWORD || settings.adminPassword || 'admin';
 
     if (username === expectedUsername && password === expectedPassword) {
       const res = NextResponse.json({ success: true });
