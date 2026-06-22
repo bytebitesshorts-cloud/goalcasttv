@@ -24,6 +24,16 @@ export interface AppConfig {
   adDuration: number;
   appName: string;
   baseUrl: string;
+  adsScreenEnabled?: boolean;
+  adsScreenHeadline?: string;
+  adsScreenSubheadline?: string;
+  adsScreenImageUrl?: string;
+  adsScreenClickUrl?: string;
+  adsScreenTutorialUrl?: string;
+  adsScreenTelegramUrl?: string;
+  adsScreenDuration?: number;
+  announcementText?: string;
+  announcementEnabled?: boolean;
 }
 
 export async function fetchMatches(): Promise<Match[]> {
@@ -48,6 +58,16 @@ export async function fetchConfig(): Promise<AppConfig> {
       adDuration: 15,
       appName: 'Goal Cast',
       baseUrl: BASE_URL,
+      adsScreenEnabled: false,
+      adsScreenHeadline: 'Activate Your Stream - Supporting Goalcast-TV',
+      adsScreenSubheadline: 'Follow steps to access the video server',
+      adsScreenClickUrl: '',
+      adsScreenImageUrl: '',
+      adsScreenTutorialUrl: '',
+      adsScreenTelegramUrl: '',
+      adsScreenDuration: 15,
+      announcementText: '',
+      announcementEnabled: false,
     };
   }
 }

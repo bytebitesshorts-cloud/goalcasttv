@@ -1,14 +1,21 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
 import {
   View, Text, StyleSheet, TouchableOpacity, Image, FlatList,
-  RefreshControl, StatusBar, ActivityIndicator, Dimensions,
+  RefreshControl, StatusBar, ActivityIndicator, Dimensions, Animated, Pressable,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { fetchMatches, fetchConfig, type Match, type AppConfig } from '../lib/api';
+import InfoModal from '../components/InfoModal';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const SPORTS = ['All', 'Football', 'Cricket', 'Basketball', 'Tennis', 'Rugby', 'Other'];
+
+const INFO_TEXTS = {
+  about: `Goalcast-TV is a leading sports streaming platform providing premium live match coverage, real-time score updates, and detailed schedules for sports enthusiasts worldwide.\n\nOur mission is to bring high-quality live sports directly to your mobile screens with zero hassle and minimum latency.\n\nThank you for supporting Goalcast-TV!`,
+  privacy: `Your privacy is extremely important to us. Goalcast-TV does not collect, store, or sell any personal user data. We do not track your location, contacts, or browsing history.\n\nAny data stored locally on your device (such as your favorite channels or app preferences) remains entirely private and never leaves your device.\n\nThird-party ad networks used in the app may serve personalized advertisements. Please refer to their respective privacy policies for details.`,
+  terms: `Welcome to Goalcast-TV. By using our application, you agree to comply with the following terms:\n\n1. Content Streams: All video feeds and streams are retrieved from publicly available web sources. Goalcast-TV does not host any streams or media files on its servers.\n\n2. External Links: Clicking on ads or external buttons will redirect you to third-party web content. We are not responsible for the safety, reliability, or terms of third-party websites.\n\n3. Prohibited Use: You may not attempt to reverse-engineer, modify, or distribute the app's contents without authorization.\n\nEnjoy the games!`,
+};
 
 export default function HomeScreen({ navigation }: { navigation: any }) {
   const [matches, setMatches] = useState<Match[]>([]);
@@ -16,6 +23,30 @@ export default function HomeScreen({ navigation }: { navigation: any }) {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [activeCategory, setActiveCategory] = useState('All');
+
+  // Sidebar & Info Modal state
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [infoModalVisible, setInfoModalVisible] = useState(false);
+  const [infoTitle, setInfoTitle] = useState('');
+  const [infoContent, setInfoContent] = useState('');
+
+  const slideAnim = useRef(new Animated.Value(SCREEN_WIDTH)).current;
+
+  const toggleDrawer = (open: boolean) => {
+    setDrawerOpen(open);
+    Animated.timing(slideAnim, {
+      toValue: open ? SCREEN_WIDTH - 280 : SCREEN_WIDTH,
+      duration: 250,
+      useNativeDriver: true,
+    }).start();
+  };
+
+  const handleInfoPress = (type: 'about' | 'privacy' | 'terms', title: string) => {
+    toggleDrawer(false);
+    setInfoTitle(title);
+    setInfoContent(INFO_TEXTS[type]);
+    setInfoModalVisible(true);
+  };
 
   const load = useCallback(async (silent = false) => {
     if (!silent) setLoading(true);
@@ -123,11 +154,26 @@ export default function HomeScreen({ navigation }: { navigation: any }) {
             <Ionicons name="football" size={22} color="#22c55e" />
             <Text style={styles.logoText}>Goal<Text style={{ color: '#22c55e' }}>Cast</Text></Text>
           </View>
-          <TouchableOpacity onPress={() => load()} style={styles.refreshBtn}>
-            <Ionicons name="refresh" size={20} color="#71717a" />
-          </TouchableOpacity>
+          <View style={styles.headerActions}>
+            <TouchableOpacity onPress={() => load()} style={styles.refreshBtn}>
+              <Ionicons name="refresh" size={20} color="#71717a" />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => toggleDrawer(true)} style={styles.menuBtn}>
+              <Ionicons name="menu" size={24} color="#22c55e" />
+            </TouchableOpacity>
+          </View>
         </View>
       </LinearGradient>
+
+      {/* Announcement Ticker / Bullet Notification */}
+      {config?.announcementEnabled && config?.announcementText ? (
+        <View style={styles.announcementBar}>
+          <Ionicons name="alert-circle" size={16} color="#fbbf24" style={styles.announcementIcon} />
+          <Text style={styles.announcementTextContent} numberOfLines={1}>
+            {config.announcementText}
+          </Text>
+        </View>
+      ) : null}
 
       {/* Category Tabs */}
       <FlatList
@@ -176,25 +222,85 @@ export default function HomeScreen({ navigation }: { navigation: any }) {
           }
         />
       )}
+
+      {/* ── Custom Right-side Sidebar (Drawer) Overlay ── */}
+      {drawerOpen && (
+        <Pressable style={styles.drawerBackdrop} onPress={() => toggleDrawer(false)} />
+      )}
+      <Animated.View style={[styles.drawer, { transform: [{ translateX: slideAnim }] }]}>
+        <View style={styles.drawerHeader}>
+          <Text style={styles.drawerTitle}>Menu</Text>
+          <TouchableOpacity onPress={() => toggleDrawer(false)} style={styles.drawerCloseBtn}>
+            <Ionicons name="close" size={24} color="#71717a" />
+          </TouchableOpacity>
+        </View>
+        <View style={styles.drawerItems}>
+          <TouchableOpacity style={styles.drawerItem} onPress={() => handleInfoPress('about', 'About Us')}>
+            <Ionicons name="information-circle-outline" size={20} color="#22c55e" />
+            <Text style={styles.drawerItemText}>About Us</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.drawerItem} onPress={() => handleInfoPress('privacy', 'Privacy Policy')}>
+            <Ionicons name="shield-checkmark-outline" size={20} color="#22c55e" />
+            <Text style={styles.drawerItemText}>Privacy Policy</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.drawerItem} onPress={() => handleInfoPress('terms', 'Terms & Conditions')}>
+            <Ionicons name="document-text-outline" size={20} color="#22c55e" />
+            <Text style={styles.drawerItemText}>Terms & Conditions</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.drawerFooter}>
+          <Text style={styles.drawerFooterText}>GoalCast v1.0.0</Text>
+        </View>
+      </Animated.View>
+
+      {/* Info Modals */}
+      <InfoModal
+        visible={infoModalVisible}
+        title={infoTitle}
+        content={infoContent}
+        onClose={() => setInfoModalVisible(false)}
+      />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#0a0a0a' },
-  header: { paddingTop: 50, paddingBottom: 12, paddingHorizontal: 16 },
+  header: { paddingTop: 50, paddingBottom: 10, paddingHorizontal: 16 },
   headerContent: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   logo: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   logoText: { fontSize: 22, fontWeight: '800', color: '#fff', letterSpacing: -0.5 },
-  refreshBtn: { padding: 8 },
+  headerActions: { flexDirection: 'row', alignItems: 'center', gap: 6 },
+  refreshBtn: { padding: 6 },
+  menuBtn: { padding: 6 },
 
-  categoryBar: { paddingHorizontal: 12, paddingVertical: 10, gap: 8, flexDirection: 'row' },
+  // Announcement Bar Style
+  announcementBar: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#1c1917',
+    borderBottomWidth: 1,
+    borderBottomColor: '#292524',
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    gap: 8,
+  },
+  announcementIcon: { marginRight: 2 },
+  announcementTextContent: {
+    color: '#fbbf24',
+    fontSize: 12,
+    fontWeight: '600',
+    flex: 1,
+  },
+
+  // Categories Layout (Compact Padding!)
+  categoryBar: { paddingHorizontal: 12, paddingVertical: 6, gap: 6, flexDirection: 'row' },
   categoryChip: {
-    paddingHorizontal: 16, paddingVertical: 7, borderRadius: 20,
+    paddingHorizontal: 12, paddingVertical: 5, borderRadius: 20,
     backgroundColor: '#18181b', borderWidth: 1, borderColor: '#27272a',
   },
   categoryChipActive: { backgroundColor: '#22c55e', borderColor: '#22c55e' },
-  categoryText: { fontSize: 13, fontWeight: '600', color: '#71717a' },
+  categoryText: { fontSize: 12, fontWeight: '600', color: '#71717a' },
   categoryTextActive: { color: '#000' },
 
   matchList: { paddingHorizontal: 12, paddingBottom: 24, gap: 12 },
@@ -248,4 +354,50 @@ const styles = StyleSheet.create({
   loadingText: { color: '#52525b', fontSize: 14 },
   emptyText: { color: '#52525b', fontSize: 18, fontWeight: '700' },
   emptySubText: { color: '#3f3f46', fontSize: 13 },
+
+  // Drawer / Sidebar styles
+  drawerBackdrop: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+    zIndex: 100,
+  },
+  drawer: {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    right: 0,
+    width: 280,
+    backgroundColor: '#111111',
+    borderLeftWidth: 1,
+    borderLeftColor: '#27272a',
+    paddingTop: 50,
+    paddingHorizontal: 16,
+    zIndex: 101,
+  },
+  drawerHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingBottom: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: '#27272a',
+    marginBottom: 20,
+  },
+  drawerTitle: { fontSize: 20, fontWeight: '800', color: '#fff' },
+  drawerCloseBtn: { padding: 4 },
+  drawerItems: { gap: 16, flex: 1 },
+  drawerItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    paddingVertical: 12,
+    paddingHorizontal: 10,
+    borderRadius: 10,
+    backgroundColor: '#161616',
+    borderWidth: 1,
+    borderColor: '#27272a',
+  },
+  drawerItemText: { fontSize: 14, fontWeight: '600', color: '#e4e4e7' },
+  drawerFooter: { paddingVertical: 20, alignItems: 'center' },
+  drawerFooterText: { fontSize: 11, color: '#52525b' },
 });

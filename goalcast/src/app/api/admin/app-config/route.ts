@@ -21,6 +21,16 @@ export async function POST(req: NextRequest) {
       adDuration: body.adDuration || 15,
       appName: 'GoalCast',
       baseUrl: 'https://goalcast-tv.vercel.app',
+      adsScreenEnabled: body.adsScreenEnabled ?? false,
+      adsScreenHeadline: body.adsScreenHeadline || 'Activate Your Stream - Supporting Goalcast-TV',
+      adsScreenSubheadline: body.adsScreenSubheadline || 'Follow steps to access the video server',
+      adsScreenClickUrl: body.adsScreenClickUrl || '',
+      adsScreenImageUrl: body.adsScreenImageUrl || '',
+      adsScreenTutorialUrl: body.adsScreenTutorialUrl || '',
+      adsScreenTelegramUrl: body.adsScreenTelegramUrl || '',
+      adsScreenDuration: body.adsScreenDuration || 15,
+      announcementText: body.announcementText || '',
+      announcementEnabled: body.announcementEnabled ?? false,
     };
     if (store) {
       store.data = config;
