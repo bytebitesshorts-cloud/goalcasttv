@@ -63,6 +63,23 @@ export default function HomeScreen({ navigation }: { navigation: any }) {
     return () => clearInterval(interval);
   }, [load]);
 
+  const getCategoryCount = (category: string) => {
+    if (category === 'All') return matches.length;
+    return matches.filter(m => m.sport === category).length;
+  };
+
+  const getCategoryIcon = (category: string) => {
+    switch (category) {
+      case 'All': return 'sync-outline';
+      case 'Football': return 'football-outline';
+      case 'Cricket': return 'trophy-outline';
+      case 'Basketball': return 'basketball-outline';
+      case 'Tennis': return 'tennisball-outline';
+      case 'Rugby': return 'american-football-outline';
+      default: return 'apps-outline';
+    }
+  };
+
   const filtered = activeCategory === 'All'
     ? matches
     : matches.filter(m => m.sport === activeCategory);
@@ -182,16 +199,30 @@ export default function HomeScreen({ navigation }: { navigation: any }) {
         showsHorizontalScrollIndicator={false}
         keyExtractor={s => s}
         contentContainerStyle={styles.categoryBar}
-        renderItem={({ item }) => (
-          <TouchableOpacity
-            onPress={() => setActiveCategory(item)}
-            style={[styles.categoryChip, activeCategory === item && styles.categoryChipActive]}
-          >
-            <Text style={[styles.categoryText, activeCategory === item && styles.categoryTextActive]}>
-              {item}
-            </Text>
-          </TouchableOpacity>
-        )}
+        renderItem={({ item }) => {
+          const count = getCategoryCount(item);
+          const icon = getCategoryIcon(item);
+          const isActive = activeCategory === item;
+          return (
+            <TouchableOpacity
+              onPress={() => setActiveCategory(item)}
+              style={styles.categoryItem}
+              activeOpacity={0.75}
+            >
+              <View style={[styles.categoryCircle, isActive && styles.categoryCircleActive]}>
+                <Ionicons name={icon as any} size={20} color={isActive ? '#000' : '#a1a1aa'} />
+                {count > 0 && (
+                  <View style={styles.categoryBadge}>
+                    <Text style={styles.categoryBadgeText}>{count}</Text>
+                  </View>
+                )}
+              </View>
+              <Text style={[styles.categoryLabel, isActive && styles.categoryLabelActive]}>
+                {item}
+              </Text>
+            </TouchableOpacity>
+          );
+        }}
       />
 
       {/* Match List */}
@@ -266,7 +297,7 @@ export default function HomeScreen({ navigation }: { navigation: any }) {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#0a0a0a' },
-  header: { paddingTop: 50, paddingBottom: 10, paddingHorizontal: 16 },
+  header: { paddingTop: 40, paddingBottom: 6, paddingHorizontal: 16 },
   headerContent: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   logo: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   logoText: { fontSize: 22, fontWeight: '800', color: '#fff', letterSpacing: -0.5 },
@@ -281,7 +312,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#1c1917',
     borderBottomWidth: 1,
     borderBottomColor: '#292524',
-    paddingVertical: 8,
+    paddingVertical: 6,
     paddingHorizontal: 16,
     gap: 8,
   },
@@ -293,15 +324,52 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 
-  // Categories Layout (Compact Padding!)
-  categoryBar: { paddingHorizontal: 12, paddingVertical: 6, gap: 6, flexDirection: 'row' },
-  categoryChip: {
-    paddingHorizontal: 12, paddingVertical: 5, borderRadius: 20,
-    backgroundColor: '#18181b', borderWidth: 1, borderColor: '#27272a',
+  // Categories Layout (Circular Icon Badges!)
+  categoryBar: { paddingHorizontal: 16, paddingVertical: 10, gap: 12, flexDirection: 'row' },
+  categoryItem: { alignItems: 'center', gap: 6 },
+  categoryCircle: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    backgroundColor: '#18181b',
+    borderWidth: 1,
+    borderColor: '#27272a',
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'relative',
   },
-  categoryChipActive: { backgroundColor: '#22c55e', borderColor: '#22c55e' },
-  categoryText: { fontSize: 12, fontWeight: '600', color: '#71717a' },
-  categoryTextActive: { color: '#000' },
+  categoryCircleActive: {
+    backgroundColor: '#22c55e',
+    borderColor: '#22c55e',
+  },
+  categoryBadge: {
+    position: 'absolute',
+    top: -4,
+    right: -4,
+    backgroundColor: '#ef4444',
+    borderRadius: 8,
+    minWidth: 16,
+    height: 16,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 4,
+    borderWidth: 1.5,
+    borderColor: '#0a0a0a',
+  },
+  categoryBadgeText: {
+    color: '#fff',
+    fontSize: 8,
+    fontWeight: '800',
+  },
+  categoryLabel: {
+    fontSize: 11,
+    fontWeight: '600',
+    color: '#71717a',
+  },
+  categoryLabelActive: {
+    color: '#fff',
+    fontWeight: '700',
+  },
 
   matchList: { paddingHorizontal: 12, paddingBottom: 24, gap: 12 },
   matchCard: {
