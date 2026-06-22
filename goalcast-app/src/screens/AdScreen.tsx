@@ -71,7 +71,12 @@ export default function AdScreen({ navigation, route }: Props) {
       startTimer();
     }
     const targetUrl = config?.adsScreenClickUrl || 'https://google.com';
-    navigation.navigate('AdBrowser', { url: targetUrl, title: 'Verification Server' });
+    navigation.navigate('AdBrowser', {
+      url: targetUrl,
+      title: 'Verification Server',
+      match: match,
+      duration: adDuration,
+    });
   };
 
   const handleTutorialClick = () => {
