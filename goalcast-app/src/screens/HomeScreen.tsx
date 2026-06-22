@@ -297,7 +297,7 @@ export default function HomeScreen({ navigation }: { navigation: any }) {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#0a0a0a' },
-  header: { paddingTop: 40, paddingBottom: 6, paddingHorizontal: 16 },
+  header: { paddingTop: 32, paddingBottom: 2, paddingHorizontal: 16 },
   headerContent: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   logo: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   logoText: { fontSize: 22, fontWeight: '800', color: '#fff', letterSpacing: -0.5 },
