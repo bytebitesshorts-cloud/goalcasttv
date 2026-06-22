@@ -9,6 +9,7 @@ import ChannelsScreen from './src/screens/ChannelsScreen';
 import AdScreen from './src/screens/AdScreen';
 import PlayerScreen from './src/screens/PlayerScreen';
 import AdBrowserScreen from './src/screens/AdBrowserScreen';
+import ScoresScreen from './src/screens/ScoresScreen';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -37,6 +38,14 @@ function TabNavigator() {
         options={{
           tabBarLabel: 'Live Matches',
           tabBarIcon: ({ color, size }) => <Ionicons name="football" size={size} color={color} />,
+        }}
+      />
+      <Tab.Screen
+        name="Scores"
+        component={ScoresScreen}
+        options={{
+          tabBarLabel: 'Live Scores',
+          tabBarIcon: ({ color, size }) => <Ionicons name="stats-chart" size={size} color={color} />,
         }}
       />
       <Tab.Screen

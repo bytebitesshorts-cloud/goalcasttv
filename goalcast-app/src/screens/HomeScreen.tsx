@@ -371,12 +371,12 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
 
-  matchList: { paddingHorizontal: 12, paddingBottom: 24, gap: 12 },
+  matchList: { paddingHorizontal: 10, paddingBottom: 20, gap: 10 },
   matchCard: {
-    backgroundColor: '#111111', borderRadius: 16, overflow: 'hidden',
+    backgroundColor: '#111111', borderRadius: 12, overflow: 'hidden',
     borderWidth: 1, borderColor: '#1f1f1f',
   },
-  thumbnailContainer: { width: '100%', height: 180, position: 'relative' },
+  thumbnailContainer: { width: '100%', height: 150, position: 'relative' },
   thumbnail: {
     width: '100%', height: '100%', alignItems: 'center', justifyContent: 'center',
   },
@@ -392,22 +392,22 @@ const styles = StyleSheet.create({
     position: 'absolute', bottom: 10, right: 10,
   },
   playButton: {
-    width: 44, height: 44, borderRadius: 22,
+    width: 40, height: 40, borderRadius: 20,
     backgroundColor: 'rgba(34,197,94,0.9)',
     alignItems: 'center', justifyContent: 'center',
-    shadowColor: '#22c55e', shadowOpacity: 0.5, shadowRadius: 10,
+    shadowColor: '#22c55e', shadowOpacity: 0.5, shadowRadius: 8,
   },
 
-  matchInfo: { padding: 14 },
-  teamsRow: { flexDirection: 'row', alignItems: 'center', marginBottom: 10 },
-  team: { flex: 1, alignItems: 'center', gap: 6 },
-  teamLogo: { width: 52, height: 52, borderRadius: 26 },
+  matchInfo: { padding: 10 },
+  teamsRow: { flexDirection: 'row', alignItems: 'center', marginBottom: 8 },
+  team: { flex: 1, alignItems: 'center', gap: 4 },
+  teamLogo: { width: 44, height: 44, borderRadius: 22 },
   teamLogoFallback: {
     backgroundColor: '#22c55e20', borderWidth: 1, borderColor: '#22c55e30',
     alignItems: 'center', justifyContent: 'center',
   },
-  teamLogoFallbackText: { color: '#22c55e', fontWeight: '700', fontSize: 20 },
-  teamName: { color: '#e4e4e7', fontWeight: '700', fontSize: 13, textAlign: 'center' },
+  teamLogoFallbackText: { color: '#22c55e', fontWeight: '700', fontSize: 18 },
+  teamName: { color: '#e4e4e7', fontWeight: '700', fontSize: 12, textAlign: 'center' },
   vsContainer: { alignItems: 'center', gap: 4, paddingHorizontal: 8 },
   vsText: { color: '#52525b', fontWeight: '800', fontSize: 13, letterSpacing: 1 },
   sportTag: {
