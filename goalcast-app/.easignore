@@ -4,3 +4,8 @@ ios/
 .expo/
 dist/
 web-build/
+temp-app/
+build.json
+build.txt
+build2.json
+eas_log.txt
