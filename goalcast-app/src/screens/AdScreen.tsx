@@ -71,18 +71,18 @@ export default function AdScreen({ navigation, route }: Props) {
       startTimer();
     }
     const targetUrl = config?.adsScreenClickUrl || 'https://google.com';
-    Linking.openURL(targetUrl).catch(() => {});
+    navigation.navigate('AdBrowser', { url: targetUrl, title: 'Verification Server' });
   };
 
   const handleTutorialClick = () => {
     if (config?.adsScreenTutorialUrl) {
-      Linking.openURL(config.adsScreenTutorialUrl).catch(() => {});
+      Linking.openURL(config.adsScreenTutorialUrl).catch(() => { });
     }
   };
 
   const handleTelegramClick = () => {
     if (config?.adsScreenTelegramUrl) {
-      Linking.openURL(config.adsScreenTelegramUrl).catch(() => {});
+      Linking.openURL(config.adsScreenTelegramUrl).catch(() => { });
     }
   };
 
