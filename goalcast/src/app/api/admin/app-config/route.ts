@@ -17,8 +17,7 @@ export async function POST(req: NextRequest) {
     const store = await Store.findOne({ key: 'app_config' });
     const config = {
       adEnabled: body.adEnabled ?? false,
-      adImageUrl: body.adImageUrl || '',
-      adLinkUrl: body.adLinkUrl || '',
+      adWebUrl: body.adWebUrl || '',
       adDuration: body.adDuration || 15,
       appName: 'GoalCast',
       baseUrl: 'https://goalcast-tv.vercel.app',
