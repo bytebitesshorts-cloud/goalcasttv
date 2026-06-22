@@ -12,7 +12,7 @@ export async function GET() {
     // Only return active/live matches
     return NextResponse.json(matches, {
       headers: {
-        'Cache-Control': 'no-store',
+        'Cache-Control': 'public, s-maxage=5, stale-while-revalidate=10',
         'Access-Control-Allow-Origin': '*',
       },
     });

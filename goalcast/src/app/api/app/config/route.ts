@@ -28,7 +28,7 @@ export async function GET() {
     const config = { ...defaultConfig, ...(store?.data || {}) };
     return NextResponse.json(config, {
       headers: {
-        'Cache-Control': 'no-store',
+        'Cache-Control': 'public, s-maxage=10, stale-while-revalidate=15',
         'Access-Control-Allow-Origin': '*',
       },
     });
