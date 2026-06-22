@@ -50,6 +50,16 @@ export default function AdminMatchesPage() {
     adEnabled: false,
     adWebUrl: '',
     adDuration: 15,
+    adsScreenEnabled: false,
+    adsScreenHeadline: 'Activate Your Stream - Supporting Goalcast-TV',
+    adsScreenSubheadline: 'Follow steps to access the video server',
+    adsScreenClickUrl: '',
+    adsScreenImageUrl: '',
+    adsScreenTutorialUrl: '',
+    adsScreenTelegramUrl: '',
+    adsScreenDuration: 15,
+    announcementText: '',
+    announcementEnabled: false,
   });
   const [savingAd, setSavingAd] = useState(false);
 
@@ -76,6 +86,16 @@ export default function AdminMatchesPage() {
         adEnabled: data.adEnabled || false,
         adWebUrl: data.adWebUrl || '',
         adDuration: data.adDuration || 15,
+        adsScreenEnabled: data.adsScreenEnabled || false,
+        adsScreenHeadline: data.adsScreenHeadline || 'Activate Your Stream - Supporting Goalcast-TV',
+        adsScreenSubheadline: data.adsScreenSubheadline || 'Follow steps to access the video server',
+        adsScreenClickUrl: data.adsScreenClickUrl || '',
+        adsScreenImageUrl: data.adsScreenImageUrl || '',
+        adsScreenTutorialUrl: data.adsScreenTutorialUrl || '',
+        adsScreenTelegramUrl: data.adsScreenTelegramUrl || '',
+        adsScreenDuration: data.adsScreenDuration || 15,
+        announcementText: data.announcementText || '',
+        announcementEnabled: data.announcementEnabled || false,
       });
     }
   }, []);
@@ -214,6 +234,112 @@ export default function AdminMatchesPage() {
               className="flex items-center gap-2 px-5 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-white font-semibold rounded-xl transition-all text-sm shadow-lg shadow-emerald-500/20 disabled:opacity-50">
               <Save className="w-4 h-4" />
               {savingAd ? 'Saving…' : 'Save Ad Settings'}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* ── Ads Screen Mobile Settings ── */}
+      <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6">
+        <h2 className="text-lg font-bold text-white flex items-center gap-2 mb-5">
+          <Tv className="w-5 h-5 text-emerald-400" /> Ads Screen Mobile Settings
+          <span className="text-xs font-normal text-zinc-500 ml-1">(shown as custom verification screen in mobile app)</span>
+        </h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="sm:col-span-2 flex items-center justify-between p-4 bg-zinc-800/40 rounded-xl border border-zinc-700">
+            <div>
+              <span className="block text-sm font-medium text-zinc-200">Enable Custom Verification Screen</span>
+              <span className="text-xs text-zinc-500">Require users to click ad and wait for timer to unlock stream</span>
+            </div>
+            <label className="relative inline-flex items-center cursor-pointer">
+              <input type="checkbox" checked={adConfig.adsScreenEnabled}
+                onChange={e => setAdConfig(a => ({ ...a, adsScreenEnabled: e.target.checked }))}
+                className="sr-only peer" />
+              <div className="w-11 h-6 bg-zinc-700 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500" />
+            </label>
+          </div>
+          <div>
+            <label className="block text-xs font-medium text-zinc-400 mb-1.5 uppercase tracking-wider">Headline</label>
+            <input value={adConfig.adsScreenHeadline}
+              onChange={e => setAdConfig(a => ({ ...a, adsScreenHeadline: e.target.value }))}
+              placeholder="Activate Your Stream - Supporting Goalcast-TV"
+              className="w-full bg-zinc-800/50 border border-zinc-700 rounded-xl px-3 py-2.5 text-white placeholder-zinc-600 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/40" />
+          </div>
+          <div>
+            <label className="block text-xs font-medium text-zinc-400 mb-1.5 uppercase tracking-wider">Sub-Headline</label>
+            <input value={adConfig.adsScreenSubheadline}
+              onChange={e => setAdConfig(a => ({ ...a, adsScreenSubheadline: e.target.value }))}
+              placeholder="Follow steps to access the video server"
+              className="w-full bg-zinc-800/50 border border-zinc-700 rounded-xl px-3 py-2.5 text-white placeholder-zinc-600 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/40" />
+          </div>
+          <div className="sm:col-span-2">
+            <label className="block text-xs font-medium text-zinc-400 mb-1.5 uppercase tracking-wider">Click Here Target Ad URL</label>
+            <input value={adConfig.adsScreenClickUrl}
+              onChange={e => setAdConfig(a => ({ ...a, adsScreenClickUrl: e.target.value }))}
+              placeholder="https://example.com/your-ad-link"
+              className="w-full bg-zinc-800/50 border border-zinc-700 rounded-xl px-3 py-2.5 text-white placeholder-zinc-600 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/40" />
+          </div>
+          <div>
+            <label className="block text-xs font-medium text-zinc-400 mb-1.5 uppercase tracking-wider">Video Tutorial URL</label>
+            <input value={adConfig.adsScreenTutorialUrl}
+              onChange={e => setAdConfig(a => ({ ...a, adsScreenTutorialUrl: e.target.value }))}
+              placeholder="https://youtube.com/..."
+              className="w-full bg-zinc-800/50 border border-zinc-700 rounded-xl px-3 py-2.5 text-white placeholder-zinc-600 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/40" />
+          </div>
+          <div>
+            <label className="block text-xs font-medium text-zinc-400 mb-1.5 uppercase tracking-wider">Telegram Channel URL</label>
+            <input value={adConfig.adsScreenTelegramUrl}
+              onChange={e => setAdConfig(a => ({ ...a, adsScreenTelegramUrl: e.target.value }))}
+              placeholder="https://t.me/..."
+              className="w-full bg-zinc-800/50 border border-zinc-700 rounded-xl px-3 py-2.5 text-white placeholder-zinc-600 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/40" />
+          </div>
+          <div>
+            <label className="block text-xs font-medium text-zinc-400 mb-1.5 uppercase tracking-wider">Verification Timer (seconds)</label>
+            <input type="number" value={adConfig.adsScreenDuration} min={5} max={60}
+              onChange={e => setAdConfig(a => ({ ...a, adsScreenDuration: parseInt(e.target.value) || 15 }))}
+              className="w-full bg-zinc-800/50 border border-zinc-700 rounded-xl px-3 py-2.5 text-white text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/40" />
+          </div>
+          <div className="flex items-end">
+            <button onClick={saveAdConfig} disabled={savingAd}
+              className="flex items-center gap-2 px-5 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-white font-semibold rounded-xl transition-all text-sm shadow-lg shadow-emerald-500/20 disabled:opacity-50">
+              <Save className="w-4 h-4" />
+              {savingAd ? 'Saving…' : 'Save Ads Screen Settings'}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* ── App Announcement Settings ── */}
+      <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6">
+        <h2 className="text-lg font-bold text-white flex items-center gap-2 mb-5">
+          <AlertCircle className="w-5 h-5 text-emerald-400" /> App Announcement Settings
+          <span className="text-xs font-normal text-zinc-500 ml-1">(shown as bullet notification/ticker in mobile app)</span>
+        </h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="sm:col-span-2 flex items-center justify-between p-4 bg-zinc-800/40 rounded-xl border border-zinc-700">
+            <div>
+              <span className="block text-sm font-medium text-zinc-200">Enable Announcement Ticker</span>
+              <span className="text-xs text-zinc-500">Show notification bar under header in mobile app</span>
+            </div>
+            <label className="relative inline-flex items-center cursor-pointer">
+              <input type="checkbox" checked={adConfig.announcementEnabled}
+                onChange={e => setAdConfig(a => ({ ...a, announcementEnabled: e.target.checked }))}
+                className="sr-only peer" />
+              <div className="w-11 h-6 bg-zinc-700 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500" />
+            </label>
+          </div>
+          <div className="sm:col-span-2">
+            <label className="block text-xs font-medium text-zinc-400 mb-1.5 uppercase tracking-wider">Announcement Text</label>
+            <textarea value={adConfig.announcementText} rows={2}
+              onChange={e => setAdConfig(a => ({ ...a, announcementText: e.target.value }))}
+              placeholder="Enter ticker message here..."
+              className="w-full bg-zinc-800/50 border border-zinc-700 rounded-xl px-3 py-2 text-white placeholder-zinc-600 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/40" />
+          </div>
+          <div className="flex items-end">
+            <button onClick={saveAdConfig} disabled={savingAd}
+              className="flex items-center gap-2 px-5 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-white font-semibold rounded-xl transition-all text-sm shadow-lg shadow-emerald-500/20 disabled:opacity-50">
+              <Save className="w-4 h-4" />
+              {savingAd ? 'Saving…' : 'Save Announcement'}
             </button>
           </div>
         </div>
