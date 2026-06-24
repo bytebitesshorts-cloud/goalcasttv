@@ -12,6 +12,8 @@ import com.facebook.react.defaults.DefaultReactActivityDelegate
 
 import expo.modules.ReactActivityDelegateWrapper
 
+import com.goalcast.app.BuildConfig
+
 class MainActivity : ReactActivity() {
   companion object {
     var isPipEnabled: Boolean = false
