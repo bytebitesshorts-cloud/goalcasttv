@@ -41,7 +41,7 @@ export interface AppConfig {
 
 export async function fetchMatches(): Promise<Match[]> {
   try {
-    const res = await fetch(`${BASE_URL}/api/app/matches`, { cache: 'no-store' });
+    const res = await fetch(`${BASE_URL}/api/app/matches?t=${Date.now()}`, { cache: 'no-store' });
     if (!res.ok) return [];
     return await res.json();
   } catch {
@@ -51,7 +51,7 @@ export async function fetchMatches(): Promise<Match[]> {
 
 export async function fetchConfig(): Promise<AppConfig> {
   try {
-    const res = await fetch(`${BASE_URL}/api/app/config`, { cache: 'no-store' });
+    const res = await fetch(`${BASE_URL}/api/app/config?t=${Date.now()}`, { cache: 'no-store' });
     if (!res.ok) throw new Error('Failed');
     return await res.json();
   } catch {

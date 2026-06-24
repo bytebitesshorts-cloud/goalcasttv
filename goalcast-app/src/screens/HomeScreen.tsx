@@ -111,6 +111,10 @@ export default function HomeScreen({ navigation }: { navigation: any }) {
       return new Date(m.endsAt).getTime() > currentTime;
     }
     return true;
+  }).sort((a, b) => {
+    if (a.isLive && !b.isLive) return -1;
+    if (!a.isLive && b.isLive) return 1;
+    return 0;
   });
 
   const handleMatchPress = (match: Match) => {
@@ -190,13 +194,11 @@ export default function HomeScreen({ navigation }: { navigation: any }) {
           </View>
         </View>
 
-        {/* Title & Servers under VS layout if it has thumbnail */}
-        {hasThumbnail && (
-          <View style={styles.matchMetaInfo}>
-            <Text style={styles.matchTitle} numberOfLines={1}>{match.title}</Text>
-            <Text style={styles.serverCount}>{match.streams?.length || 0} server{(match.streams?.length || 0) !== 1 ? 's' : ''} available</Text>
-          </View>
-        )}
+        {/* Title & Servers under VS layout */}
+        <View style={styles.matchMetaInfo}>
+          <Text style={styles.matchTitle} numberOfLines={1}>{match.title}</Text>
+          <Text style={styles.serverCount}>{match.streams?.length || 0} server{(match.streams?.length || 0) !== 1 ? 's' : ''} available</Text>
+        </View>
       </TouchableOpacity>
     );
   };
@@ -209,15 +211,15 @@ export default function HomeScreen({ navigation }: { navigation: any }) {
       <LinearGradient colors={['#0a0a0a', '#0f1a0f']} style={styles.header}>
         <View style={styles.headerContent}>
           <View style={styles.logo}>
-            <Ionicons name="football" size={22} color="#22c55e" />
+            <Ionicons name="football" size={16} color="#22c55e" />
             <Text style={styles.logoText}>Goal<Text style={{ color: '#22c55e' }}>Cast</Text></Text>
           </View>
           <View style={styles.headerActions}>
             <TouchableOpacity onPress={() => load()} style={styles.refreshBtn}>
-              <Ionicons name="refresh" size={20} color="#71717a" />
+              <Ionicons name="refresh" size={14} color="#71717a" />
             </TouchableOpacity>
             <TouchableOpacity onPress={() => toggleDrawer(true)} style={styles.menuBtn}>
-              <Ionicons name="menu" size={24} color="#22c55e" />
+              <Ionicons name="menu" size={17} color="#22c55e" />
             </TouchableOpacity>
           </View>
         </View>
@@ -338,13 +340,13 @@ export default function HomeScreen({ navigation }: { navigation: any }) {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#0a0a0a' },
-  header: { paddingTop: 32, paddingBottom: 2, paddingHorizontal: 16 },
+  header: { paddingTop: 24, paddingBottom: 2, paddingHorizontal: 12 },
   headerContent: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
-  logo: { flexDirection: 'row', alignItems: 'center', gap: 8 },
-  logoText: { fontSize: 22, fontWeight: '800', color: '#fff', letterSpacing: -0.5 },
-  headerActions: { flexDirection: 'row', alignItems: 'center', gap: 6 },
-  refreshBtn: { padding: 6 },
-  menuBtn: { padding: 6 },
+  logo: { flexDirection: 'row', alignItems: 'center', gap: 6 },
+  logoText: { fontSize: 16, fontWeight: '800', color: '#fff', letterSpacing: -0.5 },
+  headerActions: { flexDirection: 'row', alignItems: 'center', gap: 4 },
+  refreshBtn: { padding: 4 },
+  menuBtn: { padding: 4 },
 
   // Announcement Bar Style
   announcementBar: {

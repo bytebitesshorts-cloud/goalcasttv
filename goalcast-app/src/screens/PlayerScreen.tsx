@@ -122,14 +122,36 @@ export default function PlayerScreen({ navigation, route }: Props) {
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    html, body { width: 100%; height: 100%; background: #000; overflow: hidden; }
+    html, body { width: 100%; height: 100%; background: #000; overflow: hidden; position: relative; }
     video { width: 100%; height: 100%; object-fit: contain; background: #000; }
+    #qual-wrapper {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      z-index: 9999;
+      display: none;
+    }
+    #qual-select {
+      background: rgba(0, 0, 0, 0.7);
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 6px;
+      padding: 5px 10px;
+      font-size: 11px;
+      font-weight: bold;
+      font-family: sans-serif;
+      outline: none;
+      cursor: pointer;
+    }
   </style>
   <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
   <script src="https://cdn.jsdelivr.net/npm/dashjs@latest/dist/dash.all.min.js"></script>
 </head>
 <body>
   <video id="v" controls autoplay playsinline></video>
+  <div id="qual-wrapper">
+    <select id="qual-select"></select>
+  </div>
   <script>
     var v = document.getElementById('v');
     var src = '${server.url}';
@@ -163,9 +185,43 @@ export default function PlayerScreen({ navigation, route }: Props) {
         var hls = new Hls({ lowLatencyMode: true });
         hls.loadSource(src);
         hls.attachMedia(v);
-        hls.on(Hls.Events.MANIFEST_PARSED, function() { 
+        
+        var select = document.getElementById('qual-select');
+        var wrapper = document.getElementById('qual-wrapper');
+
+        hls.on(Hls.Events.MANIFEST_PARSED, function(event, data) { 
           v.play().catch(function() { sendMsg('error'); }); 
+          
+          var levels = hls.levels;
+          if (levels && levels.length > 1) {
+            select.innerHTML = '';
+            var optAuto = document.createElement('option');
+            optAuto.value = '-1';
+            optAuto.text = 'Auto';
+            select.appendChild(optAuto);
+            
+            levels.forEach(function(level, index) {
+              var opt = document.createElement('option');
+              opt.value = index;
+              opt.text = level.height ? level.height + 'p' : Math.round(level.bitrate / 1000) + 'k';
+              select.appendChild(opt);
+            });
+            wrapper.style.display = 'block';
+          }
         });
+
+        select.addEventListener('change', function() {
+          hls.currentLevel = parseInt(this.value);
+        });
+
+        hls.on(Hls.Events.LEVEL_SWITCHED, function(event, data) {
+          if (hls.autoLevelEnabled) {
+            select.value = '-1';
+          } else {
+            select.value = data.level;
+          }
+        });
+
         hls.on(Hls.Events.ERROR, function(event, data) {
           if (data.fatal) {
             sendMsg('error');
