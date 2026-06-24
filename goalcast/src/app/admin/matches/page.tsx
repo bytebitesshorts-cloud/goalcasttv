@@ -16,6 +16,9 @@ interface Match {
   id: string;
   title: string;
   sport: string;
+  league?: string;
+  isTemporary?: boolean;
+  endsAt?: string;
   teamA: { name: string; logo: string };
   teamB: { name: string; logo: string };
   thumbnail: string;
@@ -29,6 +32,9 @@ const SPORTS = ['Football', 'Cricket', 'Basketball', 'Tennis', 'Rugby', 'Hockey'
 const EMPTY_MATCH = {
   title: '',
   sport: 'Football',
+  league: '',
+  isTemporary: false,
+  endsAt: '',
   teamA: { name: '', logo: '' },
   teamB: { name: '', logo: '' },
   thumbnail: '',
@@ -121,11 +127,15 @@ export default function AdminMatchesPage() {
   }
 
   async function saveMatch() {
+    const preparedData = {
+      ...formData,
+      endsAt: formData.isTemporary && formData.endsAt ? new Date(formData.endsAt).toISOString() : '',
+    };
     if (modalMode === 'add') {
       const r = await fetch('/api/admin/matches', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(preparedData),
       });
       if (r.ok) { showToast('Match added!'); setModalMode(null); load(); }
       else showToast('Failed to add match', 'error');
@@ -133,7 +143,7 @@ export default function AdminMatchesPage() {
       const r = await fetch(`/api/admin/matches/${editId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(preparedData),
       });
       if (r.ok) { showToast('Match updated!'); setModalMode(null); load(); }
       else showToast('Failed to update match', 'error');
@@ -155,12 +165,25 @@ export default function AdminMatchesPage() {
   }
 
   function openEdit(m: Match) {
+    let formattedEndsAt = '';
+    if (m.endsAt) {
+      try {
+        const d = new Date(m.endsAt);
+        const tzoffset = d.getTimezoneOffset() * 60000;
+        formattedEndsAt = new Date(d.getTime() - tzoffset).toISOString().slice(0, 16);
+      } catch (e) {
+        formattedEndsAt = '';
+      }
+    }
     setFormData({
       title: m.title,
       sport: m.sport,
-      teamA: m.teamA,
-      teamB: m.teamB,
-      thumbnail: m.thumbnail,
+      league: m.league || '',
+      isTemporary: m.isTemporary || false,
+      endsAt: formattedEndsAt,
+      teamA: m.teamA || { name: '', logo: '' },
+      teamB: m.teamB || { name: '', logo: '' },
+      thumbnail: m.thumbnail || '',
       isLive: m.isLive,
       streams: m.streams?.length ? m.streams : [{ label: 'Server 1', url: '', embedCode: '' }],
     });
@@ -391,11 +414,17 @@ export default function AdminMatchesPage() {
                       )}
                     </div>
                     <div className="flex items-center gap-3 mt-0.5">
-                      <span className="text-xs text-zinc-500">{m.sport}</span>
+                      <span className="text-xs text-zinc-500">{m.sport}{m.league ? ` (${m.league})` : ''}</span>
                       <span className="text-xs text-zinc-600">·</span>
                       <span className="text-xs text-zinc-500">{m.teamA?.name} vs {m.teamB?.name}</span>
                       <span className="text-xs text-zinc-600">·</span>
                       <span className="text-xs text-zinc-500">{m.streams?.length || 0} server{(m.streams?.length || 0) !== 1 ? 's' : ''}</span>
+                      {m.isTemporary && (
+                        <>
+                          <span className="text-xs text-zinc-600">·</span>
+                          <span className="text-[10px] text-amber-400 bg-amber-400/10 px-1.5 py-0.5 rounded border border-amber-400/20 font-medium">Temporary</span>
+                        </>
+                      )}
                     </div>
                   </div>
                   <div className="flex items-center gap-1 shrink-0">
@@ -458,7 +487,14 @@ export default function AdminMatchesPage() {
                     </select>
                   </div>
                   <div>
-                    <label className="block text-xs font-medium text-zinc-400 mb-1.5 uppercase tracking-wider">Thumbnail URL</label>
+                    <label className="block text-xs font-medium text-zinc-400 mb-1.5 uppercase tracking-wider">League / Tournament</label>
+                    <input value={formData.league}
+                      onChange={e => setFormData(f => ({ ...f, league: e.target.value }))}
+                      placeholder="e.g. World Cup 2026 - Round 2"
+                      className="w-full bg-zinc-800/50 border border-zinc-700 rounded-xl px-3 py-2.5 text-white placeholder-zinc-600 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/40" />
+                  </div>
+                  <div className="sm:col-span-2">
+                    <label className="block text-xs font-medium text-zinc-400 mb-1.5 uppercase tracking-wider">Thumbnail URL (Leave empty for compact card view)</label>
                     <input value={formData.thumbnail}
                       onChange={e => setFormData(f => ({ ...f, thumbnail: e.target.value }))}
                       placeholder="https://..."
@@ -554,6 +590,51 @@ export default function AdminMatchesPage() {
                     className="sr-only peer" />
                   <div className="w-11 h-6 bg-zinc-700 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500" />
                 </label>
+              </div>
+
+              {/* Temporary Match Expiry */}
+              <div className="bg-zinc-800/30 border border-zinc-800 rounded-xl p-4 space-y-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <span className="block text-sm font-medium text-zinc-200">One-Night / Temporary Match</span>
+                    <span className="text-xs text-zinc-500">Enable automatic countdown timer in the app</span>
+                  </div>
+                  <label className="relative inline-flex items-center cursor-pointer">
+                    <input type="checkbox" checked={formData.isTemporary}
+                      onChange={e => setFormData(f => ({ ...f, isTemporary: e.target.checked }))}
+                      className="sr-only peer" />
+                    <div className="w-11 h-6 bg-zinc-700 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500" />
+                  </label>
+                </div>
+                {formData.isTemporary && (
+                  <div className="space-y-3">
+                    <div>
+                      <label className="block text-xs font-medium text-zinc-400 mb-1.5 uppercase tracking-wider">Expiration Date & Time *</label>
+                      <input type="datetime-local" value={formData.endsAt}
+                        onChange={e => setFormData(f => ({ ...f, endsAt: e.target.value }))}
+                        className="w-full bg-zinc-800/50 border border-zinc-700 rounded-xl px-3 py-2.5 text-white text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/40" />
+                    </div>
+                    <div className="flex flex-wrap gap-2 pt-1">
+                      <span className="text-xs text-zinc-500 flex items-center mr-1">Quick Add:</span>
+                      {[1, 2, 3, 6, 12, 24].map(hours => (
+                        <button
+                          key={hours}
+                          type="button"
+                          onClick={() => {
+                            const d = new Date();
+                            d.setHours(d.getHours() + hours);
+                            const tzoffset = d.getTimezoneOffset() * 60000;
+                            const localISOTime = (new Date(d.getTime() - tzoffset)).toISOString().slice(0, 16);
+                            setFormData(f => ({ ...f, endsAt: localISOTime }));
+                          }}
+                          className="px-2 py-1 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-xs font-semibold rounded-lg border border-zinc-700 transition-colors"
+                        >
+                          +{hours}h
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
 

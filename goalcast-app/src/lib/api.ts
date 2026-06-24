@@ -10,6 +10,9 @@ export interface Match {
   id: string;
   title: string;
   sport: string;
+  league?: string;
+  isTemporary?: boolean;
+  endsAt?: string;
   teamA: { name: string; logo: string };
   teamB: { name: string; logo: string };
   thumbnail: string;

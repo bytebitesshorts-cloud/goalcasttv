@@ -17,12 +17,28 @@ const INFO_TEXTS = {
   terms: `Welcome to Goalcast-TV. By using our application, you agree to comply with the following terms:\n\n1. Content Streams: All video feeds and streams are retrieved from publicly available web sources. Goalcast-TV does not host any streams or media files on its servers.\n\n2. External Links: Clicking on ads or external buttons will redirect you to third-party web content. We are not responsible for the safety, reliability, or terms of third-party websites.\n\n3. Prohibited Use: You may not attempt to reverse-engineer, modify, or distribute the app's contents without authorization.\n\nEnjoy the games!`,
 };
 
+const getRemainingTime = (endsAt?: string, currentMs: number = Date.now()) => {
+  if (!endsAt) return '';
+  const diff = new Date(endsAt).getTime() - currentMs;
+  if (diff <= 0) return 'Ended';
+  
+  const secs = Math.floor(diff / 1000);
+  const hours = Math.floor(secs / 3600);
+  const mins = Math.floor((secs % 3600) / 60);
+  const remainingSecs = secs % 60;
+  
+  const pad = (num: number) => String(num).padStart(2, '0');
+  
+  return `${pad(hours)}:${pad(mins)}:${pad(remainingSecs)}`;
+};
+
 export default function HomeScreen({ navigation }: { navigation: any }) {
   const [matches, setMatches] = useState<Match[]>([]);
   const [config, setConfig] = useState<AppConfig | null>(null);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [activeCategory, setActiveCategory] = useState('All');
+  const [currentTime, setCurrentTime] = useState(Date.now());
 
   // Sidebar & Info Modal state
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -63,6 +79,13 @@ export default function HomeScreen({ navigation }: { navigation: any }) {
     return () => clearInterval(interval);
   }, [load]);
 
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(Date.now());
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
+
   const getCategoryCount = (category: string) => {
     if (category === 'All') return matches.length;
     return matches.filter(m => m.sport === category).length;
@@ -80,85 +103,103 @@ export default function HomeScreen({ navigation }: { navigation: any }) {
     }
   };
 
-  const filtered = activeCategory === 'All'
+  const filtered = (activeCategory === 'All'
     ? matches
-    : matches.filter(m => m.sport === activeCategory);
+    : matches.filter(m => m.sport === activeCategory)
+  ).filter(m => {
+    if (m.isTemporary && m.endsAt) {
+      return new Date(m.endsAt).getTime() > currentTime;
+    }
+    return true;
+  });
 
   const handleMatchPress = (match: Match) => {
     navigation.navigate('Ad', { match, config });
   };
 
-  const renderMatch = ({ item: match }: { item: Match }) => (
-    <TouchableOpacity
-      style={styles.matchCard}
-      onPress={() => handleMatchPress(match)}
-      activeOpacity={0.85}
-    >
-      {/* Thumbnail */}
-      <View style={styles.thumbnailContainer}>
-        {match.thumbnail ? (
-          <Image source={{ uri: match.thumbnail }} style={styles.thumbnail} resizeMode="cover" />
-        ) : (
-          <LinearGradient colors={['#1a2a1a', '#0a1a0a']} style={styles.thumbnail}>
-            <Ionicons name="football" size={40} color="#22c55e" />
-          </LinearGradient>
-        )}
-        {/* LIVE badge */}
-        {match.isLive && (
-          <View style={styles.liveBadge}>
-            <View style={styles.liveDot} />
-            <Text style={styles.liveText}>LIVE</Text>
+  const renderMatch = ({ item: match }: { item: Match }) => {
+    const remaining = match.isTemporary ? getRemainingTime(match.endsAt, currentTime) : '';
+    const hasThumbnail = !!match.thumbnail;
+
+    return (
+      <TouchableOpacity
+        style={[styles.matchCard, !hasThumbnail && styles.compactCard]}
+        onPress={() => handleMatchPress(match)}
+        activeOpacity={0.85}
+      >
+        {/* Card Header (Matches the reference image style) */}
+        <View style={styles.cardHeader}>
+          <View style={styles.headerLeft}>
+            <Text style={styles.leagueText} numberOfLines={1}>
+              🏆 {match.sport}{match.league ? ` || ${match.league}` : ''}
+            </Text>
           </View>
-        )}
-        {/* Play button overlay */}
-        <View style={styles.playOverlay}>
-          <View style={styles.playButton}>
-            <Ionicons name="play" size={22} color="#fff" />
+          <View style={styles.headerRight}>
+            {match.isTemporary && remaining !== 'Ended' && remaining !== '' && (
+              <Text style={styles.countdownText}>{remaining}</Text>
+            )}
+            {match.isLive && (
+              <View style={styles.liveBadgeCapsule}>
+                <View style={styles.liveDotWhite} />
+                <Text style={styles.liveTextWhite}>LIVE</Text>
+              </View>
+            )}
           </View>
         </View>
-      </View>
 
-      {/* Match info */}
-      <View style={styles.matchInfo}>
-        {/* Teams */}
-        <View style={styles.teamsRow}>
+        {/* Thumbnail if present */}
+        {hasThumbnail && (
+          <View style={styles.thumbnailContainer}>
+            <Image source={{ uri: match.thumbnail }} style={styles.thumbnail} resizeMode="cover" />
+            {/* Play button overlay */}
+            <View style={styles.playOverlay}>
+              <View style={styles.playButton}>
+                <Ionicons name="play" size={22} color="#fff" />
+              </View>
+            </View>
+          </View>
+        )}
+
+        {/* Card Body - Teams VS Layout */}
+        <View style={[styles.vsLayoutRow, hasThumbnail && styles.vsLayoutRowWithThumbnail]}>
           {/* Team A */}
-          <View style={styles.team}>
+          <View style={styles.teamLeft}>
             {match.teamA?.logo ? (
-              <Image source={{ uri: match.teamA.logo }} style={styles.teamLogo} resizeMode="contain" />
+              <Image source={{ uri: match.teamA.logo }} style={styles.circularLogo} resizeMode="contain" />
             ) : (
-              <View style={[styles.teamLogo, styles.teamLogoFallback]}>
+              <View style={styles.circularLogoFallback}>
                 <Text style={styles.teamLogoFallbackText}>{match.teamA?.name?.[0] || '?'}</Text>
               </View>
             )}
-            <Text style={styles.teamName} numberOfLines={1}>{match.teamA?.name}</Text>
+            <Text style={styles.teamText} numberOfLines={1}>{match.teamA?.name}</Text>
           </View>
 
           {/* VS */}
-          <View style={styles.vsContainer}>
-            <Text style={styles.vsText}>VS</Text>
-            <Text style={styles.sportTag}>{match.sport}</Text>
-          </View>
+          <Text style={styles.vsTextCenter}>VS</Text>
 
           {/* Team B */}
-          <View style={styles.team}>
+          <View style={styles.teamRight}>
             {match.teamB?.logo ? (
-              <Image source={{ uri: match.teamB.logo }} style={styles.teamLogo} resizeMode="contain" />
+              <Image source={{ uri: match.teamB.logo }} style={styles.circularLogo} resizeMode="contain" />
             ) : (
-              <View style={[styles.teamLogo, styles.teamLogoFallback]}>
+              <View style={styles.circularLogoFallback}>
                 <Text style={styles.teamLogoFallbackText}>{match.teamB?.name?.[0] || '?'}</Text>
               </View>
             )}
-            <Text style={styles.teamName} numberOfLines={1}>{match.teamB?.name}</Text>
+            <Text style={styles.teamText} numberOfLines={1}>{match.teamB?.name}</Text>
           </View>
         </View>
 
-        {/* Title & Servers */}
-        <Text style={styles.matchTitle} numberOfLines={1}>{match.title}</Text>
-        <Text style={styles.serverCount}>{match.streams?.length || 0} server{(match.streams?.length || 0) !== 1 ? 's' : ''} available</Text>
-      </View>
-    </TouchableOpacity>
-  );
+        {/* Title & Servers under VS layout if it has thumbnail */}
+        {hasThumbnail && (
+          <View style={styles.matchMetaInfo}>
+            <Text style={styles.matchTitle} numberOfLines={1}>{match.title}</Text>
+            <Text style={styles.serverCount}>{match.streams?.length || 0} server{(match.streams?.length || 0) !== 1 ? 's' : ''} available</Text>
+          </View>
+        )}
+      </TouchableOpacity>
+    );
+  };
 
   return (
     <View style={styles.container}>
@@ -418,10 +459,125 @@ const styles = StyleSheet.create({
   matchTitle: { color: '#a1a1aa', fontSize: 12, marginTop: 2 },
   serverCount: { color: '#22c55e', fontSize: 11, fontWeight: '600', marginTop: 4 },
 
-  centered: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 12 },
-  loadingText: { color: '#52525b', fontSize: 14 },
-  emptyText: { color: '#52525b', fontSize: 18, fontWeight: '700' },
-  emptySubText: { color: '#3f3f46', fontSize: 13 },
+  compactCard: {
+    backgroundColor: '#121824',
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: '#1f293d',
+    padding: 16,
+  },
+  cardHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    borderBottomWidth: 1,
+    borderBottomColor: '#1f293d',
+    paddingBottom: 10,
+    marginBottom: 12,
+  },
+  headerLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    flex: 1,
+  },
+  headerRight: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  leagueText: {
+    color: '#94a3b8',
+    fontSize: 12,
+    fontWeight: '700',
+  },
+  countdownText: {
+    color: '#00f5ff',
+    fontSize: 12,
+    fontWeight: '700',
+    marginHorizontal: 8,
+  },
+  liveBadgeCapsule: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#ef4444',
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: 12,
+    gap: 4,
+  },
+  liveDotWhite: {
+    width: 6,
+    height: 6,
+    borderRadius: 3,
+    backgroundColor: '#fff',
+  },
+  liveTextWhite: {
+    color: '#fff',
+    fontSize: 10,
+    fontWeight: '800',
+    letterSpacing: 0.5,
+  },
+  vsLayoutRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingVertical: 4,
+  },
+  vsLayoutRowWithThumbnail: {
+    paddingHorizontal: 10,
+    paddingTop: 10,
+    paddingBottom: 6,
+  },
+  teamLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    flex: 1,
+  },
+  teamRight: {
+    flexDirection: 'row-reverse',
+    alignItems: 'center',
+    gap: 10,
+    flex: 1,
+  },
+  circularLogo: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: '#1f293d',
+  },
+  circularLogoFallback: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: '#22c55e20',
+    borderWidth: 1,
+    borderColor: '#22c55e30',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  teamText: {
+    color: '#fff',
+    fontWeight: '700',
+    fontSize: 13,
+    flexShrink: 1,
+  },
+  vsTextCenter: {
+    color: '#94a3b8',
+    fontWeight: '800',
+    fontSize: 13,
+    width: 40,
+    textAlign: 'center',
+  },
+  matchMetaInfo: {
+    paddingHorizontal: 10,
+    paddingBottom: 10,
+    borderTopWidth: 1,
+    borderTopColor: '#1f293d',
+    paddingTop: 8,
+    marginTop: 4,
+  },
 
   // Drawer / Sidebar styles
   drawerBackdrop: {
@@ -468,4 +624,8 @@ const styles = StyleSheet.create({
   drawerItemText: { fontSize: 14, fontWeight: '600', color: '#e4e4e7' },
   drawerFooter: { paddingVertical: 20, alignItems: 'center' },
   drawerFooterText: { fontSize: 11, color: '#52525b' },
+  centered: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 12 },
+  loadingText: { color: '#52525b', fontSize: 14 },
+  emptyText: { color: '#52525b', fontSize: 18, fontWeight: '700' },
+  emptySubText: { color: '#3f3f46', fontSize: 13 },
 });
