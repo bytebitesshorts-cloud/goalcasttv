@@ -6,6 +6,7 @@ import android.os.Bundle
 
 import com.facebook.react.ReactActivity
 import com.facebook.react.ReactActivityDelegate
+import com.facebook.react.ReactApplication
 import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint.fabricEnabled
 import com.facebook.react.defaults.DefaultReactActivityDelegate
 
@@ -40,6 +41,7 @@ class MainActivity : ReactActivity() {
 
   override fun onPictureInPictureModeChanged(isInPictureInPictureMode: Boolean) {
     super.onPictureInPictureModeChanged(isInPictureInPictureMode)
+    val reactInstanceManager = (application as? ReactApplication)?.reactNativeHost?.reactInstanceManager
     val reactContext = reactInstanceManager?.currentReactContext
     if (reactContext != null) {
       val params = com.facebook.react.bridge.Arguments.createMap().apply {

@@ -14,7 +14,7 @@ class PipModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMod
 
     @ReactMethod
     fun enterPipMode() {
-        val activity = currentActivity
+        val activity = reactApplicationContext.currentActivity
         if (activity != null && android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             try {
                 val params = android.app.PictureInPictureParams.Builder().build()
