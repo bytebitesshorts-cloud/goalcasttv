@@ -1,6 +1,5 @@
 package com.goalcast.app
 
-import android.content.res.Configuration
 import android.app.PictureInPictureParams
 import android.os.Build
 import android.os.Bundle
@@ -39,9 +38,9 @@ class MainActivity : ReactActivity() {
     }
   }
 
-  override fun onPictureInPictureModeChanged(isInPictureInPictureMode: Boolean, newConfig: Configuration) {
-    super.onPictureInPictureModeChanged(isInPictureInPictureMode, newConfig)
-    val reactContext = reactInstanceManager.currentReactContext
+  override fun onPictureInPictureModeChanged(isInPictureInPictureMode: Boolean) {
+    super.onPictureInPictureModeChanged(isInPictureInPictureMode)
+    val reactContext = reactInstanceManager?.currentReactContext
     if (reactContext != null) {
       val params = com.facebook.react.bridge.Arguments.createMap().apply {
         putBoolean("isInPictureInPictureMode", isInPictureInPictureMode)
