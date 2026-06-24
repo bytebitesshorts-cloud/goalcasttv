@@ -28,7 +28,8 @@
       "versionCode": 1,
       "permissions": [
         "INTERNET",
-        "ACCESS_NETWORK_STATE"
+        "ACCESS_NETWORK_STATE",
+        "REQUEST_INSTALL_PACKAGES"
       ]
     },
     "web": {

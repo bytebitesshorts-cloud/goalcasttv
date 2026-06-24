@@ -10,6 +10,7 @@ import AdScreen from './src/screens/AdScreen';
 import PlayerScreen from './src/screens/PlayerScreen';
 import AdBrowserScreen from './src/screens/AdBrowserScreen';
 import ScoresScreen from './src/screens/ScoresScreen';
+import AppUpdater from './src/components/AppUpdater';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -62,13 +63,16 @@ function TabNavigator() {
 
 export default function App() {
   return (
-    <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerShown: false, animation: 'slide_from_bottom' }}>
-        <Stack.Screen name="Tabs" component={TabNavigator} />
-        <Stack.Screen name="Ad" component={AdScreen} />
-        <Stack.Screen name="Player" component={PlayerScreen} options={{ animation: 'slide_from_right' }} />
-        <Stack.Screen name="AdBrowser" component={AdBrowserScreen} options={{ animation: 'slide_from_right' }} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <>
+      <NavigationContainer>
+        <Stack.Navigator screenOptions={{ headerShown: false, animation: 'slide_from_bottom' }}>
+          <Stack.Screen name="Tabs" component={TabNavigator} />
+          <Stack.Screen name="Ad" component={AdScreen} />
+          <Stack.Screen name="Player" component={PlayerScreen} options={{ animation: 'slide_from_right' }} />
+          <Stack.Screen name="AdBrowser" component={AdBrowserScreen} options={{ animation: 'slide_from_right' }} />
+        </Stack.Navigator>
+      </NavigationContainer>
+      <AppUpdater />
+    </>
   );
 }
