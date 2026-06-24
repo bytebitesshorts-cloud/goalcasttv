@@ -14,7 +14,6 @@ web-build/
 .DS_Store
 
 # Android
-android/
 .idea
 .gradle
 local.properties
