@@ -1,6 +1,6 @@
 {
   "expo": {
-    "owner": "bytebitess-organization",
+    "owner": "xprttanvir",
     "name": "Goal Cast",
     "slug": "goal-cast",
     "version": "1.0.0",
@@ -47,7 +47,7 @@
     ],
     "extra": {
       "eas": {
-        "projectId": "de904ab1-de90-4fa6-b88a-e39dabbd4bf1"
+        "projectId": "8252f205-5870-4a21-b0d2-a656713cc4ec"
       }
     }
   }
