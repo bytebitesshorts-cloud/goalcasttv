@@ -24,6 +24,11 @@ export async function GET(req: NextRequest) {
         vpnPopupButtonLink: settings.vpnPopupButtonLink,
         vpnPopupImage: settings.vpnPopupImage,
         showBlogsOnHome: settings.showBlogsOnHome ?? false,
+        appVersionCode: settings.appVersionCode,
+        appVersionName: settings.appVersionName,
+        appApkUrl: settings.appApkUrl,
+        appReleaseNotes: settings.appReleaseNotes,
+        appForceUpdate: settings.appForceUpdate,
       });
     }
     // Never expose credentials in API responses
@@ -59,6 +64,11 @@ export async function PUT(req: NextRequest) {
       ...(body.vpnPopupButtonLink !== undefined && { vpnPopupButtonLink: body.vpnPopupButtonLink }),
       ...(body.vpnPopupImage !== undefined && { vpnPopupImage: body.vpnPopupImage }),
       ...(body.showBlogsOnHome !== undefined && { showBlogsOnHome: body.showBlogsOnHome }),
+      ...(body.appVersionCode !== undefined && { appVersionCode: body.appVersionCode }),
+      ...(body.appVersionName !== undefined && { appVersionName: body.appVersionName }),
+      ...(body.appApkUrl !== undefined && { appApkUrl: body.appApkUrl }),
+      ...(body.appReleaseNotes !== undefined && { appReleaseNotes: body.appReleaseNotes }),
+      ...(body.appForceUpdate !== undefined && { appForceUpdate: body.appForceUpdate }),
     };
 
     if (settingsStore) {

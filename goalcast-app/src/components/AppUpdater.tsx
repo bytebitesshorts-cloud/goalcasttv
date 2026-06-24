@@ -28,7 +28,7 @@ export default function AppUpdater() {
       try {
         // Fetch current setting configurations which contains app update info
         // Fetch current setting configurations which contains app update info
-        const response = await fetch('https://goalcast-tv.vercel.app/version.json');
+        const response = await fetch('https://goalcast-tv.vercel.app/api/app/version?t=' + Date.now());
         if (!response.ok) return;
         const data = await response.json();
 

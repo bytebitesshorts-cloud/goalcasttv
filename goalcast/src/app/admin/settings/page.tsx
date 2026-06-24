@@ -14,6 +14,11 @@ interface SiteSettings {
   vpnPopupButtonText?: string;
   vpnPopupButtonLink?: string;
   vpnPopupImage?: string;
+  appVersionCode?: number;
+  appVersionName?: string;
+  appApkUrl?: string;
+  appReleaseNotes?: string;
+  appForceUpdate?: boolean;
 }
 
 export default function AdminSettingsPage() {
@@ -286,6 +291,100 @@ export default function AdminSettingsPage() {
             className="mt-2 px-4 py-2 text-sm font-medium bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/20 rounded-xl transition-colors disabled:opacity-50"
           >
             Save Popup Details
+          </button>
+        </div>
+      </div>
+
+      {/* App Updates Settings */}
+      <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 space-y-5">
+        <div className="flex items-start gap-3">
+          <div className="w-10 h-10 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center shrink-0">
+            <AlertCircle className="w-5 h-5 text-purple-400" />
+          </div>
+          <div>
+            <h2 className="text-lg font-semibold text-white">Mobile App Updates</h2>
+            <p className="text-sm text-zinc-400 mt-0.5">Push OTA updates to all Android users.</p>
+          </div>
+        </div>
+
+        {/* Force Update Toggle */}
+        <div className="flex items-center justify-between p-4 bg-zinc-800/60 rounded-xl border border-zinc-700/60">
+          <div>
+            <p className="text-sm font-medium text-zinc-200">Force Update</p>
+            <p className="text-xs text-zinc-500 mt-0.5">
+              Require users to update before they can use the app.
+            </p>
+          </div>
+          <button
+            onClick={() => saveSettings({ appForceUpdate: !settings.appForceUpdate })}
+            disabled={saving}
+            className="transition-colors disabled:opacity-50"
+          >
+            {settings.appForceUpdate ? (
+              <ToggleRight className="w-10 h-10 text-purple-400" />
+            ) : (
+              <ToggleLeft className="w-10 h-10 text-zinc-500" />
+            )}
+          </button>
+        </div>
+
+        <div className="space-y-4">
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm text-zinc-400 mb-1">Version Code</label>
+              <input
+                type="number"
+                value={settings.appVersionCode || ''}
+                onChange={e => setSettings(s => ({ ...s, appVersionCode: parseInt(e.target.value) || 1 }))}
+                placeholder="e.g. 2"
+                className="w-full bg-zinc-800 border border-zinc-700 rounded-xl px-4 py-3 text-zinc-200 placeholder-zinc-600 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500/40"
+              />
+            </div>
+            <div>
+              <label className="block text-sm text-zinc-400 mb-1">Version Name</label>
+              <input
+                type="text"
+                value={settings.appVersionName || ''}
+                onChange={e => setSettings(s => ({ ...s, appVersionName: e.target.value }))}
+                placeholder="e.g. 1.0.1"
+                className="w-full bg-zinc-800 border border-zinc-700 rounded-xl px-4 py-3 text-zinc-200 placeholder-zinc-600 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500/40"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-sm text-zinc-400 mb-1">APK Download URL</label>
+            <input
+              type="text"
+              value={settings.appApkUrl || ''}
+              onChange={e => setSettings(s => ({ ...s, appApkUrl: e.target.value }))}
+              placeholder="https://..."
+              className="w-full bg-zinc-800 border border-zinc-700 rounded-xl px-4 py-3 text-zinc-200 placeholder-zinc-600 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500/40"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm text-zinc-400 mb-1">Release Notes</label>
+            <textarea
+              value={settings.appReleaseNotes || ''}
+              onChange={e => setSettings(s => ({ ...s, appReleaseNotes: e.target.value }))}
+              rows={3}
+              placeholder="What's new in this version..."
+              className="w-full bg-zinc-800 border border-zinc-700 rounded-xl px-4 py-3 text-zinc-200 placeholder-zinc-600 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500/40 resize-none"
+            />
+          </div>
+
+          <button
+            onClick={() => saveSettings({
+              appVersionCode: settings.appVersionCode,
+              appVersionName: settings.appVersionName,
+              appApkUrl: settings.appApkUrl,
+              appReleaseNotes: settings.appReleaseNotes,
+            })}
+            disabled={saving}
+            className="mt-2 px-4 py-2 text-sm font-medium bg-purple-500/10 hover:bg-purple-500/20 text-purple-400 border border-purple-500/20 rounded-xl transition-colors disabled:opacity-50"
+          >
+            Save App Update Details
           </button>
         </div>
       </div>
