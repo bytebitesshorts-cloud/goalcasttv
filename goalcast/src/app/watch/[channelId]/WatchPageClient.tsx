@@ -78,8 +78,16 @@ export default function WatchPageClient({
       return;
     }
     if (autoRetryCount >= MAX_AUTO_RETRIES) {
-      // Exhausted auto-retries — show manual buttons, stop countdown
+      // Exhausted auto-retries — automatically switch to the next channel
       setAutoRetryCountdown(null);
+      const currentIndex = allChannels.findIndex(c => c.id === activeStream?.id);
+      const nextCh = (currentIndex !== -1 && currentIndex + 1 < allChannels.length) 
+        ? allChannels[currentIndex + 1] 
+        : allChannels[0];
+      
+      if (nextCh) {
+        handleSwitchChannel(nextCh);
+      }
       return;
     }
 
@@ -355,9 +363,15 @@ export default function WatchPageClient({
                         <RefreshCw className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                         Try Again
                       </button>
-                      {sidebarChannels[0] && (
+                      {allChannels.length > 0 && (
                         <button
-                          onClick={() => handleSwitchChannel(sidebarChannels[0])}
+                          onClick={() => {
+                            const currentIndex = allChannels.findIndex(c => c.id === activeStream?.id);
+                            const nextCh = (currentIndex !== -1 && currentIndex + 1 < allChannels.length) 
+                              ? allChannels[currentIndex + 1] 
+                              : allChannels[0];
+                            if (nextCh) handleSwitchChannel(nextCh);
+                          }}
                           className="flex items-center gap-2 px-4 sm:px-5 py-2 sm:py-2.5 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-200 text-xs sm:text-sm font-semibold transition-all active:scale-95"
                         >
                           <AlertTriangle className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-400" />
