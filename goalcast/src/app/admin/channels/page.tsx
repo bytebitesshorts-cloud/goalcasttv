@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import {
   Plus, Search, Edit2, Trash2, X, Save, Radio,
-  ChevronLeft, ChevronRight, AlertCircle, CheckCircle2, Play, Filter
+  ChevronLeft, ChevronRight, AlertCircle, CheckCircle2, Play, Filter, PowerOff, ShieldCheck
 } from 'lucide-react';
 import VideoPlayer from '@/components/VideoPlayer';
 
@@ -181,6 +181,47 @@ export default function AdminChannelsPage() {
           </div>
         </div>
         <div className="flex items-center gap-2">
+          <button
+            onClick={async () => {
+              if (!confirm('⚠️ This will check ALL active streams and logos. Broken ones will be deactivated or cleared. This might take a minute. Continue?')) return;
+              showToast('Validating streams and logos... Please wait.', 'success');
+              try {
+                const r = await fetch('/api/admin/channels/validate-all', { method: 'POST' });
+                const data = await r.json();
+                if (r.ok) {
+                  showToast(`✅ ${data.message}`, 'success');
+                  load();
+                } else {
+                  showToast(`❌ ${data.error}`, 'error');
+                }
+              } catch (e: any) {
+                showToast(`❌ Validation failed: ${e.message}`, 'error');
+              }
+            }}
+            className="flex items-center gap-2 px-3 py-2.5 bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 border border-blue-500/20 font-semibold rounded-xl transition-all text-sm"
+            title="Validate all streams and logos"
+          >
+            <ShieldCheck className="w-4 h-4" />
+            Validate Streams
+          </button>
+          <button
+            onClick={async () => {
+              if (!confirm('⚠️ This will turn off (deactivate) ALL currently active channels. Continue?')) return;
+              const r = await fetch('/api/admin/channels/turn-off-all', { method: 'POST' });
+              const data = await r.json();
+              if (r.ok) {
+                showToast(`✅ ${data.message}`, 'success');
+                load();
+              } else {
+                showToast(`❌ ${data.error}`, 'error');
+              }
+            }}
+            className="flex items-center gap-2 px-3 py-2.5 bg-orange-500/10 hover:bg-orange-500/20 text-orange-400 border border-orange-500/20 font-semibold rounded-xl transition-all text-sm"
+            title="Turn off all active channels"
+          >
+            <PowerOff className="w-4 h-4" />
+            Turn Off All
+          </button>
           <button
             onClick={async () => {
               if (!confirm('⚠️ This will permanently delete ALL inactive channels from the database. This cannot be undone. Continue?')) return;

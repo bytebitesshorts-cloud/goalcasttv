@@ -1,25 +1,24 @@
-import { getAllCountries } from '@/lib/search';
-import type { Channel } from '@/types';
+import connectDB from '@/lib/db';
+import { Channel } from '@/lib/models/Channel';
+import type { Channel as ChannelType } from '@/types';
 
 /**
  * Get all unique categories present in the database, sorted alphabetically,
  * with 'General' pushed to the end.
  */
 export async function getAllCategories(): Promise<string[]> {
-  const countries = await getAllCountries();
-  const categorySet = new Set<string>();
+  await connectDB();
+  const rawCategories = await Channel.distinct('category', { active: true });
 
-  countries.forEach((country) => {
-    country.channels.forEach((channel) => {
-      if (channel.category) {
-        // Capitalize first letter for consistency
-        const cat = channel.category.charAt(0).toUpperCase() + channel.category.slice(1);
-        categorySet.add(cat);
-      }
-    });
-  });
+  const categorySet = new Set<string>();
+  for (const cat of rawCategories) {
+    if (cat) {
+      categorySet.add(cat.charAt(0).toUpperCase() + cat.slice(1));
+    }
+  }
 
   const categories = Array.from(categorySet).sort();
+
   // Move 'General' to end if exists
   const generalIndex = categories.indexOf('General');
   if (generalIndex > -1) {
@@ -40,18 +39,25 @@ export async function getAllCategories(): Promise<string[]> {
 /**
  * Get all channels globally that match a specific category.
  */
-export async function getChannelsByCategory(category: string): Promise<Channel[]> {
-  const countries = await getAllCountries();
-  const channels: Channel[] = [];
-  const lowerCat = category.toLowerCase();
+export async function getChannelsByCategory(category: string): Promise<ChannelType[]> {
+  await connectDB();
 
-  countries.forEach((country) => {
-    country.channels.forEach((channel) => {
-      if (channel.category && channel.category.toLowerCase() === lowerCat) {
-        channels.push(channel);
-      }
-    });
-  });
+  const channels = await Channel.find({
+    active: true,
+    category: { $regex: new RegExp(`^${category}$`, 'i') },
+  }).lean();
 
-  return channels;
+  return channels.map((ch) => ({
+    id: ch.id,
+    name: ch.name,
+    logo: ch.logo || '',
+    stream: ch.stream || '',
+    embedCode: ch.embedCode || '',
+    category: ch.category || 'Sports',
+    country: ch.country,
+    countryCode: ch.countryCode || '',
+    quality: ch.quality || '',
+    code: ch.code || '',
+    active: ch.active,
+  }));
 }

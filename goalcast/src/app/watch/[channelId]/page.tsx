@@ -93,12 +93,40 @@ export default async function WatchPage({ params }: Props) {
   );
 
   return (
-    <WatchPageClient
-      channel={channel}
-      country={country}
-      allChannels={allChannels}
-      servers={servers}
-      adConfig={adConfig}
-    />
+    <>
+      <WatchPageClient
+        channel={channel}
+        country={country}
+        allChannels={allChannels}
+        servers={servers}
+        adConfig={adConfig}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'BroadcastEvent',
+            name: `${channel.name} Live Stream`,
+            description: `Live sports broadcast of ${channel.name} from ${channel.country}`,
+            isLiveBroadcast: true,
+            videoFormat: 'HD',
+            broadcastOfEvent: {
+              '@type': 'Event',
+              name: `${channel.name} Live Broadcast`,
+            },
+            video: {
+              '@type': 'VideoObject',
+              name: `${channel.name} Live`,
+              description: `Watch ${channel.name} live online`,
+              thumbnailUrl: channel.logo || 'https://goalcast-tv.vercel.app/og-image.png',
+              uploadDate: new Date().toISOString(),
+              contentUrl: (channel as any).url || channel.stream || '',
+              embedUrl: `https://goalcast-tv.vercel.app/watch/${channel.id}`,
+            },
+          }),
+        }}
+      />
+    </>
   );
 }

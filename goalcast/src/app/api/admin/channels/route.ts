@@ -1,77 +1,80 @@
 export const dynamic = 'force-dynamic';
 import { NextRequest, NextResponse } from 'next/server';
 import connectDB from '@/lib/db';
-import { Store } from '@/lib/models';
+import { Channel } from '@/lib/models/Channel';
+import { isAuthenticated } from '@/lib/session';
+import { revalidateTag } from 'next/cache';
 
-function isAuthenticated(req: NextRequest) {
-  return req.cookies.get('admin_session')?.value === 'authenticated';
-}
+
 
 export async function GET(req: NextRequest) {
-  if (!isAuthenticated(req)) {
+  if (!(await isAuthenticated(req))) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
   
   try {
     await connectDB();
-    const channelsStore = await Store.findOne({ key: 'channels' });
-    const raw = channelsStore?.data || {};
+    const channels = await Channel.find({}).sort({ createdAt: -1 }).lean();
     
-    // Inject country name into each channel object since it's stored implicitly via grouping
-    const flat = Object.entries(raw).flatMap(([countryName, channels]: [string, any]) => {
-      return channels.map((ch: any) => ({
-        ...ch,
-        country: countryName,
-        countryCode: ch.countryCode || countryName.toLowerCase().replace(/\s+/g, '-'),
-      }));
-    });
-    
-    return NextResponse.json(flat);
+    return NextResponse.json(channels.map((ch: any) => ({
+      id: ch.id,
+      name: ch.name,
+      code: ch.code || '',
+      category: ch.category || 'Sports',
+      country: ch.country,
+      countryCode: ch.countryCode || '',
+      logo: ch.logo || '',
+      stream: ch.stream || '',
+      embedCode: ch.embedCode || '',
+      languages: ch.languages || [],
+      active: ch.active !== false,
+      quality: ch.quality || '',
+    })));
   } catch (error) {
     return NextResponse.json({ error: 'Failed to fetch channels' }, { status: 500 });
   }
 }
 
 export async function POST(req: NextRequest) {
-  if (!isAuthenticated(req)) {
+  if (!(await isAuthenticated(req))) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
   try {
     await connectDB();
     const body = await req.json();
-    
-    const channelsStore = await Store.findOne({ key: 'channels' });
-    const raw = (channelsStore?.data || {}) as Record<string, unknown[]>;
 
-    const newChannel: Record<string, unknown> = {
+    const newChannel = await Channel.create({
       id: `ch_${Date.now()}`,
       name: body.name || '',
       code: body.code || '',
       category: body.category || 'Sports',
+      country: body.country || 'Unknown',
+      countryCode: body.countryCode || '',
       logo: body.logo || '',
       stream: body.stream || '',
       embedCode: body.embedCode || '',
       languages: body.languages ? [body.languages] : [],
       active: body.active !== false,
       is_nsfw: false,
-    };
+    });
 
-    const targetCountry = body.country || 'Unknown';
-    if (!raw[targetCountry]) raw[targetCountry] = [];
-    raw[targetCountry].push(newChannel);
+    revalidateTag('channels');
 
-    if (channelsStore) {
-      channelsStore.data = raw;
-      channelsStore.markModified('data');
-      await channelsStore.save();
-    } else {
-      await Store.create({ key: 'channels', data: raw });
-    }
-
-    return NextResponse.json({ ...newChannel, country: targetCountry }, { status: 201 });
-  } catch {
+    return NextResponse.json({
+      id: newChannel.id,
+      name: newChannel.name,
+      code: newChannel.code,
+      category: newChannel.category,
+      country: newChannel.country,
+      countryCode: newChannel.countryCode,
+      logo: newChannel.logo,
+      stream: newChannel.stream,
+      embedCode: newChannel.embedCode,
+      languages: newChannel.languages,
+      active: newChannel.active,
+    }, { status: 201 });
+  } catch (err: any) {
     return NextResponse.json({ error: 'Failed to create channel' }, { status: 500 });
   }
 }
-

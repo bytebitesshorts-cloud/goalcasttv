@@ -177,13 +177,35 @@ export default async function HomePage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            '@context': 'https://schema.org',
-            '@type': 'WebSite',
-            name: 'GoalCast',
-            url: 'https://goalcast-tv.vercel.app',
-            description: 'Free live sports TV channels worldwide',
-          }),
+          __html: JSON.stringify([
+            {
+              '@context': 'https://schema.org',
+              '@type': 'WebSite',
+              name: 'GoalCast',
+              url: 'https://goalcast-tv.vercel.app',
+              description: 'Free live sports TV channels worldwide',
+            },
+            {
+              '@context': 'https://schema.org',
+              '@type': 'SportsOrganization',
+              name: 'GoalCast',
+              url: 'https://goalcast-tv.vercel.app',
+              logo: 'https://goalcast-tv.vercel.app/og-image.png',
+            },
+            {
+              '@context': 'https://schema.org',
+              '@type': 'ItemList',
+              itemListElement: sortedChannels.slice(0, 10).map((ch, index) => ({
+                '@type': 'ListItem',
+                position: index + 1,
+                item: {
+                  '@type': 'BroadcastEvent',
+                  name: ch.name,
+                  url: `https://goalcast-tv.vercel.app/watch/${ch.id}`,
+                }
+              }))
+            }
+          ]),
         }}
       />
     </div>

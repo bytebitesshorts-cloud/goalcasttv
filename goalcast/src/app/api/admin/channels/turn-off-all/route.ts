@@ -15,14 +15,17 @@ export async function POST(req: NextRequest) {
 
   try {
     await connectDB();
-    const result = await Channel.deleteMany({ active: false });
+    const result = await Channel.updateMany(
+      { active: true },
+      { $set: { active: false } }
+    );
 
     revalidateTag('channels');
 
     return NextResponse.json({
       success: true,
-      removed: result.deletedCount,
-      message: `Successfully removed ${result.deletedCount} inactive channel(s).`,
+      turnedOff: result.modifiedCount,
+      message: `Successfully turned off ${result.modifiedCount} active channel(s).`,
     });
   } catch (err: any) {
     return NextResponse.json({ error: err.message }, { status: 500 });

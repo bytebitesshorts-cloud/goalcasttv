@@ -1,43 +1,48 @@
 import Fuse from 'fuse.js';
 import connectDB from '@/lib/db';
-import { Store } from '@/lib/models';
-import type { Channel, Country, SearchResult } from '@/types';
+import { Channel } from '@/lib/models/Channel';
+import type { Channel as ChannelType, Country, SearchResult } from '@/types';
 import { slugify } from '@/lib/utils';
-import mongoose from 'mongoose';
-
-// Add mongoose import for readyState check
 
 export async function getAllCountries(): Promise<Country[]> {
   await connectDB();
-  // Add readyState check before querying
-  if (mongoose.connection.readyState !== 1) {
-    await connectDB(); // Ensure fresh connection
+
+  // Query only active channels directly from the Channel collection
+  const channels = await Channel.find({ active: true }).lean();
+
+  // Group by country
+  const countryMap = new Map<string, ChannelType[]>();
+  for (const ch of channels) {
+    const country = ch.country || 'Unknown';
+    if (!countryMap.has(country)) countryMap.set(country, []);
+    countryMap.get(country)!.push({
+      id: ch.id,
+      name: ch.name,
+      logo: ch.logo || '',
+      stream: ch.stream || '',
+      embedCode: ch.embedCode || '',
+      category: ch.category || 'Sports',
+      country: ch.country,
+      countryCode: ch.countryCode || ch.country.toLowerCase().replace(/\s+/g, '-'),
+      quality: ch.quality || '',
+      code: ch.code || '',
+      active: ch.active,
+    });
   }
-  const channelsStore = await Store.findOne({ key: 'channels' });
-  const data = (channelsStore?.data || {}) as Record<string, Omit<Channel, 'country' | 'countryCode'>[]>;
 
-  const countries = Object.entries(data)
-    .map(([countryName, channels]) => {
-      const firstChannel = channels[0] as Channel;
-      const code = firstChannel?.countryCode || countryName.toLowerCase().replace(/\s+/g, '-');
-
-      const activeChannels = (channels as Array<Omit<Channel, 'country' | 'countryCode'> & { active?: boolean }>)
-        .filter((ch) => ch.active !== false)
-        .map((ch) => ({
-          ...ch,
-          country: countryName,
-          countryCode: code,
-        }));
-
+  const countries = Array.from(countryMap.entries())
+    .map(([countryName, chans]) => {
+      const code = chans[0]?.countryCode || countryName.toLowerCase().replace(/\s+/g, '-');
       return {
         name: countryName,
         code,
         flag: getFlagEmoji(code),
-        channels: activeChannels,
+        channels: chans,
       };
     })
-    .filter((country) => country.channels.length > 0);
+    .filter((c) => c.channels.length > 0);
 
+  // Assign sequential channel codes
   let globalIdx = 1;
   for (const country of countries) {
     for (const channel of country.channels) {
@@ -48,7 +53,7 @@ export async function getAllCountries(): Promise<Country[]> {
   return countries;
 }
 
-export async function getAllChannels(): Promise<Channel[]> {
+export async function getAllChannels(): Promise<ChannelType[]> {
   const countries = await getAllCountries();
   return countries.flatMap((c) => c.channels);
 }
@@ -58,9 +63,23 @@ export async function getCountry(name: string): Promise<Country | undefined> {
   return countries.find((c) => slugify(c.name) === name);
 }
 
-export async function getChannel(id: string): Promise<Channel | undefined> {
-  const channels = await getAllChannels();
-  return channels.find((c) => c.id === id);
+export async function getChannel(id: string): Promise<ChannelType | undefined> {
+  await connectDB();
+  const ch = await Channel.findOne({ id, active: true }).lean();
+  if (!ch) return undefined;
+  return {
+    id: ch.id,
+    name: ch.name,
+    logo: ch.logo || '',
+    stream: ch.stream || '',
+    embedCode: ch.embedCode || '',
+    category: ch.category || 'Sports',
+    country: ch.country,
+    countryCode: ch.countryCode || '',
+    quality: ch.quality || '',
+    code: ch.code || '',
+    active: ch.active,
+  };
 }
 
 let fuseInstance: Fuse<SearchResult> | null = null;

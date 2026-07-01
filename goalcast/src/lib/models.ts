@@ -20,3 +20,6 @@ const StoreSchema = new mongoose.Schema({
 });
 
 export const Store = mongoose.models.Store || mongoose.model('Store', StoreSchema);
+
+// Re-export Channel model from its dedicated file
+export { Channel } from '@/lib/models/Channel';
